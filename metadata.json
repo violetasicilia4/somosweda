@@ -1,0 +1,6 @@
+{
+  "name": "Weda",
+  "description": "La plataforma definitiva para organizar los preparativos y lista de regalos de tu casamiento sin estrés.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
