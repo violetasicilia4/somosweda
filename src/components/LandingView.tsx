@@ -10,11 +10,11 @@ interface LandingViewProps {
 
 export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExample }) => {
   return (
-    <div className="min-h-screen bg-white text-gray-900 flex flex-col font-sans">
-      {/* Header + Hero + Herramientas Integradas: reproducción exacta del diseño de
-          referencia (Figma), con su propia tipografía (Quicksand) y marco oscuro,
-          aislados del resto de la landing (planes, pasos, testimonios, footer),
-          que no forman parte de esa referencia y mantienen su estilo actual. */}
+    <div className="min-h-screen flex flex-col">
+      {/* Reproducción pixel-fiel del diseño aprobado en Figma (frame
+          "weda-editorial-landing"): marco oscuro alrededor de toda la página,
+          tipografía Quicksand y paleta marfil/terracota/tinta en todas las
+          secciones, de punta a punta. */}
       <div className="bg-[#171310] p-2 sm:p-3" style={{ fontFamily: "'Quicksand', sans-serif" }}>
       <div className="bg-[#F7F1E4] text-[#2A2318]">
       {/* Navigation Header */}
@@ -139,274 +139,238 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
           </div>
         </div>
       </section>
-      </div>
-      </div>
 
       {/* Planes y Precios */}
-      <section className="py-20 px-4 sm:px-6 max-w-6xl mx-auto w-full">
-        <div className="text-center mb-14">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
-            Elegí tu plan ideal.
-          </h2>
-          <p className="text-sm sm:text-base text-gray-600 mt-2">
-            Probalo gratis y publicalo cuando estés listo.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
-          {pricingPlans.map((plan) => (
-            <div 
-              key={plan.id}
-              className={`rounded-2xl p-7 flex flex-col justify-between transition-all relative ${
-                plan.recommended 
-                  ? 'border-2 border-gray-900 shadow-lg bg-white ring-1 ring-gray-900/5' 
-                  : 'border border-gray-200 bg-white shadow-2xs hover:border-gray-300'
-              }`}
-            >
-              {plan.badge && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] tracking-wider font-bold py-1 px-3 rounded-full uppercase">
-                  {plan.badge}
-                </div>
-              )}
-
-              <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-1">{plan.name}</h3>
-                <p className="text-xs text-gray-500 min-h-[36px]">{plan.tagline}</p>
-
-                <div className="my-6 pt-4 border-t border-gray-100">
-                  <span className="text-xs text-gray-400 block uppercase font-medium">{plan.experienceType}</span>
-                  <span className="text-xl sm:text-2xl font-bold text-gray-900">{plan.price}</span>
-                </div>
-
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-gray-600">
-                      <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <button
-                id={`plan-choose-${plan.id}`}
-                onClick={() => onNavigate('register')}
-                className={`w-full py-3 px-4 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
-                  plan.recommended
-                    ? 'bg-gray-900 text-white hover:bg-black shadow-xs'
-                    : 'bg-white border border-gray-300 text-gray-800 hover:bg-gray-50'
-                }`}
-              >
-                Elegir {plan.name}
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Simplificá tu Organización (Steps 01-04) */}
-      <section className="py-16 bg-gray-50/70 border-t border-gray-100 px-4 sm:px-6">
+      <section className="py-20 sm:py-24 bg-white px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <span className="text-xs font-bold tracking-widest text-gray-500 uppercase">
-              Simplificá tu organización
+          <div className="text-center mb-14">
+            <span className="text-xs font-semibold tracking-widest text-[#A9795A] uppercase">
+              Precios transparentes
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">
-              Tu evento listo en pocos pasos.
+            <h2 className="text-3xl sm:text-4xl font-medium text-[#2A2318] mt-3">
+              Elegí tu plan ideal.
             </h2>
+            <p className="text-sm text-[#7A6F5F] mt-2">
+              Probalo gratis y publicalo cuando estés listo.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-xl border border-gray-200">
-              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-900 text-white text-xs font-bold mb-4">
-                01
-              </span>
-              <h3 className="font-semibold text-gray-900 text-base mb-1.5">Crear cuenta</h3>
-              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                Registrate en segundos para acceder al panel.
-              </p>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+            {pricingPlans.map((plan) => (
+              <div
+                key={plan.id}
+                className="rounded-2xl overflow-hidden bg-white border border-[#E7DCC8] flex flex-col"
+              >
+                <div className="relative aspect-4/3">
+                  <img
+                    src={plan.previewImage}
+                    alt={plan.previewAlt}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute top-3 left-3 flex items-center gap-1.5">
+                    <span className="bg-white text-[#2A2318] text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full">
+                      {plan.name}
+                    </span>
+                    {plan.badge && (
+                      <span className="bg-[#2A2318] text-white text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full">
+                        {plan.badge}
+                      </span>
+                    )}
+                  </div>
+                </div>
 
-            <div className="bg-white p-6 rounded-xl border border-gray-200">
-              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-900 text-white text-xs font-bold mb-4">
-                02
-              </span>
-              <h3 className="font-semibold text-gray-900 text-base mb-1.5">Configurar tu evento</h3>
-              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                Personalizá el diseño, fecha y datos clave.
-              </p>
-            </div>
+                <div className="p-6 flex flex-col grow">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#A9795A]">
+                    {plan.name}
+                  </span>
+                  <span className="block text-[11px] uppercase tracking-wide text-gray-400 mt-0.5">
+                    {plan.experienceType}
+                  </span>
+                  <div className="text-2xl font-semibold text-[#2A2318] mt-2">{plan.price}</div>
+                  <p className="text-sm text-[#7A6F5F] mt-1 min-h-[36px]">{plan.tagline}</p>
 
-            <div className="bg-white p-6 rounded-xl border border-gray-200">
-              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-900 text-white text-xs font-bold mb-4">
-                03
-              </span>
-              <h3 className="font-semibold text-gray-900 text-base mb-1.5">Agregar invitados</h3>
-              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                Cargá tu lista de contactos fácilmente.
-              </p>
-            </div>
+                  <ul className="space-y-2.5 mt-4 mb-6">
+                    {plan.features.map((feature, i) => (
+                      <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#5A5142]">
+                        <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
 
-            <div className="bg-white p-6 rounded-xl border border-gray-200">
-              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-900 text-white text-xs font-bold mb-4">
-                04
-              </span>
-              <h3 className="font-semibold text-gray-900 text-base mb-1.5">Compartir y recibir</h3>
-              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                Enviá tu sitio y recibí confirmaciones.
-              </p>
-            </div>
+                  <button
+                    id={`plan-choose-${plan.id}`}
+                    onClick={() => onNavigate('register')}
+                    className={`w-full py-3 px-4 text-xs uppercase tracking-wider font-medium transition-colors cursor-pointer mt-auto ${
+                      plan.recommended
+                        ? 'bg-[#2A2318] text-white hover:bg-black'
+                        : 'bg-white border border-[#2A2318]/30 text-[#2A2318] hover:bg-[#F7F1E4]'
+                    }`}
+                  >
+                    Elegir {plan.name}
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Testimonios */}
-      <section className="py-20 px-4 sm:px-6 max-w-6xl mx-auto w-full">
-        <div className="text-center mb-14">
-          <span className="text-xs font-bold tracking-widest text-gray-500 uppercase">
-            Parejas felices
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">
-            Testimonios con amor.
-          </h2>
-        </div>
+      <section className="py-20 sm:py-24 bg-[#F0E8D8] px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-14">
+            <span className="text-xs font-semibold tracking-widest text-[#A9795A] uppercase">
+              Parejas felices
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-medium text-[#2A2318] mt-3">
+              Testimonios con amor.
+            </h2>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Testimonial 1 */}
-          <div className="bg-white p-6 sm:p-7 rounded-2xl border border-gray-200 shadow-2xs flex flex-col justify-between">
-            <div className="mb-4">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center text-stone-600 font-bold text-sm">
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#2A2318]/15 border-t border-[#2A2318]/15">
+            {/* Testimonial 1 */}
+            <div className="pt-8 md:pr-8 md:first:pr-8">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#2A2318] font-semibold text-xs shrink-0">
                   M&S
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sm text-gray-900">Martina & Sebastián</h4>
-                  <p className="text-xs text-gray-400">Febrero 2026</p>
+                  <h4 className="font-semibold text-sm text-[#2A2318]">Martina & Sebastián</h4>
+                  <p className="text-xs text-[#8A8072]">Febrero 2026 · San Antonio de Areco</p>
                 </div>
               </div>
-              <p className="text-xs text-gray-600 italic leading-relaxed">
-                "Excelente plataforma. El RSVP en tiempo real nos ahorró horas de responder mensajes por WhatsApp. Súper recomendado."
+              <p className="text-sm text-[#5A5142] leading-relaxed">
+                Excelente plataforma. El RSVP en tiempo real nos ahorró horas de responder mensajes por WhatsApp. Súper recomendada la lista de bodas simbólica.
               </p>
             </div>
-          </div>
 
-          {/* Testimonial 2 */}
-          <div className="bg-white p-6 sm:p-7 rounded-2xl border border-gray-200 shadow-2xs flex flex-col justify-between">
-            <div className="mb-4">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center text-stone-600 font-bold text-sm">
+            {/* Testimonial 2 */}
+            <div className="pt-8 md:px-8">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#2A2318] font-semibold text-xs shrink-0">
                   C&F
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sm text-gray-900">Camila & Francisco</h4>
-                  <p className="text-xs text-gray-400">Noviembre 2025</p>
+                  <h4 className="font-semibold text-sm text-[#2A2318]">Camila & Francisco</h4>
+                  <p className="text-xs text-[#8A8072]">Noviembre 2025 · Mendoza</p>
                 </div>
               </div>
-              <p className="text-xs text-gray-600 italic leading-relaxed">
-                "El sistema de regalos digitales funcionó de maravilla. Pudimos centralizar todos los aportes de nuestros invitados del exterior sin problemas."
+              <p className="text-sm text-[#5A5142] leading-relaxed">
+                El sistema de regalos digitales funcionó de maravilla. Pudimos centralizar todos los aportes de nuestros invitados del exterior sin ningún problema.
               </p>
             </div>
-          </div>
 
-          {/* Testimonial 3 */}
-          <div className="bg-white p-6 sm:p-7 rounded-2xl border border-gray-200 shadow-2xs flex flex-col justify-between">
-            <div className="mb-4">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center text-stone-600 font-bold text-sm">
+            {/* Testimonial 3 */}
+            <div className="pt-8 md:pl-8">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#2A2318] font-semibold text-xs shrink-0">
                   V&A
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sm text-gray-900">Victoria & Alejandro</h4>
-                  <p className="text-xs text-gray-400">Enero 2026</p>
+                  <h4 className="font-semibold text-sm text-[#2A2318]">Victoria & Alejandro</h4>
+                  <p className="text-xs text-[#8A8072]">Enero 2026 · Buenos Aires</p>
                 </div>
               </div>
-              <p className="text-xs text-gray-600 italic leading-relaxed">
-                "La interfaz es muy intuitiva, el sitio web nos quedó hermoso y pudimos compartir todos los detalles del menú y la ubicación en un solo lugar."
+              <p className="text-sm text-[#5A5142] leading-relaxed">
+                La interfaz es muy intuitiva, el sitio web nos quedó hermoso y pudimos compartir todos los detalles del menú y la ubicación en un solo lugar.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Bottom Banner */}
-      <section className="px-4 sm:px-6 mb-16 max-w-6xl mx-auto w-full">
-        <div className="relative rounded-2xl overflow-hidden shadow-lg p-8 sm:p-12 text-center text-white flex flex-col items-center justify-center">
-          <img 
-            src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1600&q=80" 
+      {/* CTA Bottom Banner — foto a sangre completa, sin card ni márgenes */}
+      <section className="relative w-full">
+        <div className="relative aspect-4/5 sm:aspect-21/9 overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1600&q=80"
             alt="Fondo romántico de boda"
             className="absolute inset-0 w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-black/65 backdrop-blur-xs"></div>
+          <div className="absolute inset-0 bg-black/55"></div>
 
-          <div className="relative z-10 max-w-xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3">
+          <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
+            <h2 className="text-2xl sm:text-4xl font-medium text-white mb-3 max-w-xl">
               Tu historia merece algo más que una invitación.
             </h2>
-            <p className="text-sm sm:text-base text-white/80 mb-6 font-normal">
-              Creá tu sitio, organizá tus invitados y recibí regalos en un solo lugar.
+            <p className="text-sm text-white/80 mb-7 max-w-md">
+              Creá tu sitio, organizá tus invitados y recibí regalos en un solo lugar. Sin estrés, sin complicaciones.
             </p>
             <button
               id="cta-create-list-bottom"
               onClick={() => onNavigate('register')}
-              className="px-6 py-3.5 bg-white text-gray-900 hover:bg-gray-100 font-semibold rounded-lg text-sm transition-all shadow-md cursor-pointer mb-3"
+              className="text-xs uppercase tracking-wider font-medium border border-white/70 text-white px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer mb-4"
             >
               Crear mi lista gratis
             </button>
             <p className="text-xs text-white/60">
-              No necesitás pagar para empezar.
+              No necesitás tarjeta de crédito para empezar.
             </p>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-auto py-12 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-2">
-            <span className="text-2xl font-bold text-gray-900 block mb-2">Weda</span>
-            <p className="text-xs sm:text-sm text-gray-500 max-w-sm leading-relaxed">
-              La plataforma definitiva para organizar los preparativos y lista de regalos de tu casamiento sin estrés.
+      <footer className="relative bg-[#171310] text-[#F7F1E4] px-4 sm:px-8 pt-16 pb-8 overflow-hidden">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 relative z-10">
+          <div className="md:col-span-1">
+            <span className="text-lg font-semibold tracking-[0.1em] uppercase block mb-3">Weda</span>
+            <p className="text-sm text-[#F7F1E4]/60 leading-relaxed">
+              La plataforma contemporánea para organizar tu casamiento de punta a punta. Creada con orgullo en Argentina para celebraciones con sentido y belleza.
             </p>
           </div>
 
           <div>
-            <h4 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-3">Navegación</h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-gray-600">
-              <li>
-                <button onClick={() => onNavigate('landing')} className="hover:text-gray-900">
-                  Planes
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onNavigate('landing')} className="hover:text-gray-900">
-                  Preguntas frecuentes
-                </button>
-              </li>
-              <li>
-                <button onClick={onOpenExample} className="hover:text-gray-900">
-                  Ver ejemplo de sitio
-                </button>
-              </li>
+            <h4 className="text-[11px] font-semibold uppercase tracking-wider text-[#A9795A] mb-3">Herramientas</h4>
+            <ul className="space-y-2.5 text-sm text-[#F7F1E4]/70">
+              <li><button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Sitio Web</button></li>
+              <li><button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Lista de Invitados</button></li>
+              <li><button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Confirmación RSVP</button></li>
+              <li><button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Regalos Digitales</button></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-3">Contacto</h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-gray-600">
-              <li>soporte@weda.com</li>
-              <li>
-                <a href="#instagram" className="hover:text-gray-900">Instagram</a>
-              </li>
+            <h4 className="text-[11px] font-semibold uppercase tracking-wider text-[#A9795A] mb-3">Compañía</h4>
+            <ul className="space-y-2.5 text-sm text-[#F7F1E4]/70">
+              <li><button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Sobre Nosotros</button></li>
+              <li><button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Blog Editorial</button></li>
+              <li><button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Contacto</button></li>
+              <li><button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Preguntas Frecuentes</button></li>
             </ul>
+          </div>
+
+          <div>
+            <h4 className="text-[11px] font-semibold uppercase tracking-wider text-[#A9795A] mb-3">Contacto & Soporte</h4>
+            <a href="mailto:hola@weda.com.ar" className="text-sm text-[#F7F1E4]/90 hover:text-white transition-colors block mb-2">
+              hola@weda.com.ar
+            </a>
+            <p className="text-sm text-[#F7F1E4]/60 leading-relaxed">
+              ¿Tenés dudas? Nuestro atelier de soporte está disponible de lunes a viernes de 9 a 18 hs.
+            </p>
           </div>
         </div>
 
-        <div className="max-w-6xl mx-auto mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-400 gap-2">
-          <span>© {new Date().getFullYear()} Weda. Todos los derechos reservados.</span>
-          <span>Hecho con amor para parejas de todo el mundo.</span>
+        <span
+          aria-hidden="true"
+          className="block relative z-0 text-center font-semibold uppercase leading-none text-[#F7F1E4]/[0.06] text-[22vw] mt-8 select-none pointer-events-none"
+        >
+          WEDA
+        </span>
+
+        <div className="max-w-6xl mx-auto pt-6 border-t border-[#F7F1E4]/10 flex flex-col sm:flex-row items-center justify-between text-xs text-[#F7F1E4]/50 gap-2 relative z-10">
+          <span>© {new Date().getFullYear()} Weda Casamientos. Todos los derechos reservados.</span>
+          <div className="flex items-center gap-4">
+            <button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Políticas de Privacidad</button>
+            <button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Términos del Servicio</button>
+          </div>
         </div>
       </footer>
+      </div>
+      </div>
     </div>
   );
 };
