@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
 import { GiftItem, WeddingData } from '../../types';
 import { suggestedGiftsByCategory } from '../../data/initialData';
-import { CobrosView } from './CobrosView';
 import {
   Plus,
   Trash2,
   Check,
   CheckCircle2,
-  AlertCircle,
   X,
   Share2,
   Edit3,
   Lock,
   Calendar,
   MapPin,
-  Wallet,
-  Gift as GiftIcon,
+  ExternalLink,
 } from 'lucide-react';
 
 interface GiftRegistryViewProps {
@@ -24,7 +21,7 @@ interface GiftRegistryViewProps {
   onAddGift: (gift: Omit<GiftItem, 'id' | 'currentAmount'>) => void;
   onDeleteGift: (giftId: string) => void;
   onUpdateGift?: (giftId: string, updates: Partial<GiftItem>) => void;
-  onUpdateWedding: (updated: Partial<WeddingData>) => void;
+  onOpenMicrosite: () => void;
 }
 
 // 5 Categorías pensadas desde la perspectiva de los novios — son los únicos
@@ -50,14 +47,10 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
   onAddGift,
   onDeleteGift,
   onUpdateGift,
-  onUpdateWedding,
+  onOpenMicrosite,
 }) => {
-  // Setup del registro: métodos de pago primero si todavía no están cargados,
-  // igual que en Confites (pestañas con estado antes de poder compartir la lista).
-  const isPaymentConfigured = Boolean(wedding.bankAlias?.trim() || wedding.mercadoPagoAlias?.trim());
-  const [activeSection, setActiveSection] = useState<'pago' | 'lista'>(
-    isPaymentConfigured ? 'lista' : 'pago'
-  );
+  // Sin gate de cobro acá: la lista se arma entera sin CBU, alias ni Mercado Pago.
+  // Eso se pide recién al publicar la boda (ver el modal de publicación).
 
   // Category filter for the gift catalog
   const [selectedCategory, setSelectedCategory] = useState<string>('Luna de miel');
@@ -218,7 +211,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/35" />
         </div>
 
-        {/* Top Badges Row: Estado + acción secundaria de compartir */}
+        {/* Top Badges Row: Estado */}
         <div className="relative z-10 flex flex-wrap items-center justify-between gap-3">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-white/20 text-xs font-medium text-white">
             {wedding.status === 'PUBLICADO' ? (
@@ -233,27 +226,6 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
               </>
             )}
           </div>
-
-          {/* Secundario a propósito: previsualizar no es la acción principal de esta pantalla.
-              Un solo botón, como el "Compartir Lista" de Confites. */}
-          <button
-            type="button"
-            onClick={handleSharePreview}
-            className="px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-white/80 hover:text-white hover:bg-white/10 inline-flex items-center gap-1.5 transition-colors cursor-pointer"
-            title="Copiar el enlace de tu lista de regalos"
-          >
-            {copiedShare ? (
-              <>
-                <Check className="w-3.5 h-3.5 text-emerald-300" />
-                <span className="text-emerald-300 font-semibold">¡Enlace copiado!</span>
-              </>
-            ) : (
-              <>
-                <Share2 className="w-3.5 h-3.5" />
-                <span>Compartir lista</span>
-              </>
-            )}
-          </button>
         </div>
 
         {/* Bottom Hero Information: lo primero que la pareja identifica como "esto es mío" */}
@@ -282,71 +254,52 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
         </div>
       </div>
 
-      {/* 2. SETUP: métodos de pago y lista, con estado de avance — como en Confites */}
-      <div className="flex flex-wrap gap-2.5">
-        <button
-          type="button"
-          onClick={() => setActiveSection('pago')}
-          className={`flex-1 min-w-[220px] flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl border text-left transition-all cursor-pointer ${
-            activeSection === 'pago'
-              ? 'bg-gray-900 border-gray-900 text-white shadow-xs'
-              : 'bg-white border-gray-200 text-gray-900 hover:border-gray-300'
-          }`}
-        >
-          <Wallet className={`w-5 h-5 shrink-0 ${activeSection === 'pago' ? 'text-amber-300' : 'text-gray-400'}`} />
-          <span className="flex-1 min-w-0">
-            <span className="block text-sm font-bold">Métodos de pago</span>
-            <span className={`block text-[11px] ${activeSection === 'pago' ? 'text-white/70' : 'text-gray-500'}`}>
-              CBU, alias y Mercado Pago
-            </span>
-          </span>
-          {isPaymentConfigured ? (
-            <CheckCircle2 className="w-4.5 h-4.5 text-emerald-400 shrink-0" />
-          ) : (
-            <AlertCircle className="w-4.5 h-4.5 text-amber-400 shrink-0" />
-          )}
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveSection('lista')}
-          className={`flex-1 min-w-[220px] flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl border text-left transition-all cursor-pointer ${
-            activeSection === 'lista'
-              ? 'bg-gray-900 border-gray-900 text-white shadow-xs'
-              : 'bg-white border-gray-200 text-gray-900 hover:border-gray-300'
-          }`}
-        >
-          <GiftIcon className={`w-5 h-5 shrink-0 ${activeSection === 'lista' ? 'text-amber-300' : 'text-gray-400'}`} />
-          <span className="flex-1 min-w-0">
-            <span className="block text-sm font-bold">
-              Lista de regalos {gifts.length > 0 && `(${gifts.length})`}
-            </span>
-            <span className={`block text-[11px] ${activeSection === 'lista' ? 'text-white/70' : 'text-gray-500'}`}>
-              Tildá los regalos que quieras recibir
-            </span>
-          </span>
-          {gifts.length > 0 ? (
-            <CheckCircle2 className="w-4.5 h-4.5 text-emerald-400 shrink-0" />
-          ) : (
-            <AlertCircle className="w-4.5 h-4.5 text-amber-400 shrink-0" />
-          )}
-        </button>
+      {/* 2. CTA PRINCIPAL: ver la experiencia pública real, sin simulaciones */}
+      <div className="space-y-2">
+        <div className="flex flex-col sm:flex-row gap-2.5">
+          <button
+            type="button"
+            onClick={onOpenMicrosite}
+            className="flex-1 sm:flex-none px-6 py-3.5 bg-gray-900 hover:bg-black text-white rounded-2xl text-sm font-bold inline-flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer active:scale-[0.98]"
+          >
+            <ExternalLink className="w-4 h-4" />
+            <span>Ver mi lista</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleSharePreview}
+            className="px-4 py-3.5 border border-gray-200 hover:bg-gray-50 rounded-2xl text-sm font-semibold text-gray-700 inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
+          >
+            {copiedShare ? (
+              <>
+                <Check className="w-4 h-4 text-emerald-600" />
+                <span className="text-emerald-700">¡Enlace copiado!</span>
+              </>
+            ) : (
+              <>
+                <Share2 className="w-4 h-4 text-gray-500" />
+                <span>Copiar enlace</span>
+              </>
+            )}
+          </button>
+        </div>
+        <p className="text-[11px] text-gray-400">
+          Así la ven tus invitados: la web pública real, no una simulación.
+        </p>
       </div>
 
-      {activeSection === 'pago' ? (
-        <CobrosView wedding={wedding} onUpdateWedding={onUpdateWedding} />
-      ) : (
-        // 3. UNA SOLA EXPERIENCIA: elegir categoría, tildar/destildar regalos y ver
-        // en todo momento lo que ya sumaste — sin secciones separadas ni pasos extra.
-        <section className="space-y-5">
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900">
-              Armá tu lista de regalos
-            </h2>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">
-              Elegí una categoría y tildá los regalos que quieras recibir. Podés destildarlos cuando quieras y combinar todas las categorías.
-            </p>
-          </div>
+      {/* 3. UNA SOLA EXPERIENCIA: elegir categoría, tildar/destildar regalos y ver
+          en todo momento lo que ya sumaste — sin secciones separadas ni pasos extra.
+          No depende de tener métodos de cobro configurados. */}
+      <section className="space-y-5">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900">
+            Armá tu lista de regalos
+          </h2>
+          <p className="text-xs sm:text-sm text-gray-600 mt-1">
+            Elegí una categoría y tildá los regalos que quieras recibir. Podés destildarlos cuando quieras y combinar todas las categorías.
+          </p>
+        </div>
 
           {/* Resumen liviano de lo ya elegido — siempre visible, se puede sacar desde acá */}
           {gifts.length > 0 && (
@@ -453,6 +406,12 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                       <span className="text-gray-500 font-medium">Aporte sugerido:</span>
                       <span className="font-bold text-gray-900">${item.targetPrice.toLocaleString()}</span>
                     </div>
+                    {checked && (
+                      <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 pt-1">
+                        <Check className="w-3.5 h-3.5" />
+                        <span>Agregado a tu lista</span>
+                      </div>
+                    )}
                   </div>
                 </button>
               );
@@ -518,8 +477,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             <Plus className="w-4 h-4 text-gray-400" />
             <span>Crear un regalo específico en "{selectedCategory}"</span>
           </button>
-        </section>
-      )}
+      </section>
 
       {/* ========================================================================= */}
       {/* MODAL: CREAR REGALO PERSONALIZADO                                         */}

@@ -17,12 +17,14 @@ import { ReceivedGiftsView } from './dashboard/ReceivedGiftsView';
 import { PlanBillingView } from './dashboard/PlanBillingView';
 import { AccountView } from './dashboard/AccountView';
 import { HelpView } from './dashboard/HelpView';
+import { CobrosView } from './dashboard/CobrosView';
 import {
   ExternalLink,
   Sparkles,
   Check,
   CreditCard,
-  Globe
+  Globe,
+  CheckCircle2,
 } from 'lucide-react';
 
 interface DashboardViewProps {
@@ -68,6 +70,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [selectedPlanId, setSelectedPlanId] = useState<'essential' | 'premium' | 'signature'>(
     wedding.selectedPlan || 'premium'
   );
+  // Los datos de cobro se piden acá, recién al publicar — nunca antes, para no
+  // trabar la construcción de la lista de regalos con una tarea administrativa.
+  const [isEditingCobro, setIsEditingCobro] = useState(false);
+  const isPaymentConfigured = Boolean(wedding.bankAlias?.trim() || wedding.mercadoPagoAlias?.trim());
 
   // Plan chosen inside the Publish modal (plan selection no longer lives in onboarding)
   const currentPlan = pricingPlans.find(p => p.id === selectedPlanId) || pricingPlans[1];
@@ -78,6 +84,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   // Open the Publish modal, syncing the plan picker to whatever was last chosen in Plan y Facturación
   const handleOpenPublishModal = () => {
     setSelectedPlanId(wedding.selectedPlan || 'premium');
+    setIsEditingCobro(false);
     setIsPaymentModalOpen(true);
   };
 
@@ -166,7 +173,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               onAddGift={onAddGift}
               onDeleteGift={onDeleteGift}
               onUpdateGift={onUpdateGift}
-              onUpdateWedding={onUpdateWedding}
+              onOpenMicrosite={onOpenMicrosite}
             />
           )}
 
@@ -222,7 +229,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* ================= MODAL: PAGAR AHORA / PUBLICAR BODA ================= */}
       {isPaymentModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-gray-100 animate-fade-in space-y-5">
+          <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-xl border border-gray-100 animate-fade-in space-y-5 max-h-[92vh] overflow-y-auto">
             <div className="flex justify-between items-start pb-2 border-b border-gray-100">
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full inline-block mb-1">
@@ -238,6 +245,30 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               >
                 Cerrar
               </button>
+            </div>
+
+            {/* Cómo van a cobrar los regalos — única vez que se pide, justo antes de publicar */}
+            <div className="space-y-2">
+              <span className="block text-xs font-semibold text-gray-700">
+                Cómo van a cobrar los regalos
+              </span>
+              {isPaymentConfigured && !isEditingCobro ? (
+                <div className="flex items-center justify-between gap-3 bg-emerald-50 border border-emerald-200 rounded-xl p-3">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-emerald-800">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>Datos de cobro cargados</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditingCobro(true)}
+                    className="text-xs font-semibold text-emerald-800 underline shrink-0 cursor-pointer"
+                  >
+                    Editar
+                  </button>
+                </div>
+              ) : (
+                <CobrosView wedding={wedding} onUpdateWedding={onUpdateWedding} compact />
+              )}
             </div>
 
             <div className="space-y-3">
@@ -290,9 +321,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <div className="pt-2 flex flex-col gap-2">
               <button
                 type="button"
-                disabled={isPublishingInProgress}
+                disabled={isPublishingInProgress || !isPaymentConfigured}
                 onClick={handleExecutePayment}
-                className="w-full py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-sm font-semibold cursor-pointer shadow-xs flex items-center justify-center gap-2 transition-colors"
+                className="w-full py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-sm font-semibold cursor-pointer shadow-xs flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isPublishingInProgress ? (
                   <span>Activando boda...</span>
@@ -303,6 +334,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   </>
                 )}
               </button>
+              {!isPaymentConfigured && !isPublishingInProgress && (
+                <p className="text-[11px] text-center text-amber-700">
+                  Completá los datos de cobro para poder publicar.
+                </p>
+              )}
 
               <button
                 type="button"

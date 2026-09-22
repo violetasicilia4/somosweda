@@ -5,9 +5,12 @@ import { CheckCircle2, ShieldCheck } from 'lucide-react';
 interface CobrosViewProps {
   wedding: WeddingData;
   onUpdateWedding: (updated: Partial<WeddingData>) => void;
+  // Modo embebido (p.ej. dentro del modal de publicación): sin título propio
+  // ni el ancho de una pantalla completa.
+  compact?: boolean;
 }
 
-export const CobrosView: React.FC<CobrosViewProps> = ({ wedding, onUpdateWedding }) => {
+export const CobrosView: React.FC<CobrosViewProps> = ({ wedding, onUpdateWedding, compact = false }) => {
   const [bankAlias, setBankAlias] = useState(wedding.bankAlias || '');
   const [bankCbu, setBankCbu] = useState(wedding.bankCbu || '');
   const [bankHolder, setBankHolder] = useState(wedding.bankHolder || '');
@@ -28,15 +31,17 @@ export const CobrosView: React.FC<CobrosViewProps> = ({ wedding, onUpdateWedding
   };
 
   return (
-    <div className="space-y-6 animate-fade-in max-w-2xl">
-      <div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Cobros</h2>
-        <p className="text-sm text-gray-500 mt-1">
-          ¿Cómo recibirán el dinero de los regalos? (CBU / Alias / Mercado Pago)
-        </p>
-      </div>
+    <div className={`space-y-6 animate-fade-in ${compact ? '' : 'max-w-2xl'}`}>
+      {!compact && (
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Cobros</h2>
+          <p className="text-sm text-gray-500 mt-1">
+            ¿Cómo recibirán el dinero de los regalos? (CBU / Alias / Mercado Pago)
+          </p>
+        </div>
+      )}
 
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-xs space-y-5">
+      <div className={`bg-white rounded-2xl border border-gray-200 space-y-5 ${compact ? 'p-4 sm:p-5' : 'p-6 sm:p-8 shadow-xs'}`}>
         <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
           <ShieldCheck className="w-4 h-4 text-emerald-600" />
           <span>100% directo a su cuenta. Weda no descuenta comisiones.</span>

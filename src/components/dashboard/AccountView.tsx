@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { WeddingData, DashboardTab } from '../../types';
 import { pricingPlans } from '../../data/initialData';
-import { Check, ArrowRight, Sparkles, Wallet, AlertCircle } from 'lucide-react';
+import { Check, ArrowRight, Sparkles } from 'lucide-react';
 
 interface AccountViewProps {
   wedding: WeddingData;
@@ -15,7 +15,6 @@ export const AccountView: React.FC<AccountViewProps> = ({
   onNavigateTab,
 }) => {
   const currentPlan = pricingPlans.find(p => p.id === (wedding.selectedPlan || 'premium')) || pricingPlans[1];
-  const isPaymentConfigured = Boolean(wedding.bankAlias?.trim() || wedding.mercadoPagoAlias?.trim());
   const [partner1, setPartner1] = useState(wedding.partner1);
   const [partner2, setPartner2] = useState(wedding.partner2);
   const [weddingDate, setWeddingDate] = useState(wedding.weddingDate);
@@ -158,37 +157,6 @@ export const AccountView: React.FC<AccountViewProps> = ({
             </button>
           </div>
         </form>
-      </div>
-
-      {/* CONFIGURÁ TU COBRO — atajo directo a la sección de Métodos de pago dentro de la lista */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-              isPaymentConfigured ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
-            }`}>
-              <Wallet className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="text-[11px] uppercase font-bold tracking-wider text-gray-400 block">
-                Configurá tu cobro
-              </span>
-              <h3 className="text-base font-bold text-gray-900 flex items-center gap-1.5">
-                {isPaymentConfigured ? 'CBU, alias y Mercado Pago cargados' : 'Todavía no cargaste tus datos de cobro'}
-                {!isPaymentConfigured && <AlertCircle className="w-4 h-4 text-amber-500" />}
-              </h3>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => onNavigateTab('regalos')}
-            className="px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-800 rounded-xl text-xs sm:text-sm font-semibold cursor-pointer inline-flex items-center gap-1.5 transition-colors shrink-0"
-          >
-            <span>{isPaymentConfigured ? 'Ver métodos de pago' : 'Configurar métodos de pago'}</span>
-            <ArrowRight className="w-3.5 h-3.5 text-gray-400" />
-          </button>
-        </div>
       </div>
 
       {/* TU PLAN */}
