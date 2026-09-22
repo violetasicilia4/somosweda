@@ -39,7 +39,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
   return (
     <div className="space-y-6 animate-fade-in max-w-2xl">
       <div>
-        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
           Mi Boda
         </h2>
         <p className="text-sm text-gray-500 mt-1">
@@ -56,7 +56,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
           referrerPolicy="no-referrer"
         />
         <div className="min-w-0 flex-1">
-          <h3 className="font-serif text-base font-bold text-gray-900 truncate">{wedding.coupleName}</h3>
+          <h3 className="text-base font-bold text-gray-900 truncate">{wedding.coupleName}</h3>
           <p className="text-xs text-gray-500 truncate">
             {wedding.weddingDate} · {wedding.venue}
           </p>
@@ -167,10 +167,10 @@ export const AccountView: React.FC<AccountViewProps> = ({
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <span className="text-[11px] uppercase font-bold font-mono tracking-wider text-gray-400 block">
+              <span className="text-[11px] uppercase font-bold tracking-wider text-gray-400 block">
                 Tu plan
               </span>
-              <h3 className="font-serif text-base font-bold text-gray-900">
+              <h3 className="text-base font-bold text-gray-900">
                 {currentPlan.name} — {currentPlan.price}
               </h3>
             </div>

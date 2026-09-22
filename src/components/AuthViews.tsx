@@ -93,7 +93,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
           <button 
             type="button" 
             onClick={() => onNavigate('landing')} 
-            className="font-serif text-3xl font-black tracking-tight text-gray-900 cursor-pointer inline-block hover:opacity-85 transition-opacity"
+            className="text-3xl font-bold tracking-tight text-gray-900 cursor-pointer inline-block hover:opacity-85 transition-opacity"
           >
             Weda
           </button>
@@ -109,7 +109,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
         {currentView === 'login' && (
           <div>
             <div className="text-center mb-7">
-              <h1 className="font-serif text-xl font-bold text-gray-900 mb-1">Bienvenido nuevamente</h1>
+              <h1 className="text-xl font-bold text-gray-900 mb-1">Bienvenido nuevamente</h1>
               <p className="text-xs sm:text-sm text-gray-500">Ingresá para administrar tu evento.</p>
             </div>
 
@@ -221,7 +221,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
         {currentView === 'register' && (
           <div>
             <div className="text-center mb-6">
-              <h1 className="font-serif text-xl font-bold text-gray-900 mb-1">Creá tu cuenta</h1>
+              <h1 className="text-xl font-bold text-gray-900 mb-1">Creá tu cuenta</h1>
               <p className="text-xs sm:text-sm text-gray-500">Comenzá a organizar tu evento.</p>
             </div>
 
@@ -367,7 +367,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
         {currentView === 'forgot-password' && (
           <div>
             <div className="text-center mb-7">
-              <h1 className="font-serif text-xl font-bold text-gray-900 mb-2">¿Olvidaste tu contraseña?</h1>
+              <h1 className="text-xl font-bold text-gray-900 mb-2">¿Olvidaste tu contraseña?</h1>
               <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
                 Ingresá tu correo electrónico registrado y te enviaremos un enlace para restablecer tu contraseña.
               </p>
@@ -415,7 +415,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
         {currentView === 'verify-pin' && (
           <div>
             <div className="text-center mb-7">
-              <h1 className="font-serif text-xl font-bold text-gray-900 mb-2">Ingresá el código de recuperación</h1>
+              <h1 className="text-xl font-bold text-gray-900 mb-2">Ingresá el código de recuperación</h1>
               <p className="text-xs sm:text-sm text-gray-500">
                 Te enviamos un código de 6 dígitos a tu email.
               </p>
@@ -476,7 +476,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
         {currentView === 'reset-password' && (
           <div>
             <div className="text-center mb-6">
-              <h1 className="font-serif text-xl font-bold text-gray-900 mb-1">Creá una nueva contraseña</h1>
+              <h1 className="text-xl font-bold text-gray-900 mb-1">Creá una nueva contraseña</h1>
               <p className="text-xs sm:text-sm text-gray-500">
                 Elegí una contraseña segura de la que puedas acordarte.
               </p>

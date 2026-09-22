@@ -52,14 +52,14 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
           <button
             type="button"
             onClick={() => onNavigate('landing')}
-            className="font-serif text-3xl font-black tracking-tight text-gray-900 cursor-pointer inline-block hover:opacity-85 transition-opacity"
+            className="text-3xl font-bold tracking-tight text-gray-900 cursor-pointer inline-block hover:opacity-85 transition-opacity"
           >
             Weda
           </button>
         </div>
 
         <div className="mb-8">
-          <h1 className="font-serif text-2xl font-bold text-gray-900 mb-1.5">Creemos tu boda</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-1.5">Creemos tu boda</h1>
           <p className="text-sm text-gray-500">Necesitamos algunos datos para empezar.</p>
         </div>
 

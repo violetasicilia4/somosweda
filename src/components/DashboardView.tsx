@@ -232,10 +232,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-xl border border-gray-100 animate-fade-in space-y-5 max-h-[92vh] overflow-y-auto">
             <div className="flex justify-between items-start pb-2 border-b border-gray-100">
               <div>
-                <span className="text-[10px] uppercase font-bold font-mono tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full inline-block mb-1">
+                <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full inline-block mb-1">
                   Publicación Definitiva
                 </span>
-                <h3 className="font-serif font-bold text-lg text-gray-900">
+                <h3 className="font-bold text-lg text-gray-900">
                   Publicar tu boda en Weda
                 </h3>
               </div>
