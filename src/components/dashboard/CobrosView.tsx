@@ -34,7 +34,7 @@ export const CobrosView: React.FC<CobrosViewProps> = ({ wedding, onUpdateWedding
     <div className={`space-y-6 animate-fade-in ${compact ? '' : 'max-w-2xl'}`}>
       {!compact && (
         <div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Cobros</h2>
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900">Cobros</h2>
           <p className="text-sm text-gray-500 mt-1">
             ¿Cómo recibirán el dinero de los regalos? (CBU / Alias / Mercado Pago)
           </p>

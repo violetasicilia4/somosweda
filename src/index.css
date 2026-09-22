@@ -1,7 +1,20 @@
 @import "tailwindcss";
 
+/*
+ * Tipografía "Posto Quieto": un serif condensado y pesado (Fraunces) para
+ * títulos grandes, al estilo del wordmark de la referencia, y una mono
+ * (Space Mono) para etiquetas/eyebrows tracked en mayúsculas — el equivalente
+ * a "DAL · 1922" / "LO STILE DI VITA ITALIANO". El sans de siempre se queda
+ * para texto de cuerpo y controles de UI, donde un serif pesado no funciona.
+ */
+@theme {
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: 'Fraunces', ui-serif, Georgia, serif;
+  --font-mono: 'Space Mono', ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
 @layer base {
   body {
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--font-sans);
   }
 }

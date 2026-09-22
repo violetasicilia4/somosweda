@@ -272,10 +272,10 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
         {/* Bottom Hero Information + CTA: el "Ver mi lista" vive acá, con protagonismo real */}
         <div className="relative z-10 space-y-3">
           <div className="space-y-1.5">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-white/60">
+            <span className="text-[11px] font-semibold uppercase font-mono tracking-wider text-white/60">
               Estás armando la lista de regalos de
             </span>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white drop-shadow-sm">
+            <h1 className="font-serif text-2xl sm:text-3xl font-black tracking-tight text-white drop-shadow-sm">
               {wedding.coupleName || 'Sofía & Martín'}
             </h1>
             <p className="text-xs sm:text-sm font-medium text-white/90 flex flex-wrap items-center gap-2 drop-shadow-xs">
@@ -333,7 +333,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
           No depende de tener métodos de cobro configurados. */}
       <section className="space-y-5">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900">
+          <h2 className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-gray-900">
             Armá tu lista de regalos
           </h2>
           <p className="text-xs sm:text-sm text-gray-600 mt-1">
@@ -380,7 +380,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                     </span>
                   </div>
                   <div>
-                    <h3 className="text-xs sm:text-sm font-bold leading-tight text-gray-900">
+                    <h3 className="font-serif text-xs sm:text-sm font-bold leading-tight text-gray-900">
                       {cat.name}
                     </h3>
                     <p className="text-[10px] leading-snug line-clamp-1 mt-0.5 text-gray-400">
@@ -399,7 +399,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             const allAdded = categoryItems.length > 0 && categoryItems.every(item => isGiftInList(item.title));
             return (
               <div className="flex flex-wrap items-center justify-between gap-2.5">
-                <h3 className="text-sm font-bold text-gray-900">
+                <h3 className="font-serif text-sm font-bold text-gray-900">
                   {selectedCategory} <span className="text-gray-400 font-medium">· {categoryItems.length} regalos</span>
                 </h3>
                 <div className="flex items-center gap-2">
@@ -463,7 +463,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   </div>
 
                   <div className="pt-3 space-y-0.5 w-full">
-                    <h3 className="text-sm font-bold text-gray-900 leading-snug line-clamp-2">
+                    <h3 className="font-serif text-sm font-bold text-gray-900 leading-snug line-clamp-2">
                       {item.title}
                     </h3>
                     <p className="text-sm font-bold text-gray-700">
@@ -498,7 +498,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   Personalizado
                 </span>
                 <div className="pt-2 space-y-0.5 w-full">
-                  <h3 className="text-sm font-bold text-gray-900 leading-snug line-clamp-2">
+                  <h3 className="font-serif text-sm font-bold text-gray-900 leading-snug line-clamp-2">
                     {gift.title}
                   </h3>
                   <p className="text-sm font-bold text-gray-700">
@@ -536,7 +536,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 space-y-6 animate-fade-in max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-gray-100 pb-3">
               <div>
-                <h3 className="text-lg font-bold text-gray-900">Crear regalo</h3>
+                <h3 className="font-serif text-lg font-bold text-gray-900">Crear regalo</h3>
                 <p className="text-xs text-gray-500">Ingresá el nombre, categoría y monto para este regalo.</p>
               </div>
               <button
@@ -647,7 +647,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 space-y-6 animate-fade-in max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-gray-100 pb-3">
               <div>
-                <h3 className="text-lg font-bold text-gray-900">Editar regalo</h3>
+                <h3 className="font-serif text-lg font-bold text-gray-900">Editar regalo</h3>
                 <p className="text-xs text-gray-500">Modificá el nombre, descripción, categoría o monto.</p>
               </div>
               <button

@@ -275,10 +275,10 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 to-black/35"></div>
 
             <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center">
-              <span className="text-xs uppercase tracking-[0.3em] font-medium text-white/90 mb-2">
+              <span className="text-xs uppercase font-mono tracking-[0.3em] font-medium text-white/90 mb-2">
                 ¡Nos casamos!
               </span>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white mb-3">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-black text-white mb-3">
                 {wedding.coupleName}
               </h1>
               <p className="text-sm sm:text-base text-white/90 font-light max-w-md mx-auto mb-6">
@@ -330,11 +330,11 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {events.map((ev) => (
                   <div key={ev.id} className="bg-white p-6 rounded-xl border border-stone-200 shadow-2xs">
-                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-rose-600 mb-2">
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase font-mono tracking-wider text-rose-600 mb-2">
                       <Clock className="w-3.5 h-3.5" />
                       <span>{ev.time}</span>
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-1">{ev.title}</h3>
+                    <h3 className="font-serif text-lg font-bold text-gray-900 mb-1">{ev.title}</h3>
                     <p className="text-xs font-medium text-gray-700 mb-2">{ev.locationName}</p>
                     <p className="text-xs text-gray-500 mb-4">{ev.address}</p>
                     <p className="text-xs text-gray-600 mb-4 italic">{ev.description}</p>
@@ -357,7 +357,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
           {/* RSVP Form */}
           <div className="py-12 px-6 max-w-xl mx-auto">
             <div className="text-center mb-6">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+              <span className="text-xs font-bold text-gray-400 uppercase font-mono tracking-widest">
                 Confirmación de Asistencia
               </span>
               <h2 className="text-2xl font-serif font-bold text-gray-900 mt-1">
@@ -371,7 +371,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
             {rsvpSubmitted ? (
               <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 text-center text-emerald-900 animate-fade-in">
                 <Check className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
-                <h3 className="font-bold text-base mb-1">¡Gracias por confirmar!</h3>
+                <h3 className="font-serif font-bold text-base mb-1">¡Gracias por confirmar!</h3>
                 <p className="text-xs text-emerald-700">
                   Hemos registrado tu respuesta exitosamente. ¡Nos vemos en la fiesta!
                 </p>
@@ -591,16 +591,16 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
             <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100 max-h-[92vh] overflow-y-auto animate-fade-in">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full w-fit mb-1">
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase font-mono tracking-wider text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full w-fit mb-1">
                     <Heart className="w-3 h-3 fill-rose-600" />
                     Regalo para {wedding.coupleName}
                   </div>
                   {giftFlowStep === 'cart' ? (
-                    <h3 className="font-bold text-base text-gray-900">
+                    <h3 className="font-serif font-bold text-base text-gray-900">
                       {cartItems.length === 1 ? cartItems[0].title : `${cartItems.length} regalos elegidos`}
                     </h3>
                   ) : (
-                    <h3 className="font-bold text-base text-gray-900">
+                    <h3 className="font-serif font-bold text-base text-gray-900">
                       {cartItems.length === 1 ? cartItems[0].title : `${cartItems.length} regalos`}
                     </h3>
                   )}

@@ -79,7 +79,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       {/* BRAND & WEDDING SUMMARY */}
       <div className="p-6 pb-4">
         <div className="flex items-center gap-2 mb-6">
-          <span className="text-2xl font-bold tracking-tight text-gray-900 cursor-pointer">
+          <span className="font-serif text-2xl font-black tracking-tight text-gray-900 cursor-pointer">
             Weda
           </span>
         </div>

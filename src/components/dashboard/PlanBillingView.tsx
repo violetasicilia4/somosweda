@@ -33,7 +33,7 @@ export const PlanBillingView: React.FC<PlanBillingViewProps> = ({
     <div className="space-y-8 animate-fade-in max-w-5xl">
       {/* HEADER */}
       <div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900">
           Plan y Facturación
         </h2>
         <p className="text-sm text-gray-500 mt-1">
@@ -51,7 +51,7 @@ export const PlanBillingView: React.FC<PlanBillingViewProps> = ({
             </div>
 
             <div>
-              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-gray-900">
                 Plan seleccionado: {currentPlan.name}
               </h3>
               <p className="text-sm text-gray-600 mt-1 max-w-lg">
@@ -66,7 +66,7 @@ export const PlanBillingView: React.FC<PlanBillingViewProps> = ({
 
           <div className="md:w-64 bg-gray-50 border border-gray-200 rounded-2xl p-5 shrink-0 flex flex-col justify-between">
             <div>
-              <span className="text-[11px] uppercase font-bold tracking-wider text-gray-400 block mb-1">
+              <span className="text-[11px] uppercase font-bold font-mono tracking-wider text-gray-400 block mb-1">
                 Monto del plan
               </span>
               <div className="text-2xl font-extrabold text-gray-900 tracking-tight">
@@ -91,7 +91,7 @@ export const PlanBillingView: React.FC<PlanBillingViewProps> = ({
       {/* PLAN COMPARISON CARDS */}
       <div className="space-y-4">
         <div>
-          <h3 className="text-base font-bold text-gray-900">Comparativa de Planes Weda</h3>
+          <h3 className="font-serif text-base font-bold text-gray-900">Comparativa de Planes Weda</h3>
           <p className="text-xs text-gray-500">Elegí el plan que mejor se adapte a las necesidades de su boda.</p>
         </div>
 
@@ -109,7 +109,7 @@ export const PlanBillingView: React.FC<PlanBillingViewProps> = ({
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-gray-500 bg-gray-100 px-2.5 py-0.5 rounded-full">
+                    <span className="text-[11px] font-bold uppercase font-mono tracking-wider text-gray-500 bg-gray-100 px-2.5 py-0.5 rounded-full">
                       {plan.badge}
                     </span>
                     {isSelected && (
