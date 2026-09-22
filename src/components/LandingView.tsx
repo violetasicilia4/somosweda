@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppView } from '../types';
-import { Users, CalendarCheck, Gift, Globe, Check, ArrowRight, Heart } from 'lucide-react';
+import { Users, CalendarCheck, Gift, Globe, Check, ArrowRight } from 'lucide-react';
 import { pricingPlans } from '../data/initialData';
 
 interface LandingViewProps {
@@ -47,27 +47,28 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Hero Section — titular editorial con drop-cap en script, al estilo "About Us" */}
       <section className="relative pt-6 pb-16 sm:py-20 px-4 sm:px-6 max-w-6xl mx-auto w-full">
         {/* Hero Banner Image Card */}
-        <div className="relative rounded-2xl overflow-hidden shadow-xl aspect-16/10 sm:aspect-21/9 max-h-[500px] w-full mb-10 flex items-center justify-center text-center p-6 sm:p-12">
-          <img 
-            src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80" 
-            alt="Pareja de novios sonriendo en su casamiento" 
+        <div className="relative rounded-2xl overflow-hidden shadow-xl aspect-16/10 sm:aspect-21/9 max-h-[560px] w-full mb-10 flex items-center justify-center text-center p-6 sm:p-12">
+          <img
+            src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80"
+            alt="Pareja de novios sonriendo en su casamiento"
             className="absolute inset-0 w-full h-full object-cover object-center"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/40 backdrop-brightness-95"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 to-black/35 backdrop-brightness-95"></div>
 
           <div className="relative z-10 max-w-3xl mx-auto text-white flex flex-col items-center">
-            <span className="text-[11px] sm:text-xs font-bold tracking-[0.2em] uppercase text-white/90 mb-3 bg-white/15 px-3.5 py-1 rounded-full backdrop-blur-md">
+            <span className="text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-white/70 mb-4">
               Planificá tu casamiento
             </span>
-            <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white mb-4 leading-tight">
-              Armá la lista de invitados y regalos de tu casamiento en un solo lugar.
+            <h1 className="font-bold tracking-tight text-white mb-5 leading-[0.9] flex items-baseline justify-center">
+              <span className="font-script text-brand-200 text-6xl sm:text-8xl md:text-9xl leading-none mr-1">A</span>
+              <span className="text-3xl sm:text-5xl md:text-6xl">rmá tu boda</span>
             </h1>
-            <p className="text-sm sm:text-base md:text-lg text-white/85 max-w-2xl mx-auto mb-8 font-normal leading-relaxed">
-              Creá tu sitio, gestioná confirmaciones, organizá invitados y recibí regalos digitales.
+            <p className="text-xs sm:text-sm md:text-base text-white/80 max-w-xl mx-auto mb-9 font-normal leading-relaxed tracking-wide">
+              Invitados, confirmaciones y regalos, organizados en un solo lugar — sin estrés y sin planillas.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto justify-center">
@@ -82,10 +83,116 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
               <button
                 id="hero-view-example-btn"
                 onClick={onOpenExample}
-                className="w-full sm:w-auto px-6 py-3.5 bg-white/20 hover:bg-white/30 text-white font-medium rounded-lg text-sm transition-all backdrop-blur-md border border-white/30 cursor-pointer"
+                className="w-full sm:w-auto px-6 py-3.5 bg-white/15 hover:bg-white/25 text-white font-medium rounded-lg text-sm transition-all backdrop-blur-md border border-white/30 cursor-pointer"
               >
                 Ver ejemplo
               </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Manifiesto editorial: declaración grande con acento en script + fotos incrustadas en el texto */}
+      <section className="px-4 sm:px-6 py-6 sm:py-10 max-w-6xl mx-auto w-full">
+        <div className="flex items-center gap-2 mb-6">
+          <span className="w-1.5 h-1.5 rounded-full bg-brand-600" />
+          <span className="text-xs font-bold tracking-[0.2em] uppercase text-gray-500">Sobre weda</span>
+        </div>
+
+        <h2 className="text-[26px] leading-[1.25] sm:text-4xl sm:leading-[1.2] md:text-5xl md:leading-[1.15] font-bold tracking-tight text-gray-900 max-w-5xl">
+          <span className="font-script text-brand-700 text-[1.5em] align-middle mr-1">Weda</span>
+          es donde cada detalle de tu boda{' '}
+          <img
+            src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=200&q=80"
+            alt=""
+            referrerPolicy="no-referrer"
+            className="inline-block h-[0.85em] w-[1.9em] object-cover rounded-full align-middle mx-1 -translate-y-[0.05em]"
+          />
+          {' '}encuentra su lugar, sin que la organización{' '}
+          <img
+            src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=200&q=80"
+            alt=""
+            referrerPolicy="no-referrer"
+            className="inline-block h-[0.85em] w-[1.9em] object-cover rounded-full align-middle mx-1 -translate-y-[0.05em]"
+          />
+          {' '}les robe la celebración.
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 sm:gap-10 mt-12">
+          <div className="sm:col-span-4">
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-gray-400">Nuestra idea</span>
+          </div>
+          <div className="sm:col-span-8">
+            <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+              Weda nació de una idea simple: organizar un casamiento debería sentirse como diseñar la boda
+              que soñás, no como completar un trámite. Empezamos por lo que más pesa — invitados,
+              confirmaciones y regalos — y lo unimos en un solo lugar, claro y sin fricción, para que la pareja
+              vuelva a estar en el centro de su propia historia.
+            </p>
+          </div>
+        </div>
+
+        {/* Collage de fotos: retrato + ancha + detalle, como el bloque "about us" de referencia */}
+        <div className="grid grid-cols-3 gap-3 sm:gap-4 mt-10">
+          <div className="col-span-1 aspect-3/4 rounded-xl overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=600&q=80"
+              alt="Pareja abrazándose el día de su boda"
+              referrerPolicy="no-referrer"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="col-span-1 aspect-3/4 rounded-xl overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=600&q=80"
+              alt="Lugar de la celebración entre viñedos"
+              referrerPolicy="no-referrer"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="col-span-1 aspect-3/4 rounded-xl overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80"
+              alt="Detalle de la mesa con velas"
+              referrerPolicy="no-referrer"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Weda en números — franja verde oscuro, al estilo "Moss Space by numbers" */}
+      <section className="relative mt-16 sm:mt-20 py-16 sm:py-20 px-4 sm:px-6 bg-brand-800 overflow-hidden">
+        <div className="absolute inset-0 opacity-15">
+          <img
+            src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=1800&q=80"
+            alt=""
+            referrerPolicy="no-referrer"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="relative max-w-6xl mx-auto">
+          <div className="flex items-center gap-2 mb-10">
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-200" />
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-brand-100">Weda en números</span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-10">
+            <div>
+              <span className="block text-4xl sm:text-6xl font-bold text-white tracking-tight">98%</span>
+              <span className="block text-xs sm:text-sm text-brand-100 mt-2">de parejas arman su lista en menos de un día</span>
+            </div>
+            <div>
+              <span className="block text-4xl sm:text-6xl font-bold text-white tracking-tight">100%</span>
+              <span className="block text-xs sm:text-sm text-brand-100 mt-2">de lo recaudado va directo a la cuenta de la pareja</span>
+            </div>
+            <div>
+              <span className="block text-4xl sm:text-6xl font-bold text-white tracking-tight">4</span>
+              <span className="block text-xs sm:text-sm text-brand-100 mt-2">pasos para tener invitados, RSVP y regalos listos</span>
+            </div>
+            <div>
+              <span className="block text-4xl sm:text-6xl font-bold text-white tracking-tight">0</span>
+              <span className="block text-xs sm:text-sm text-brand-100 mt-2">comisiones de Weda sobre los regalos recibidos</span>
             </div>
           </div>
         </div>
@@ -106,7 +213,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Card 1 */}
             <div className="bg-white p-6 rounded-xl border border-gray-200/80 shadow-2xs hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-gray-800 mb-5">
+              <div className="w-12 h-12 rounded-lg bg-brand-50 flex items-center justify-center text-brand-700 mb-5">
                 <Users className="w-6 h-6 text-gray-700" />
               </div>
               <h3 className="font-semibold text-lg text-gray-900 mb-1.5">Invitados</h3>
@@ -117,7 +224,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
 
             {/* Card 2 */}
             <div className="bg-white p-6 rounded-xl border border-gray-200/80 shadow-2xs hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-gray-800 mb-5">
+              <div className="w-12 h-12 rounded-lg bg-brand-50 flex items-center justify-center text-brand-700 mb-5">
                 <CalendarCheck className="w-6 h-6 text-gray-700" />
               </div>
               <h3 className="font-semibold text-lg text-gray-900 mb-1.5">RSVP</h3>
@@ -128,7 +235,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
 
             {/* Card 3 */}
             <div className="bg-white p-6 rounded-xl border border-gray-200/80 shadow-2xs hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-gray-800 mb-5">
+              <div className="w-12 h-12 rounded-lg bg-brand-50 flex items-center justify-center text-brand-700 mb-5">
                 <Gift className="w-6 h-6 text-gray-700" />
               </div>
               <h3 className="font-semibold text-lg text-gray-900 mb-1.5">Regalos</h3>
@@ -139,7 +246,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
 
             {/* Card 4 */}
             <div className="bg-white p-6 rounded-xl border border-gray-200/80 shadow-2xs hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-gray-800 mb-5">
+              <div className="w-12 h-12 rounded-lg bg-brand-50 flex items-center justify-center text-brand-700 mb-5">
                 <Globe className="w-6 h-6 text-gray-700" />
               </div>
               <h3 className="font-semibold text-lg text-gray-900 mb-1.5">Sitio Web</h3>
@@ -168,12 +275,12 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
               key={plan.id}
               className={`rounded-2xl p-7 flex flex-col justify-between transition-all relative ${
                 plan.recommended 
-                  ? 'border-2 border-gray-900 shadow-lg bg-white ring-1 ring-gray-900/5' 
+                  ? 'border-2 border-brand-800 shadow-lg bg-white ring-1 ring-brand-800/5' 
                   : 'border border-gray-200 bg-white shadow-2xs hover:border-gray-300'
               }`}
             >
               {plan.badge && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] tracking-wider font-bold py-1 px-3 rounded-full uppercase">
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-800 text-white text-[10px] tracking-wider font-bold py-1 px-3 rounded-full uppercase">
                   {plan.badge}
                 </div>
               )}
@@ -202,7 +309,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
                 onClick={() => onNavigate('register')}
                 className={`w-full py-3 px-4 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
                   plan.recommended
-                    ? 'bg-gray-900 text-white hover:bg-black shadow-xs'
+                    ? 'bg-brand-800 text-white hover:bg-brand-900 shadow-xs'
                     : 'bg-white border border-gray-300 text-gray-800 hover:bg-gray-50'
                 }`}
               >
@@ -227,7 +334,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="bg-white p-6 rounded-xl border border-gray-200">
-              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-900 text-white text-xs font-bold mb-4">
+              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-brand-800 text-white text-xs font-bold mb-4">
                 01
               </span>
               <h3 className="font-semibold text-gray-900 text-base mb-1.5">Crear cuenta</h3>
@@ -237,7 +344,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             </div>
 
             <div className="bg-white p-6 rounded-xl border border-gray-200">
-              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-900 text-white text-xs font-bold mb-4">
+              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-brand-800 text-white text-xs font-bold mb-4">
                 02
               </span>
               <h3 className="font-semibold text-gray-900 text-base mb-1.5">Configurar tu evento</h3>
@@ -247,7 +354,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             </div>
 
             <div className="bg-white p-6 rounded-xl border border-gray-200">
-              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-900 text-white text-xs font-bold mb-4">
+              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-brand-800 text-white text-xs font-bold mb-4">
                 03
               </span>
               <h3 className="font-semibold text-gray-900 text-base mb-1.5">Agregar invitados</h3>
@@ -257,7 +364,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             </div>
 
             <div className="bg-white p-6 rounded-xl border border-gray-200">
-              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-900 text-white text-xs font-bold mb-4">
+              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-brand-800 text-white text-xs font-bold mb-4">
                 04
               </span>
               <h3 className="font-semibold text-gray-900 text-base mb-1.5">Compartir y recibir</h3>
@@ -285,7 +392,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
           <div className="bg-white p-6 sm:p-7 rounded-2xl border border-gray-200 shadow-2xs flex flex-col justify-between">
             <div className="mb-4">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center text-stone-600 font-bold text-sm">
+                <div className="w-10 h-10 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 font-bold text-sm">
                   M&S
                 </div>
                 <div>
@@ -303,7 +410,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
           <div className="bg-white p-6 sm:p-7 rounded-2xl border border-gray-200 shadow-2xs flex flex-col justify-between">
             <div className="mb-4">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center text-stone-600 font-bold text-sm">
+                <div className="w-10 h-10 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 font-bold text-sm">
                   C&F
                 </div>
                 <div>
@@ -321,7 +428,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
           <div className="bg-white p-6 sm:p-7 rounded-2xl border border-gray-200 shadow-2xs flex flex-col justify-between">
             <div className="mb-4">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center text-stone-600 font-bold text-sm">
+                <div className="w-10 h-10 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 font-bold text-sm">
                   V&A
                 </div>
                 <div>

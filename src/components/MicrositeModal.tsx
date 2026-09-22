@@ -280,7 +280,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                 ¡Nos casamos!
               </span>
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white mb-3">
-                <CoupleNameDisplay name={wedding.coupleName} scriptClassName="text-amber-200" />
+                <CoupleNameDisplay name={wedding.coupleName} scriptClassName="text-brand-200" />
               </h1>
               <p className="text-sm sm:text-base text-white/90 font-light max-w-md mx-auto mb-6">
                 15 de Noviembre de 2027 • Buenos Aires
