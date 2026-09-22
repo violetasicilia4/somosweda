@@ -1,13 +1,11 @@
 @import "tailwindcss";
 
 /*
- * Identidad visual: editorial, cálida, minimalista — inspirada en Moss Space,
- * NOMA, tempo y entrenós. Onest como tipografía única (sin serif genérico), un
- * script delicado reservado para acentos puntuales (el "&" de los nombres, los
- * drop-caps editoriales), y la escala gray-* de Tailwind reemplazada por una
- * rampa crema → marrón oscuro para que toda la app herede la paleta sin tocar
- * cada archivo. `brand-*` es el verde bosque oscuro de marca (reemplaza al
- * dorado/amarillo anterior) para acentos, drop-caps y la franja de stats.
+ * Identidad visual: cálida, editorial, minimalista — inspirada en NOMA,
+ * tempo y entrenós. Onest como tipografía única (sin serif genérico), un
+ * script delicado reservado para acentos puntuales (el "&" de los nombres),
+ * y la escala gray-* de Tailwind reemplazada por una rampa crema → marrón
+ * oscuro para que toda la app herede la paleta sin tocar cada archivo.
  */
 @theme {
   --font-sans: 'Onest', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -24,18 +22,6 @@
   --color-gray-800: #47380D;
   --color-gray-900: #2E2309;
   --color-gray-950: #231B08;
-
-  --color-brand-50: #E9F0EA;
-  --color-brand-100: #CFE0D2;
-  --color-brand-200: #A9C7AE;
-  --color-brand-300: #7DAA85;
-  --color-brand-400: #588C63;
-  --color-brand-500: #3F7048;
-  --color-brand-600: #2F5738;
-  --color-brand-700: #274A2F;
-  --color-brand-800: #1F3B26;
-  --color-brand-900: #182E1D;
-  --color-brand-950: #101F14;
 }
 
 @layer base {

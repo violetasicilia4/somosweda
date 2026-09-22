@@ -152,7 +152,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 onClick={handleOpenPublishModal}
                 className="px-4 py-1.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
               >
-                <Sparkles className="w-3.5 h-3.5 text-brand-300" />
+                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                 <span>Publicar boda</span>
               </button>
             ) : (

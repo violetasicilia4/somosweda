@@ -114,7 +114,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
           className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors cursor-pointer"
         >
           <span className="flex items-center gap-2">
-            <Sparkles className="w-3.5 h-3.5 text-brand-500" />
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
             <span>Ver micrositio</span>
           </span>
           <ExternalLink className="w-3.5 h-3.5 text-gray-400" />

@@ -263,7 +263,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
               </>
             ) : (
               <>
-                <Lock className="w-3.5 h-3.5 text-brand-300" />
+                <Lock className="w-3.5 h-3.5 text-amber-300" />
                 <span>Borrador Privado</span>
               </>
             )}
@@ -277,18 +277,18 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
               Estás armando la lista de regalos de
             </span>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white drop-shadow-sm">
-              <CoupleNameDisplay name={wedding.coupleName || 'Sofía & Martín'} scriptClassName="text-brand-200" />
+              <CoupleNameDisplay name={wedding.coupleName || 'Sofía & Martín'} scriptClassName="text-amber-200" />
             </h1>
             <p className="text-xs sm:text-sm font-medium text-white/90 flex flex-wrap items-center gap-2 drop-shadow-xs">
               <span className="inline-flex items-center gap-1.5">
-                <Calendar className="w-4 h-4 text-brand-300" />
+                <Calendar className="w-4 h-4 text-amber-300" />
                 {formattedDate}
               </span>
               {wedding.venue && (
                 <>
                   <span className="text-white/50">•</span>
                   <span className="inline-flex items-center gap-1.5 text-white/85">
-                    <MapPin className="w-3.5 h-3.5 text-brand-300/90" />
+                    <MapPin className="w-3.5 h-3.5 text-amber-300/90" />
                     {wedding.venue}
                   </span>
                 </>
@@ -365,16 +365,16 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`p-3 rounded-2xl text-left transition-all cursor-pointer border flex flex-col justify-between ${
                     isSelected
-                      ? 'bg-brand-50/70 border-brand-300 shadow-xs'
+                      ? 'bg-amber-50/70 border-amber-300 shadow-xs'
                       : 'bg-white hover:bg-gray-50 text-gray-800 border-gray-200'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <Icon className={`w-4.5 h-4.5 ${isSelected ? 'text-brand-600' : 'text-gray-400'}`} />
+                    <Icon className={`w-4.5 h-4.5 ${isSelected ? 'text-amber-600' : 'text-gray-400'}`} />
                     <span className={`inline-flex items-center gap-0.5 text-[10px] font-bold px-2 py-0.5 rounded-full ${
                       addedInCategory > 0
                         ? 'bg-emerald-100 text-emerald-700'
-                        : isSelected ? 'bg-brand-100 text-brand-700' : 'bg-gray-100 text-gray-600'
+                        : isSelected ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600'
                     }`}>
                       {addedInCategory > 0 && <CheckCheck className="w-3 h-3" />}
                       {addedInCategory > 0 ? `${addedInCategory}/${itemsCount}` : itemsCount}
