@@ -341,7 +341,7 @@ export const suggestedGiftsByCategory: Record<string, Omit<GiftItem, 'id'>[]> = 
       description: 'Un día de navegación y aventura recorriendo calas e islas.',
       targetPrice: 130000,
       category: 'Luna de miel',
-      imageUrl: 'https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?auto=format&fit=crop&w=600&q=80',
+      imageUrl: 'https://images.unsplash.com/photo-1593351415075-3bac9f45c877?auto=format&fit=crop&w=600&q=80',
     },
     {
       title: 'Cena romántica especial',
@@ -466,7 +466,7 @@ export const suggestedGiftsByCategory: Record<string, Omit<GiftItem, 'id'>[]> = 
       description: 'Navegación íntima mientras cae el sol con copa de bienvenida.',
       targetPrice: 140000,
       category: 'Salidas y experiencias',
-      imageUrl: 'https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?auto=format&fit=crop&w=600&q=80',
+      imageUrl: 'https://images.unsplash.com/photo-1605387202149-47169c4ea58a?auto=format&fit=crop&w=600&q=80',
     },
     {
       title: 'Noche de teatro y cena',
