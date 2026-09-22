@@ -234,7 +234,7 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
           <button
             id="create-wedding-btn"
             type="submit"
-            className="w-full py-3.5 bg-[#0f172a] hover:bg-black text-white font-medium rounded-lg text-sm transition-all shadow-xs cursor-pointer mt-4"
+            className="w-full py-3.5 bg-gray-950 hover:bg-black text-white font-medium rounded-lg text-sm transition-all shadow-xs cursor-pointer mt-4"
           >
             Crear boda
           </button>

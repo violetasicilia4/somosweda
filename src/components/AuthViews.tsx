@@ -156,7 +156,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
               <button
                 id="login-submit-btn"
                 type="submit"
-                className="w-full py-3 bg-[#0f172a] hover:bg-black text-white font-medium rounded-lg text-sm transition-all shadow-xs cursor-pointer mt-2"
+                className="w-full py-3 bg-gray-950 hover:bg-black text-white font-medium rounded-lg text-sm transition-all shadow-xs cursor-pointer mt-2"
               >
                 Iniciar sesión
               </button>
@@ -302,7 +302,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
               <button
                 id="register-submit-btn"
                 type="submit"
-                className="w-full py-3 bg-[#0f172a] hover:bg-black text-white font-medium rounded-lg text-sm transition-all shadow-xs cursor-pointer mt-2"
+                className="w-full py-3 bg-gray-950 hover:bg-black text-white font-medium rounded-lg text-sm transition-all shadow-xs cursor-pointer mt-2"
               >
                 Crear cuenta
               </button>
@@ -392,7 +392,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
               <button
                 id="forgot-submit-btn"
                 type="submit"
-                className="w-full py-3 bg-[#0f172a] hover:bg-black text-white font-medium rounded-lg text-sm transition-all shadow-xs cursor-pointer mt-2"
+                className="w-full py-3 bg-gray-950 hover:bg-black text-white font-medium rounded-lg text-sm transition-all shadow-xs cursor-pointer mt-2"
               >
                 Enviar enlace de recuperación
               </button>
@@ -441,7 +441,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
               <button
                 id="verify-pin-btn"
                 type="submit"
-                className="w-full py-3 bg-[#0f172a] hover:bg-black text-white font-medium rounded-lg text-sm transition-all shadow-xs cursor-pointer"
+                className="w-full py-3 bg-gray-950 hover:bg-black text-white font-medium rounded-lg text-sm transition-all shadow-xs cursor-pointer"
               >
                 Verificar código
               </button>
@@ -526,7 +526,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
               <button
                 id="reset-password-submit-btn"
                 type="submit"
-                className="w-full py-3 bg-[#0f172a] hover:bg-black text-white font-medium rounded-lg text-sm transition-all shadow-xs cursor-pointer mt-2"
+                className="w-full py-3 bg-gray-950 hover:bg-black text-white font-medium rounded-lg text-sm transition-all shadow-xs cursor-pointer mt-2"
               >
                 Guardar nueva contraseña
               </button>

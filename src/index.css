@@ -1,7 +1,31 @@
 @import "tailwindcss";
 
+/*
+ * Identidad visual: cálida, editorial, minimalista — inspirada en NOMA,
+ * tempo y entrenós. Onest como tipografía única (sin serif genérico), un
+ * script delicado reservado para acentos puntuales (el "&" de los nombres),
+ * y la escala gray-* de Tailwind reemplazada por una rampa crema → marrón
+ * oscuro para que toda la app herede la paleta sin tocar cada archivo.
+ */
+@theme {
+  --font-sans: 'Onest', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-script: 'Parisienne', cursive;
+
+  --color-gray-50: #FFF5E2;
+  --color-gray-100: #F5E9CC;
+  --color-gray-200: #E8D8AC;
+  --color-gray-300: #D4C084;
+  --color-gray-400: #AFA065;
+  --color-gray-500: #8C7F4F;
+  --color-gray-600: #6B5E23;
+  --color-gray-700: #524619;
+  --color-gray-800: #47380D;
+  --color-gray-900: #2E2309;
+  --color-gray-950: #231B08;
+}
+
 @layer base {
   body {
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--font-sans);
   }
 }
