@@ -213,6 +213,22 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
     setTimeout(() => setAddedFeedback(null), 3000);
   };
 
+  // Complemento de "Agregar todos": sacar todos los de una categoría de una sola vez.
+  const handleRemoveAllInCategory = (categoryId: string) => {
+    const items = suggestedGiftsByCategory[categoryId] || [];
+    let removedCount = 0;
+    items.forEach(item => {
+      const existing = gifts.find(g => g.title.toLowerCase().trim() === item.title.toLowerCase().trim());
+      if (existing) {
+        onDeleteGift(existing.id);
+        removedCount++;
+      }
+    });
+    if (removedCount === 0) return;
+    setAddedFeedback(`${removedCount} regalos de "${categoryId}" sacados de tu lista`);
+    setTimeout(() => setAddedFeedback(null), 3000);
+  };
+
   return (
     <div className="space-y-8 animate-fade-in font-sans pb-24">
       {/* Floating feedback toast */}
@@ -325,30 +341,12 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
           </p>
         </div>
 
-          {/* Resumen liviano de lo ya elegido — siempre visible, se puede sacar desde acá */}
+          {/* Resumen liviano de lo ya elegido: un número, no una lista que crece sin límite.
+              Se administra tildando/destildando en cada categoría, no acá. */}
           {gifts.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 p-3 rounded-xl bg-gray-50 border border-gray-200">
-              <span className="text-xs font-bold text-gray-700 shrink-0">
-                Tu lista ({gifts.length}):
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {gifts.map((g) => (
-                  <span
-                    key={g.id}
-                    className="inline-flex items-center gap-1.5 bg-white border border-gray-200 rounded-full pl-2.5 pr-1.5 py-1 text-[11px] font-medium text-gray-700"
-                  >
-                    {g.title}
-                    <button
-                      type="button"
-                      onClick={() => onDeleteGift(g.id)}
-                      className="p-0.5 rounded-full hover:bg-rose-50 text-gray-400 hover:text-rose-600 cursor-pointer transition-colors"
-                      title="Sacar de la lista"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </span>
-                ))}
-              </div>
+            <div className="flex items-center gap-2 text-sm">
+              <span className="font-bold text-gray-900">{gifts.length}</span>
+              <span className="text-gray-500">regalos en tu lista</span>
             </div>
           )}
 
@@ -394,30 +392,45 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             })}
           </div>
 
-          {/* Encabezado de la categoría activa + atajo para catálogos grandes (50-60 ítems) */}
+          {/* Encabezado de la categoría activa: atajo para catálogos grandes (50-60 ítems)
+              y el "crear regalo específico", acá arriba para no perderse al fondo de la grilla. */}
           {(() => {
             const categoryItems = suggestedGiftsByCategory[selectedCategory] || [];
             const allAdded = categoryItems.length > 0 && categoryItems.every(item => isGiftInList(item.title));
             return (
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center justify-between gap-2.5">
                 <h3 className="text-sm font-bold text-gray-900">
                   {selectedCategory} <span className="text-gray-400 font-medium">· {categoryItems.length} regalos</span>
                 </h3>
-                {allAdded ? (
-                  <span className="text-xs font-bold text-emerald-700 inline-flex items-center gap-1.5">
-                    <CheckCheck className="w-4 h-4" />
-                    Todos agregados
-                  </span>
-                ) : (
+                <div className="flex items-center gap-2">
+                  {allAdded ? (
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveAllInCategory(selectedCategory)}
+                      className="text-xs font-bold text-emerald-700 hover:text-rose-600 border border-emerald-200 hover:border-rose-200 hover:bg-rose-50 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 cursor-pointer transition-colors shrink-0"
+                    >
+                      <CheckCheck className="w-3.5 h-3.5" />
+                      <span>Quitar todos</span>
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => handleAddAllInCategory(selectedCategory)}
+                      className="text-xs font-bold text-gray-700 hover:text-gray-900 border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 cursor-pointer transition-colors shrink-0"
+                    >
+                      <CheckCheck className="w-3.5 h-3.5 text-gray-400" />
+                      <span>Agregar todos</span>
+                    </button>
+                  )}
                   <button
                     type="button"
-                    onClick={() => handleAddAllInCategory(selectedCategory)}
-                    className="text-xs font-bold text-gray-700 hover:text-gray-900 border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 cursor-pointer transition-colors shrink-0"
+                    onClick={handleOpenCustomGift}
+                    className="text-xs font-bold text-gray-700 hover:text-gray-900 border border-dashed border-gray-300 hover:border-gray-400 hover:bg-gray-50 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 cursor-pointer transition-colors shrink-0"
                   >
-                    <CheckCheck className="w-3.5 h-3.5 text-gray-400" />
-                    <span>Agregar todos</span>
+                    <Plus className="w-3.5 h-3.5 text-gray-400" />
+                    <span>Crear regalo</span>
                   </button>
-                )}
+                </div>
               </div>
             );
           })()}
@@ -435,31 +448,27 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                     checked ? 'border-gray-900 ring-1 ring-gray-900' : 'border-gray-200 hover:border-gray-300 hover:shadow-xs'
                   }`}
                 >
-                  <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-gray-100 shrink-0">
+                  <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden bg-gray-100 shrink-0">
                     <img
                       src={item.imageUrl}
                       alt={item.title}
                       className="w-full h-full object-cover"
                       referrerPolicy="no-referrer"
                     />
-                    <div className={`absolute bottom-0.5 right-0.5 w-6 h-6 rounded-full flex items-center justify-center border-2 border-white transition-colors ${
+                    <div className={`absolute bottom-0.5 right-0.5 w-7 h-7 rounded-full flex items-center justify-center border-2 border-white transition-colors ${
                       checked ? 'bg-gray-900' : 'bg-white/90'
                     }`}>
-                      {checked && <Check className="w-3.5 h-3.5 text-white" />}
+                      {checked && <Check className="w-4 h-4 text-white" />}
                     </div>
                   </div>
 
-                  <div className="pt-3 space-y-1 w-full">
-                    <h3 className="text-xs sm:text-sm font-bold text-gray-900 leading-snug">
+                  <div className="pt-3 space-y-0.5 w-full">
+                    <h3 className="text-sm font-bold text-gray-900 leading-snug line-clamp-2">
                       {item.title}
                     </h3>
-                    <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
-                      {item.description}
+                    <p className="text-sm font-bold text-gray-700">
+                      Monto: ${item.targetPrice.toLocaleString()}
                     </p>
-                    <div className="flex items-center justify-between text-xs pt-1.5">
-                      <span className="text-gray-500 font-medium">Aporte sugerido:</span>
-                      <span className="font-bold text-gray-900">${item.targetPrice.toLocaleString()}</span>
-                    </div>
                     {checked && (
                       <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold text-emerald-700 pt-1">
                         <Check className="w-3.5 h-3.5" />
@@ -477,7 +486,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                 key={gift.id}
                 className="relative bg-white rounded-2xl border-2 border-gray-900 overflow-hidden shadow-2xs p-4 flex flex-col items-center text-center"
               >
-                <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-gray-100 shrink-0">
+                <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden bg-gray-100 shrink-0">
                   <img
                     src={gift.imageUrl}
                     alt={gift.title}
@@ -488,17 +497,13 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                 <span className="mt-2 bg-gray-900 text-white text-[9px] font-semibold px-2 py-0.5 rounded-full uppercase">
                   Personalizado
                 </span>
-                <div className="pt-2 space-y-1 w-full">
-                  <h3 className="text-xs sm:text-sm font-bold text-gray-900 leading-snug">
+                <div className="pt-2 space-y-0.5 w-full">
+                  <h3 className="text-sm font-bold text-gray-900 leading-snug line-clamp-2">
                     {gift.title}
                   </h3>
-                  <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
-                    {gift.description}
+                  <p className="text-sm font-bold text-gray-700">
+                    Monto: ${gift.targetPrice.toLocaleString()}
                   </p>
-                  <div className="flex items-center justify-between text-xs pt-1.5">
-                    <span className="text-gray-500 font-medium">Aporte sugerido:</span>
-                    <span className="font-bold text-gray-900">${gift.targetPrice.toLocaleString()}</span>
-                  </div>
                   <div className="flex items-center justify-center gap-1.5 pt-2 border-t border-gray-100 mt-1.5">
                     <button
                       type="button"
@@ -521,16 +526,6 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
               </div>
             ))}
           </div>
-
-          {/* Siempre disponible: un regalo puntual que no está en el catálogo */}
-          <button
-            type="button"
-            onClick={handleOpenCustomGift}
-            className="w-full sm:w-auto px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-800 border border-dashed border-gray-300 hover:border-gray-400 rounded-xl text-sm font-semibold inline-flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-          >
-            <Plus className="w-4 h-4 text-gray-400" />
-            <span>Crear un regalo específico en "{selectedCategory}"</span>
-          </button>
       </section>
 
       {/* ========================================================================= */}
@@ -542,7 +537,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             <div className="flex items-center justify-between border-b border-gray-100 pb-3">
               <div>
                 <h3 className="text-lg font-bold text-gray-900">Crear regalo</h3>
-                <p className="text-xs text-gray-500">Ingresá el nombre, categoría y aporte sugerido para este regalo.</p>
+                <p className="text-xs text-gray-500">Ingresá el nombre, categoría y monto para este regalo.</p>
               </div>
               <button
                 type="button"
@@ -599,7 +594,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
 
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 mb-1">
-                    Aporte sugerido ($) *
+                    Monto ($) *
                   </label>
                   <input
                     type="number"
@@ -653,7 +648,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             <div className="flex items-center justify-between border-b border-gray-100 pb-3">
               <div>
                 <h3 className="text-lg font-bold text-gray-900">Editar regalo</h3>
-                <p className="text-xs text-gray-500">Modificá el nombre, descripción, categoría o aporte sugerido.</p>
+                <p className="text-xs text-gray-500">Modificá el nombre, descripción, categoría o monto.</p>
               </div>
               <button
                 type="button"
@@ -708,7 +703,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
 
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 mb-1">
-                    Aporte sugerido ($) *
+                    Monto ($) *
                   </label>
                   <input
                     type="number"
