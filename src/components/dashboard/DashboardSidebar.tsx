@@ -23,14 +23,15 @@ interface DashboardSidebarProps {
 
 type MenuItem = { id: DashboardTab; label: string; icon: React.ComponentType<{ className?: string }> };
 
-// Ordenado por relevancia emocional: primero lo que la pareja arma y disfruta,
-// después lo genuinamente administrativo (separado solo por un divisor visual, no por una etiqueta).
+// Ordenado por relevancia emocional: primero los datos de la boda, después
+// lo que la pareja arma y disfruta, y por último lo genuinamente administrativo
+// (separado solo por un divisor visual, no por una etiqueta).
 const PRIMARY_ITEMS: MenuItem[] = [
+  { id: 'cuenta', label: 'Mi Boda', icon: User },
   { id: 'regalos', label: 'Lista de Regalos', icon: Gift },
   { id: 'recibidos', label: 'Regalos recibidos', icon: HandHeart },
   { id: 'micrositio', label: 'Micrositio', icon: Layout },
   { id: 'invitados', label: 'Invitados & RSVP', icon: Users },
-  { id: 'cuenta', label: 'Mi Boda', icon: User },
 ];
 
 const SECONDARY_ITEMS: MenuItem[] = [
