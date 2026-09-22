@@ -13,6 +13,12 @@ import {
   Calendar,
   MapPin,
   ExternalLink,
+  Plane,
+  Home,
+  Gem,
+  Compass,
+  PiggyBank,
+  CheckCheck,
 } from 'lucide-react';
 
 interface GiftRegistryViewProps {
@@ -29,16 +35,16 @@ interface GiftRegistryViewProps {
 interface CategoryMeta {
   id: string;
   name: string;
-  emoji: string;
+  icon: React.ComponentType<{ className?: string }>;
   examples: string;
 }
 
 const REGISTRY_CATEGORIES: CategoryMeta[] = [
-  { id: 'Luna de miel', name: 'Luna de miel', emoji: '✈️', examples: 'Pasajes, hotel, excursiones, cena romántica' },
-  { id: 'Casa y hogar', name: 'Casa y hogar', emoji: '🏠', examples: 'Cafetera, vajilla, mesa comedor, sofá, sábanas' },
-  { id: 'La boda', name: 'La boda', emoji: '💍', examples: 'Fotógrafo, barra de tragos, flores, música y DJ' },
-  { id: 'Salidas y experiencias', name: 'Salidas y experiencias', emoji: '🍽️', examples: 'Degustación de vinos, spa, cocina, velero' },
-  { id: 'Aporte libre', name: 'Aporte libre', emoji: '💰', examples: 'Aporte libre para el futuro, casa propia, remodelación' },
+  { id: 'Luna de miel', name: 'Luna de miel', icon: Plane, examples: 'Pasajes, hotel, excursiones, cena romántica' },
+  { id: 'Casa y hogar', name: 'Casa y hogar', icon: Home, examples: 'Cafetera, vajilla, mesa comedor, sofá, sábanas' },
+  { id: 'La boda', name: 'La boda', icon: Gem, examples: 'Fotógrafo, barra de tragos, flores, música y DJ' },
+  { id: 'Salidas y experiencias', name: 'Salidas y experiencias', icon: Compass, examples: 'Degustación de vinos, spa, cocina, velero' },
+  { id: 'Aporte libre', name: 'Aporte libre', icon: PiggyBank, examples: 'Aporte libre para el futuro, casa propia, remodelación' },
 ];
 
 export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
@@ -188,6 +194,25 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
     setTimeout(() => setAddedFeedback(null), 3000);
   };
 
+  // Atajo para cuando el catálogo de una categoría tiene muchos ítems (50-60):
+  // sumarlos todos de una, en vez de tildar uno por uno. El tilde individual sigue disponible.
+  const handleAddAllInCategory = (categoryId: string) => {
+    const items = suggestedGiftsByCategory[categoryId] || [];
+    const newOnes = items.filter(item => !isGiftInList(item.title));
+    if (newOnes.length === 0) return;
+    newOnes.forEach(item => {
+      onAddGift({
+        title: item.title,
+        description: item.description,
+        targetPrice: item.targetPrice,
+        category: item.category,
+        imageUrl: item.imageUrl,
+      });
+    });
+    setAddedFeedback(`${newOnes.length} regalos de "${categoryId}" agregados a tu lista`);
+    setTimeout(() => setAddedFeedback(null), 3000);
+  };
+
   return (
     <div className="space-y-8 animate-fade-in font-sans pb-24">
       {/* Floating feedback toast */}
@@ -199,7 +224,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
       )}
 
       {/* 1. HERO SUPERIOR: compacto, para que la lista de regalos sea protagonista */}
-      <div className="relative rounded-3xl overflow-hidden shadow-sm border border-gray-200 bg-gray-950 text-white min-h-[160px] sm:min-h-[190px] flex flex-col justify-between p-5 sm:p-6">
+      <div className="relative rounded-3xl overflow-hidden shadow-sm border border-gray-200 bg-gray-950 text-white min-h-[220px] sm:min-h-[250px] flex flex-col justify-between p-5 sm:p-6">
         {/* Background Wedding Photography */}
         <div className="absolute inset-0 z-0">
           <img
@@ -228,67 +253,66 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
           </div>
         </div>
 
-        {/* Bottom Hero Information: lo primero que la pareja identifica como "esto es mío" */}
-        <div className="relative z-10 space-y-1.5">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-white/60">
-            Estás armando la lista de regalos de
-          </span>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white drop-shadow-sm">
-            {wedding.coupleName || 'Sofía & Martín'}
-          </h1>
-          <p className="text-xs sm:text-sm font-medium text-white/90 flex flex-wrap items-center gap-2 drop-shadow-xs">
-            <span className="inline-flex items-center gap-1.5">
-              <Calendar className="w-4 h-4 text-amber-300" />
-              {formattedDate}
+        {/* Bottom Hero Information + CTA: el "Ver mi lista" vive acá, con protagonismo real */}
+        <div className="relative z-10 space-y-3">
+          <div className="space-y-1.5">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-white/60">
+              Estás armando la lista de regalos de
             </span>
-            {wedding.venue && (
-              <>
-                <span className="text-white/50">•</span>
-                <span className="inline-flex items-center gap-1.5 text-white/85">
-                  <MapPin className="w-3.5 h-3.5 text-amber-300/90" />
-                  {wedding.venue}
-                </span>
-              </>
-            )}
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white drop-shadow-sm">
+              {wedding.coupleName || 'Sofía & Martín'}
+            </h1>
+            <p className="text-xs sm:text-sm font-medium text-white/90 flex flex-wrap items-center gap-2 drop-shadow-xs">
+              <span className="inline-flex items-center gap-1.5">
+                <Calendar className="w-4 h-4 text-amber-300" />
+                {formattedDate}
+              </span>
+              {wedding.venue && (
+                <>
+                  <span className="text-white/50">•</span>
+                  <span className="inline-flex items-center gap-1.5 text-white/85">
+                    <MapPin className="w-3.5 h-3.5 text-amber-300/90" />
+                    {wedding.venue}
+                  </span>
+                </>
+              )}
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-2 pt-1">
+            <button
+              type="button"
+              onClick={onOpenMicrosite}
+              className="px-5 py-3 bg-white hover:bg-gray-100 text-gray-900 rounded-xl text-sm font-bold inline-flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer active:scale-[0.98]"
+            >
+              <ExternalLink className="w-4 h-4" />
+              <span>Ver mi lista</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleSharePreview}
+              className="px-4 py-3 bg-white/10 hover:bg-white/20 border border-white/25 text-white rounded-xl text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer backdrop-blur-xs"
+            >
+              {copiedShare ? (
+                <>
+                  <Check className="w-4 h-4 text-emerald-300" />
+                  <span>¡Enlace copiado!</span>
+                </>
+              ) : (
+                <>
+                  <Share2 className="w-4 h-4" />
+                  <span>Copiar enlace</span>
+                </>
+              )}
+            </button>
+          </div>
+          <p className="text-[10px] text-white/50">
+            Así la ven tus invitados: la web pública real, no una simulación.
           </p>
         </div>
       </div>
 
-      {/* 2. CTA PRINCIPAL: ver la experiencia pública real, sin simulaciones */}
-      <div className="space-y-2">
-        <div className="flex flex-col sm:flex-row gap-2.5">
-          <button
-            type="button"
-            onClick={onOpenMicrosite}
-            className="flex-1 sm:flex-none px-6 py-3.5 bg-gray-900 hover:bg-black text-white rounded-2xl text-sm font-bold inline-flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer active:scale-[0.98]"
-          >
-            <ExternalLink className="w-4 h-4" />
-            <span>Ver mi lista</span>
-          </button>
-          <button
-            type="button"
-            onClick={handleSharePreview}
-            className="px-4 py-3.5 border border-gray-200 hover:bg-gray-50 rounded-2xl text-sm font-semibold text-gray-700 inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
-          >
-            {copiedShare ? (
-              <>
-                <Check className="w-4 h-4 text-emerald-600" />
-                <span className="text-emerald-700">¡Enlace copiado!</span>
-              </>
-            ) : (
-              <>
-                <Share2 className="w-4 h-4 text-gray-500" />
-                <span>Copiar enlace</span>
-              </>
-            )}
-          </button>
-        </div>
-        <p className="text-[11px] text-gray-400">
-          Así la ven tus invitados: la web pública real, no una simulación.
-        </p>
-      </div>
-
-      {/* 3. UNA SOLA EXPERIENCIA: elegir categoría, tildar/destildar regalos y ver
+      {/* 2. UNA SOLA EXPERIENCIA: elegir categoría, tildar/destildar regalos y ver
           en todo momento lo que ya sumaste — sin secciones separadas ni pasos extra.
           No depende de tener métodos de cobro configurados. */}
       <section className="space-y-5">
@@ -334,6 +358,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
               const isSelected = selectedCategory === cat.id;
               const itemsCount = (suggestedGiftsByCategory[cat.id] || []).length;
               const addedInCategory = gifts.filter(g => g.category === cat.name).length;
+              const Icon = cat.icon;
               return (
                 <button
                   key={cat.id}
@@ -341,25 +366,26 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`p-3 rounded-2xl text-left transition-all cursor-pointer border flex flex-col justify-between ${
                     isSelected
-                      ? 'bg-gray-900 text-white border-gray-900 shadow-xs'
+                      ? 'bg-amber-50/70 border-amber-300 shadow-xs'
                       : 'bg-white hover:bg-gray-50 text-gray-800 border-gray-200'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <span className="text-lg">{cat.emoji}</span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                    <Icon className={`w-4.5 h-4.5 ${isSelected ? 'text-amber-600' : 'text-gray-400'}`} />
+                    <span className={`inline-flex items-center gap-0.5 text-[10px] font-bold px-2 py-0.5 rounded-full ${
                       addedInCategory > 0
-                        ? isSelected ? 'bg-emerald-400/90 text-emerald-950' : 'bg-emerald-100 text-emerald-700'
-                        : isSelected ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-600'
+                        ? 'bg-emerald-100 text-emerald-700'
+                        : isSelected ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600'
                     }`}>
-                      {addedInCategory > 0 ? `${addedInCategory} ✓` : itemsCount}
+                      {addedInCategory > 0 && <CheckCheck className="w-3 h-3" />}
+                      {addedInCategory > 0 ? `${addedInCategory}/${itemsCount}` : itemsCount}
                     </span>
                   </div>
                   <div>
-                    <h3 className={`text-xs sm:text-sm font-bold leading-tight ${isSelected ? 'text-white' : 'text-gray-900'}`}>
+                    <h3 className="text-xs sm:text-sm font-bold leading-tight text-gray-900">
                       {cat.name}
                     </h3>
-                    <p className={`text-[10px] leading-snug line-clamp-1 mt-0.5 ${isSelected ? 'text-white/70' : 'text-gray-400'}`}>
+                    <p className="text-[10px] leading-snug line-clamp-1 mt-0.5 text-gray-400">
                       {cat.examples}
                     </p>
                   </div>
@@ -368,8 +394,36 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             })}
           </div>
 
-          {/* Regalos de la categoría activa: tarjetas tildables, sin modal ni pasos extra */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {/* Encabezado de la categoría activa + atajo para catálogos grandes (50-60 ítems) */}
+          {(() => {
+            const categoryItems = suggestedGiftsByCategory[selectedCategory] || [];
+            const allAdded = categoryItems.length > 0 && categoryItems.every(item => isGiftInList(item.title));
+            return (
+              <div className="flex items-center justify-between gap-3">
+                <h3 className="text-sm font-bold text-gray-900">
+                  {selectedCategory} <span className="text-gray-400 font-medium">· {categoryItems.length} regalos</span>
+                </h3>
+                {allAdded ? (
+                  <span className="text-xs font-bold text-emerald-700 inline-flex items-center gap-1.5">
+                    <CheckCheck className="w-4 h-4" />
+                    Todos agregados
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => handleAddAllInCategory(selectedCategory)}
+                    className="text-xs font-bold text-gray-700 hover:text-gray-900 border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 cursor-pointer transition-colors shrink-0"
+                  >
+                    <CheckCheck className="w-3.5 h-3.5 text-gray-400" />
+                    <span>Agregar todos</span>
+                  </button>
+                )}
+              </div>
+            );
+          })()}
+
+          {/* Regalos de la categoría activa: tarjetas circulares tildables, sin modal ni pasos extra */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {(suggestedGiftsByCategory[selectedCategory] || []).map((item, idx) => {
               const checked = isGiftInList(item.title);
               return (
@@ -377,25 +431,25 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   key={idx}
                   type="button"
                   onClick={() => handleToggleSuggestion(item)}
-                  className={`text-left bg-white rounded-2xl border transition-all overflow-hidden shadow-2xs cursor-pointer ${
+                  className={`text-center bg-white rounded-2xl border transition-all overflow-hidden shadow-2xs cursor-pointer p-4 flex flex-col items-center ${
                     checked ? 'border-gray-900 ring-1 ring-gray-900' : 'border-gray-200 hover:border-gray-300 hover:shadow-xs'
                   }`}
                 >
-                  <div className="relative h-36 w-full overflow-hidden bg-gray-100">
+                  <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-gray-100 shrink-0">
                     <img
                       src={item.imageUrl}
                       alt={item.title}
                       className="w-full h-full object-cover"
                       referrerPolicy="no-referrer"
                     />
-                    <div className={`absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center border-2 transition-colors ${
-                      checked ? 'bg-gray-900 border-gray-900' : 'bg-white/90 border-white'
+                    <div className={`absolute bottom-0.5 right-0.5 w-6 h-6 rounded-full flex items-center justify-center border-2 border-white transition-colors ${
+                      checked ? 'bg-gray-900' : 'bg-white/90'
                     }`}>
                       {checked && <Check className="w-3.5 h-3.5 text-white" />}
                     </div>
                   </div>
 
-                  <div className="p-3.5 space-y-1">
+                  <div className="pt-3 space-y-1 w-full">
                     <h3 className="text-xs sm:text-sm font-bold text-gray-900 leading-snug">
                       {item.title}
                     </h3>
@@ -407,7 +461,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                       <span className="font-bold text-gray-900">${item.targetPrice.toLocaleString()}</span>
                     </div>
                     {checked && (
-                      <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 pt-1">
+                      <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold text-emerald-700 pt-1">
                         <Check className="w-3.5 h-3.5" />
                         <span>Agregado a tu lista</span>
                       </div>
@@ -421,20 +475,20 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             {gifts.filter(g => g.isCustom && g.category === selectedCategory).map((gift) => (
               <div
                 key={gift.id}
-                className="relative bg-white rounded-2xl border-2 border-gray-900 overflow-hidden shadow-2xs"
+                className="relative bg-white rounded-2xl border-2 border-gray-900 overflow-hidden shadow-2xs p-4 flex flex-col items-center text-center"
               >
-                <div className="relative h-36 w-full overflow-hidden bg-gray-100">
+                <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-gray-100 shrink-0">
                   <img
                     src={gift.imageUrl}
                     alt={gift.title}
                     className="w-full h-full object-cover"
                     referrerPolicy="no-referrer"
                   />
-                  <span className="absolute top-2 left-2 bg-gray-900 text-white text-[10px] font-semibold px-2 py-0.5 rounded uppercase">
-                    Personalizado
-                  </span>
                 </div>
-                <div className="p-3.5 space-y-1">
+                <span className="mt-2 bg-gray-900 text-white text-[9px] font-semibold px-2 py-0.5 rounded-full uppercase">
+                  Personalizado
+                </span>
+                <div className="pt-2 space-y-1 w-full">
                   <h3 className="text-xs sm:text-sm font-bold text-gray-900 leading-snug">
                     {gift.title}
                   </h3>
@@ -445,7 +499,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                     <span className="text-gray-500 font-medium">Aporte sugerido:</span>
                     <span className="font-bold text-gray-900">${gift.targetPrice.toLocaleString()}</span>
                   </div>
-                  <div className="flex items-center gap-1.5 pt-2 border-t border-gray-100 mt-1.5">
+                  <div className="flex items-center justify-center gap-1.5 pt-2 border-t border-gray-100 mt-1.5">
                     <button
                       type="button"
                       onClick={() => handleOpenEdit(gift)}
@@ -538,7 +592,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                     className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900 font-medium"
                   >
                     {REGISTRY_CATEGORIES.map((c) => (
-                      <option key={c.id} value={c.name}>{c.emoji} {c.name}</option>
+                      <option key={c.id} value={c.name}>{c.name}</option>
                     ))}
                   </select>
                 </div>
@@ -647,7 +701,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                     className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900 font-medium"
                   >
                     {REGISTRY_CATEGORIES.map((c) => (
-                      <option key={c.id} value={c.name}>{c.emoji} {c.name}</option>
+                      <option key={c.id} value={c.name}>{c.name}</option>
                     ))}
                   </select>
                 </div>

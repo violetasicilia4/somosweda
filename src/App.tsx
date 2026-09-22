@@ -44,7 +44,7 @@ export default function App() {
   const handleAddGuest = (newGuest: Omit<Guest, 'id'>) => {
     const guest: Guest = {
       ...newGuest,
-      id: `g_${Date.now()}`,
+      id: `g_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
     };
     setGuests(prev => [guest, ...prev]);
   };
@@ -58,12 +58,21 @@ export default function App() {
   };
 
   const handleAddGift = (newGift: Omit<GiftItem, 'id' | 'currentAmount'>) => {
-    const gift: GiftItem = {
-      ...newGift,
-      id: `gf_${Date.now()}`,
-      currentAmount: 0,
-    };
-    setGifts(prev => [gift, ...prev]);
+    // setGifts lee siempre el `prev` más reciente, incluso cuando esta función se
+    // llama muchas veces seguidas en el mismo tick (p.ej. "Agregar todos" de una
+    // categoría) — evita duplicados por título y colisiones de id basadas en Date.now().
+    setGifts(prev => {
+      const alreadyExists = prev.some(
+        g => g.title.toLowerCase().trim() === newGift.title.toLowerCase().trim()
+      );
+      if (alreadyExists) return prev;
+      const gift: GiftItem = {
+        ...newGift,
+        id: `gf_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+        currentAmount: 0,
+      };
+      return [gift, ...prev];
+    });
   };
 
   const handleDeleteGift = (giftId: string) => {
@@ -77,7 +86,7 @@ export default function App() {
   const handleAddReceivedGift = (newReceived: Omit<ReceivedGift, 'id'>) => {
     const rec: ReceivedGift = {
       ...newReceived,
-      id: `rg_${Date.now()}`,
+      id: `rg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
     };
     setReceivedGifts(prev => [rec, ...prev]);
   };
