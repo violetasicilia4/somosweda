@@ -14,7 +14,6 @@ import { GiftRegistryView } from './dashboard/GiftRegistryView';
 import { GuestManagementView } from './dashboard/GuestManagementView';
 import { MicrositeBuilderView } from './dashboard/MicrositeBuilderView';
 import { ReceivedGiftsView } from './dashboard/ReceivedGiftsView';
-import { CobrosView } from './dashboard/CobrosView';
 import { PlanBillingView } from './dashboard/PlanBillingView';
 import { AccountView } from './dashboard/AccountView';
 import { HelpView } from './dashboard/HelpView';
@@ -169,10 +168,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               wedding={wedding}
               gifts={gifts}
               onAddGift={onAddGift}
+              onAddGiftsFromSet={onAddGiftsFromSet}
               onDeleteGift={onDeleteGift}
               onUpdateGift={onUpdateGift}
               onReorderGifts={onReorderGifts}
               onOpenMicrosite={onOpenMicrosite}
+              onUpdateWedding={onUpdateWedding}
             />
           )}
 
@@ -200,13 +201,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               onAddGuest={onAddGuest}
               onUpdateGuestStatus={onUpdateGuestStatus}
               onDeleteGuest={onDeleteGuest}
-            />
-          )}
-
-          {activeTab === 'cobros' && (
-            <CobrosView
-              wedding={wedding}
-              onUpdateWedding={onUpdateWedding}
             />
           )}
 

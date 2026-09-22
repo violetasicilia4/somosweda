@@ -13,7 +13,6 @@ export type DashboardTab =
   | 'micrositio'
   | 'recibidos'
   | 'invitados'
-  | 'cobros'
   | 'plan'
   | 'cuenta'
   | 'ayuda';

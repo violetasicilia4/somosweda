@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { GiftItem, WeddingData } from '../../types';
-import { suggestedGiftsByCategory } from '../../data/initialData';
+import { suggestedGiftsByCategory, predefinedGiftSets, GiftSet } from '../../data/initialData';
+import { CobrosView } from './CobrosView';
 import {
   Plus,
   Trash2,
   Check,
   Eye,
   CheckCircle2,
+  AlertCircle,
   X,
   Share2,
   Edit3,
@@ -15,16 +17,20 @@ import {
   Lock,
   Calendar,
   MapPin,
+  Wallet,
+  Gift as GiftIcon,
 } from 'lucide-react';
 
 interface GiftRegistryViewProps {
   wedding: WeddingData;
   gifts: GiftItem[];
   onAddGift: (gift: Omit<GiftItem, 'id' | 'currentAmount'>) => void;
+  onAddGiftsFromSet: (items: Omit<GiftItem, 'id'>[]) => void;
   onDeleteGift: (giftId: string) => void;
   onUpdateGift?: (giftId: string, updates: Partial<GiftItem>) => void;
   onReorderGifts?: (newGifts: GiftItem[]) => void;
   onOpenMicrosite?: () => void;
+  onUpdateWedding: (updated: Partial<WeddingData>) => void;
 }
 
 // 5 Categorías pensadas desde la perspectiva de los novios
@@ -47,11 +53,20 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
   wedding,
   gifts,
   onAddGift,
+  onAddGiftsFromSet,
   onDeleteGift,
   onUpdateGift,
   onReorderGifts,
   onOpenMicrosite,
+  onUpdateWedding,
 }) => {
+  // Setup del registro: métodos de pago primero si todavía no están cargados,
+  // igual que en Confites (pestañas con estado antes de poder compartir la lista).
+  const isPaymentConfigured = Boolean(wedding.bankAlias?.trim() || wedding.mercadoPagoAlias?.trim());
+  const [activeSection, setActiveSection] = useState<'pago' | 'lista'>(
+    isPaymentConfigured ? 'lista' : 'pago'
+  );
+
   // Category filter for suggested gifts catalog
   const [selectedCategory, setSelectedCategory] = useState<string>('Luna de miel');
 
@@ -197,6 +212,20 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
     setTimeout(() => setAddedFeedback(null), 3000);
   };
 
+  // Predefined gift sets: "Elegí un estilo para tu lista", igual que los sets de Confites
+  const isSetApplied = (set: GiftSet) => set.items.every(item => isGiftInList(item.title));
+
+  const handleUseSet = (set: GiftSet) => {
+    if (isSetApplied(set)) return;
+    onAddGiftsFromSet(set.items);
+    setAddedFeedback(`Set "${set.name}" agregado a tu lista`);
+    setTimeout(() => setAddedFeedback(null), 3000);
+  };
+
+  const handleGoToPersonalize = () => {
+    setIsCustomGiftOpen(true);
+  };
+
 
   return (
     <div className="space-y-8 animate-fade-in font-sans pb-24">
@@ -221,7 +250,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/35" />
         </div>
 
-        {/* Top Badges Row: Estado */}
+        {/* Top Badges Row: Estado + acciones secundarias de previsualización */}
         <div className="relative z-10 flex flex-wrap items-center justify-between gap-3">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-white/20 text-xs font-medium text-white">
             {wedding.status === 'PUBLICADO' ? (
@@ -236,10 +265,44 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
               </>
             )}
           </div>
+
+          {/* Secundario a propósito: previsualizar no es la acción principal de esta pantalla */}
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={handleViewMyWeb}
+              className="px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-white/80 hover:text-white hover:bg-white/10 inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+              title="Abrir el micrositio real como invitado"
+            >
+              <Eye className="w-3.5 h-3.5" />
+              <span>Ver mi web</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleSharePreview}
+              className="px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-white/80 hover:text-white hover:bg-white/10 inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+              title="Copiar enlace público de la lista"
+            >
+              {copiedShare ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-300" />
+                  <span className="text-emerald-300 font-semibold">¡Copiado!</span>
+                </>
+              ) : (
+                <>
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>Copiar enlace</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
 
-        {/* Bottom Hero Information */}
+        {/* Bottom Hero Information: lo primero que la pareja identifica como "esto es mío" */}
         <div className="relative z-10 space-y-1.5">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-white/60">
+            Estás armando la lista de regalos de
+          </span>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white drop-shadow-sm">
             {wedding.coupleName || 'Sofía & Martín'}
           </h1>
@@ -261,54 +324,153 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
         </div>
       </div>
 
-      {/* 2. BARRA DE ACCIÓN PRINCIPAL */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 sm:p-4 bg-white rounded-2xl border border-gray-200/90 shadow-2xs">
-        <div className="flex flex-wrap items-center gap-2.5">
-          {/* REAL EXPERIENCE ACTION: Ver mi web */}
-          <button
-            type="button"
-            onClick={handleViewMyWeb}
-            className="px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 rounded-xl text-sm font-semibold inline-flex items-center gap-2 transition-all cursor-pointer active:scale-[0.98] shadow-2xs"
-            title="Abrir el micrositio real como invitado"
-          >
-            <Eye className="w-4 h-4 text-gray-600" />
-            <span>Ver mi web</span>
-          </button>
+      {/* 2. SETUP: métodos de pago y lista, con estado de avance — como en Confites */}
+      <div className="flex flex-wrap gap-2.5">
+        <button
+          type="button"
+          onClick={() => setActiveSection('pago')}
+          className={`flex-1 min-w-[220px] flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+            activeSection === 'pago'
+              ? 'bg-gray-900 border-gray-900 text-white shadow-xs'
+              : 'bg-white border-gray-200 text-gray-900 hover:border-gray-300'
+          }`}
+        >
+          <Wallet className={`w-5 h-5 shrink-0 ${activeSection === 'pago' ? 'text-amber-300' : 'text-gray-400'}`} />
+          <span className="flex-1 min-w-0">
+            <span className="block text-sm font-bold">Métodos de pago</span>
+            <span className={`block text-[11px] ${activeSection === 'pago' ? 'text-white/70' : 'text-gray-500'}`}>
+              CBU, alias y Mercado Pago
+            </span>
+          </span>
+          {isPaymentConfigured ? (
+            <CheckCircle2 className="w-4.5 h-4.5 text-emerald-400 shrink-0" />
+          ) : (
+            <AlertCircle className="w-4.5 h-4.5 text-amber-400 shrink-0" />
+          )}
+        </button>
 
-          {/* Compartir enlace */}
-          <button
-            type="button"
-            onClick={handleSharePreview}
-            className="px-3.5 py-2.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 rounded-xl text-sm font-medium inline-flex items-center gap-1.5 transition-all cursor-pointer"
-            title="Copiar enlace público de la lista"
-          >
-            {copiedShare ? (
-              <>
-                <Check className="w-4 h-4 text-emerald-600" />
-                <span className="text-emerald-700 font-bold text-xs sm:text-sm">¡Copiado!</span>
-              </>
-            ) : (
-              <>
-                <Share2 className="w-4 h-4 text-gray-500" />
-                <span className="text-xs sm:text-sm">Compartir enlace</span>
-              </>
-            )}
-          </button>
-
-          {/* SECUNDARIO: crear uno personalizado — la mayoría va a elegir de las ideas de abajo */}
-          <button
-            type="button"
-            onClick={() => setIsCustomGiftOpen(true)}
-            className="px-3.5 py-2.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 rounded-xl text-sm font-medium inline-flex items-center gap-1.5 transition-all cursor-pointer"
-          >
-            <Plus className="w-4 h-4 text-gray-400" />
-            <span>Crear uno personalizado</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => setActiveSection('lista')}
+          className={`flex-1 min-w-[220px] flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+            activeSection === 'lista'
+              ? 'bg-gray-900 border-gray-900 text-white shadow-xs'
+              : 'bg-white border-gray-200 text-gray-900 hover:border-gray-300'
+          }`}
+        >
+          <GiftIcon className={`w-5 h-5 shrink-0 ${activeSection === 'lista' ? 'text-amber-300' : 'text-gray-400'}`} />
+          <span className="flex-1 min-w-0">
+            <span className="block text-sm font-bold">
+              Lista de regalos {gifts.length > 0 && `(${gifts.length})`}
+            </span>
+            <span className={`block text-[11px] ${activeSection === 'lista' ? 'text-white/70' : 'text-gray-500'}`}>
+              Elegí un set armado o personalizá el tuyo
+            </span>
+          </span>
+          {gifts.length > 0 ? (
+            <CheckCircle2 className="w-4.5 h-4.5 text-emerald-400 shrink-0" />
+          ) : (
+            <AlertCircle className="w-4.5 h-4.5 text-amber-400 shrink-0" />
+          )}
+        </button>
       </div>
 
-          {/* 3. SECCIÓN: IDEAS PARA AGREGAR A TU LISTA — lo primero que ve la pareja */}
-          <section id="ideas-para-agregar" className="space-y-5">
+      {activeSection === 'pago' ? (
+        <CobrosView wedding={wedding} onUpdateWedding={onUpdateWedding} />
+      ) : (
+        <>
+          {/* 3. SECCIÓN: ELEGÍ UN ESTILO PARA TU LISTA — sets armados o personalizado, como en Confites */}
+          <section className="space-y-4">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900">
+                Elegí un estilo para tu lista
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                Empezá con un set ya armado y después sumá o sacá lo que quieras. También podés armar la tuya desde cero.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+              {predefinedGiftSets.map((set) => {
+                const applied = isSetApplied(set);
+                return (
+                  <div key={set.id} className="flex flex-col items-center text-center gap-2.5">
+                    <button
+                      type="button"
+                      onClick={() => handleUseSet(set)}
+                      disabled={applied}
+                      className={`relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 transition-all cursor-pointer ${
+                        applied ? 'border-emerald-400' : 'border-transparent hover:border-gray-300'
+                      }`}
+                      title={applied ? 'Ya está en tu lista' : `Usar el set "${set.name}"`}
+                    >
+                      <img
+                        src={set.items[0]?.imageUrl}
+                        alt={set.name}
+                        className="w-full h-full object-cover"
+                        referrerPolicy="no-referrer"
+                      />
+                      {applied && (
+                        <div className="absolute inset-0 bg-emerald-900/50 flex items-center justify-center">
+                          <Check className="w-7 h-7 text-white" />
+                        </div>
+                      )}
+                    </button>
+                    <div className="space-y-0.5">
+                      <span className="inline-block text-[9px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                        {set.badge}
+                      </span>
+                      <h3 className="text-xs font-bold text-gray-900 leading-tight">
+                        {set.name}
+                      </h3>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleUseSet(set)}
+                      disabled={applied}
+                      className={`w-full py-1.5 rounded-xl text-[11px] font-bold transition-all cursor-pointer ${
+                        applied
+                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 cursor-default'
+                          : 'bg-gray-900 hover:bg-black text-white'
+                      }`}
+                    >
+                      {applied ? 'En tu lista ✓' : 'Usar este set'}
+                    </button>
+                  </div>
+                );
+              })}
+
+              {/* Opción de personalizar, como el "Personalizar" de Confites */}
+              <div className="flex flex-col items-center text-center gap-2.5">
+                <button
+                  type="button"
+                  onClick={handleGoToPersonalize}
+                  className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border-2 border-dashed border-gray-300 hover:border-gray-500 flex items-center justify-center text-gray-400 hover:text-gray-700 transition-colors cursor-pointer"
+                  title="Crear un regalo personalizado"
+                >
+                  <Plus className="w-7 h-7" />
+                </button>
+                <div className="space-y-0.5">
+                  <span className="inline-block text-[9px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                    A tu gusto
+                  </span>
+                  <h3 className="text-xs font-bold text-gray-900 leading-tight">
+                    Personalizar
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleGoToPersonalize}
+                  className="w-full py-1.5 rounded-xl text-[11px] font-bold bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 transition-all cursor-pointer"
+                >
+                  Crear regalo
+                </button>
+              </div>
+            </div>
+          </section>
+
+          {/* 4. SECCIÓN: IDEAS PARA AGREGAR A TU LISTA */}
+          <section id="ideas-para-agregar" className="space-y-5 pt-6 border-t border-gray-200">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
@@ -427,7 +589,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             </div>
           </section>
 
-      {/* 4. SECCIÓN: NUESTRA LISTA DE REGALOS — solo aparece una vez que hay algo que mostrar */}
+      {/* 5. SECCIÓN: NUESTRA LISTA DE REGALOS — solo aparece una vez que hay algo que mostrar */}
       {gifts.length > 0 && (
       <section className="space-y-5 pt-6 border-t border-gray-200">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-200">
@@ -555,6 +717,8 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                 ))}
               </div>
       </section>
+      )}
+        </>
       )}
 
       {/* ========================================================================= */}

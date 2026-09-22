@@ -5,7 +5,6 @@ import {
   Layout,
   Users,
   User,
-  CreditCard,
   HelpCircle,
   HandHeart,
   ExternalLink,
@@ -35,7 +34,6 @@ const PRIMARY_ITEMS: MenuItem[] = [
 ];
 
 const SECONDARY_ITEMS: MenuItem[] = [
-  { id: 'cobros', label: 'Cobros', icon: CreditCard },
   { id: 'plan', label: 'Plan y Facturación', icon: Sparkles },
   { id: 'ayuda', label: 'Ayuda', icon: HelpCircle },
 ];
