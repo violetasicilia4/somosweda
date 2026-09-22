@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { WeddingData, GiftItem, WeddingEvent, ReceivedGift } from '../types';
-import { 
-  X, 
-  Heart, 
-  Calendar, 
-  MapPin, 
-  Gift, 
-  Clock, 
-  Check, 
-  Sparkles, 
-  Copy, 
-  ExternalLink, 
-  ShieldCheck, 
-  UploadCloud, 
-  FileText, 
-  Building2, 
-  CreditCard 
+import {
+  X,
+  Heart,
+  Calendar,
+  MapPin,
+  Gift,
+  Clock,
+  Check,
+  Sparkles,
+  Copy,
+  ExternalLink,
+  ShieldCheck,
+  UploadCloud,
+  FileText,
+  Building2,
+  CreditCard,
+  ArrowLeft,
 } from 'lucide-react';
 
 interface MicrositeModalProps {
@@ -48,6 +49,21 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
   const [rsvpSubmitted, setRsvpSubmitted] = useState(false);
   const [copiedAlias, setCopiedAlias] = useState(false);
   const [copiedCbu, setCopiedCbu] = useState(false);
+
+  // Navegación interna del micrositio: la invitación y la lista de regalos
+  // viven en pantallas separadas, como en Confites (MICROSITIO / REGALOS).
+  const [micrositeView, setMicrositeView] = useState<'home' | 'gifts'>('home');
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const handleGoToGifts = () => {
+    setMicrositeView('gifts');
+    scrollContainerRef.current?.scrollTo({ top: 0 });
+  };
+
+  const handleBackToHome = () => {
+    setMicrositeView('home');
+    scrollContainerRef.current?.scrollTo({ top: 0 });
+  };
 
   // Gift Contribution Flow State (cart + step wizard, mirrors the "Regalá" flow)
   const [cartItems, setCartItems] = useState<GiftItem[]>([]);
@@ -245,7 +261,9 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
         </div>
 
         {/* Microsite Body Scrollable */}
-        <div className="overflow-y-auto flex-1 font-sans">
+        <div ref={scrollContainerRef} className="overflow-y-auto flex-1 font-sans">
+        {micrositeView === 'home' && (
+        <>
           {/* Hero Banner */}
           <div className="relative h-80 sm:h-96 w-full flex items-center justify-center text-center p-6 text-white overflow-hidden">
             <img
@@ -434,8 +452,50 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
             )}
           </div>
 
+          {/* Teaser hacia la lista de regalos — no muestra los regalos acá, deriva a su propia pantalla */}
+          <div className="bg-stone-50 py-12 px-6 border-t border-stone-200 text-center">
+            <div className="max-w-md mx-auto">
+              <Gift className="w-7 h-7 text-gray-700 mx-auto mb-3" />
+              <h2 className="text-2xl font-serif font-bold text-gray-900">
+                ¿Nos querés regalar algo?
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-600 mt-2">
+                Tu presencia es nuestro mejor regalo. Si querés hacernos un presente, armamos una lista con cariño para esta nueva etapa.
+              </p>
+              <button
+                type="button"
+                onClick={handleGoToGifts}
+                className="mt-5 inline-flex items-center gap-2 px-6 py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-sm font-semibold transition-all cursor-pointer shadow-xs"
+              >
+                <Gift className="w-4 h-4" />
+                Ver lista de regalos
+              </button>
+            </div>
+          </div>
+
+          {/* Footer of the microsite */}
+          <div className="py-8 text-center text-xs text-gray-400 bg-white border-t border-gray-100">
+            <span>Diseñado con amor en Weda • {wedding.coupleName}</span>
+          </div>
+        </>
+        )}
+
+        {micrositeView === 'gifts' && (
+        <div className="min-h-full">
+          {/* Back to the invitation */}
+          <div className="px-6 py-4 border-b border-stone-200 bg-white">
+            <button
+              type="button"
+              onClick={handleBackToHome}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              Volver a la invitación
+            </button>
+          </div>
+
           {/* Lista de Regalos / Datos bancarios */}
-          <div className="bg-stone-50 py-12 px-6 border-t border-stone-200">
+          <div className="bg-stone-50 py-12 px-6">
             <div className="max-w-3xl mx-auto">
               <div className="text-center mb-8">
                 <Gift className="w-6 h-6 text-gray-700 mx-auto mb-2" />
@@ -467,10 +527,10 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                 {gifts.map((gift) => (
                   <div key={gift.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-2xs flex flex-col justify-between hover:border-gray-300 transition-colors">
                     <div className="h-36 overflow-hidden relative">
-                      <img 
-                        src={gift.imageUrl} 
-                        alt={gift.title} 
-                        className="w-full h-full object-cover" 
+                      <img
+                        src={gift.imageUrl}
+                        alt={gift.title}
+                        className="w-full h-full object-cover"
                         referrerPolicy="no-referrer"
                       />
                       <span className="absolute top-2 right-2 bg-black/60 backdrop-blur-xs text-white text-[10px] font-semibold px-2 py-0.5 rounded uppercase">
@@ -487,7 +547,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                           <span className="text-gray-500 text-[11px]">Valor sugerido:</span>
                           <span className="font-bold text-gray-900">AR$ {gift.targetPrice.toLocaleString()}</span>
                         </div>
-                        
+
                         <button
                           type="button"
                           onClick={() => handleAddToCart(gift)}
@@ -506,11 +566,8 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
               </div>
             </div>
           </div>
-
-          {/* Footer of the microsite */}
-          <div className="py-8 text-center text-xs text-gray-400 bg-white border-t border-gray-100">
-            <span>Diseñado con amor en Weda • {wedding.coupleName}</span>
-          </div>
+        </div>
+        )}
         </div>
 
         {/* Floating cart pill: reopens the wizard after "Agregar otro regalo" */}

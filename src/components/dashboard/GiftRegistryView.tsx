@@ -6,7 +6,6 @@ import {
   Plus,
   Trash2,
   Check,
-  Eye,
   CheckCircle2,
   AlertCircle,
   X,
@@ -19,6 +18,8 @@ import {
   MapPin,
   Wallet,
   Gift as GiftIcon,
+  PartyPopper,
+  ExternalLink,
 } from 'lucide-react';
 
 interface GiftRegistryViewProps {
@@ -121,7 +122,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
 
   const formattedDate = formatWeddingDateNatural(wedding.weddingDate);
 
-  // Share the real, working preview link (same URL "Ver mi web" opens)
+  // Share the real, working link to the gift list (opens straight on the "Regalos" screen)
   const handleSharePreview = () => {
     if (typeof window !== 'undefined') {
       const guestUrl = `${window.location.origin}${window.location.pathname}?guest=1`;
@@ -129,13 +130,6 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
     }
     setCopiedShare(true);
     setTimeout(() => setCopiedShare(false), 3000);
-  };
-
-  // Open the real microsite in a new tab — exactly what guests will see, no preview/simulation
-  const handleViewMyWeb = () => {
-    if (onOpenMicrosite) {
-      onOpenMicrosite();
-    }
   };
 
   // Reorder gifts
@@ -212,14 +206,47 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
     setTimeout(() => setAddedFeedback(null), 3000);
   };
 
-  // Predefined gift sets: "Elegí un estilo para tu lista", igual que los sets de Confites
+  // Predefined gift sets: "Elegí un estilo para tu lista", igual que los sets de Confites.
+  // No se agregan a ciegas: el set se abre en una previsualización con un toggle por regalo,
+  // para poder ver qué entra y qué no antes de tocar la lista — y volver a editar cuando quieras.
   const isSetApplied = (set: GiftSet) => set.items.every(item => isGiftInList(item.title));
+  const countInList = (set: GiftSet) => set.items.filter(item => isGiftInList(item.title)).length;
 
-  const handleUseSet = (set: GiftSet) => {
-    if (isSetApplied(set)) return;
-    onAddGiftsFromSet(set.items);
-    setAddedFeedback(`Set "${set.name}" agregado a tu lista`);
-    setTimeout(() => setAddedFeedback(null), 3000);
+  const [previewSet, setPreviewSet] = useState<GiftSet | null>(null);
+  const [previewChecks, setPreviewChecks] = useState<Record<string, boolean>>({});
+
+  const handleOpenSetPreview = (set: GiftSet) => {
+    const initial: Record<string, boolean> = {};
+    set.items.forEach(item => { initial[item.title] = isGiftInList(item.title); });
+    setPreviewChecks(initial);
+    setPreviewSet(set);
+  };
+
+  const togglePreviewItem = (title: string) => {
+    setPreviewChecks(prev => ({ ...prev, [title]: !prev[title] }));
+  };
+
+  const handleApplyPreview = () => {
+    if (!previewSet) return;
+
+    const toAdd = previewSet.items.filter(item => previewChecks[item.title] && !isGiftInList(item.title));
+    const toRemove = previewSet.items.filter(item => !previewChecks[item.title] && isGiftInList(item.title));
+
+    if (toAdd.length > 0) onAddGiftsFromSet(toAdd);
+    toRemove.forEach(item => {
+      const existing = gifts.find(g => g.title.toLowerCase().trim() === item.title.toLowerCase().trim());
+      if (existing) onDeleteGift(existing.id);
+    });
+
+    if (toAdd.length > 0 || toRemove.length > 0) {
+      const parts: string[] = [];
+      if (toAdd.length > 0) parts.push(`+${toAdd.length}`);
+      if (toRemove.length > 0) parts.push(`-${toRemove.length}`);
+      setAddedFeedback(`Lista actualizada (${parts.join(' / ')}) con "${previewSet.name}"`);
+      setTimeout(() => setAddedFeedback(null), 3000);
+    }
+
+    setPreviewSet(null);
   };
 
   const handleGoToPersonalize = () => {
@@ -266,36 +293,26 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             )}
           </div>
 
-          {/* Secundario a propósito: previsualizar no es la acción principal de esta pantalla */}
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              onClick={handleViewMyWeb}
-              className="px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-white/80 hover:text-white hover:bg-white/10 inline-flex items-center gap-1.5 transition-colors cursor-pointer"
-              title="Abrir el micrositio real como invitado"
-            >
-              <Eye className="w-3.5 h-3.5" />
-              <span>Ver mi web</span>
-            </button>
-            <button
-              type="button"
-              onClick={handleSharePreview}
-              className="px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-white/80 hover:text-white hover:bg-white/10 inline-flex items-center gap-1.5 transition-colors cursor-pointer"
-              title="Copiar enlace público de la lista"
-            >
-              {copiedShare ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-emerald-300" />
-                  <span className="text-emerald-300 font-semibold">¡Copiado!</span>
-                </>
-              ) : (
-                <>
-                  <Share2 className="w-3.5 h-3.5" />
-                  <span>Copiar enlace</span>
-                </>
-              )}
-            </button>
-          </div>
+          {/* Secundario a propósito: previsualizar no es la acción principal de esta pantalla.
+              Un solo botón, como el "Compartir Lista" de Confites — sin duplicar "Ver mi web". */}
+          <button
+            type="button"
+            onClick={handleSharePreview}
+            className="px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-white/80 hover:text-white hover:bg-white/10 inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+            title="Copiar el enlace de tu lista de regalos"
+          >
+            {copiedShare ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-300" />
+                <span className="text-emerald-300 font-semibold">¡Enlace copiado!</span>
+              </>
+            ) : (
+              <>
+                <Share2 className="w-3.5 h-3.5" />
+                <span>Compartir lista</span>
+              </>
+            )}
+          </button>
         </div>
 
         {/* Bottom Hero Information: lo primero que la pareja identifica como "esto es mío" */}
@@ -379,6 +396,31 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
         <CobrosView wedding={wedding} onUpdateWedding={onUpdateWedding} />
       ) : (
         <>
+          {/* Felicitaciones: aparece en cuanto hay al menos un regalo elegido */}
+          {gifts.length > 0 && (
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
+              <div className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+                <PartyPopper className="w-4.5 h-4.5 text-emerald-700" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-emerald-900">¡Tu lista de regalos ya está lista!</p>
+                <p className="text-xs text-emerald-700 mt-0.5">
+                  Tus invitados van a poder verla y elegirte un regalo desde la sección "¿Nos querés regalar algo?" de tu micrositio.
+                </p>
+              </div>
+              {onOpenMicrosite && (
+                <button
+                  type="button"
+                  onClick={onOpenMicrosite}
+                  className="shrink-0 px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold cursor-pointer inline-flex items-center justify-center gap-1.5"
+                >
+                  <span>Ver micrositio</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+          )}
+
           {/* 3. SECCIÓN: ELEGÍ UN ESTILO PARA TU LISTA — sets armados o personalizado, como en Confites */}
           <section className="space-y-4">
             <div>
@@ -393,16 +435,17 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
               {predefinedGiftSets.map((set) => {
                 const applied = isSetApplied(set);
+                const inListCount = countInList(set);
+                const partial = inListCount > 0 && !applied;
                 return (
                   <div key={set.id} className="flex flex-col items-center text-center gap-2.5">
                     <button
                       type="button"
-                      onClick={() => handleUseSet(set)}
-                      disabled={applied}
+                      onClick={() => handleOpenSetPreview(set)}
                       className={`relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 transition-all cursor-pointer ${
-                        applied ? 'border-emerald-400' : 'border-transparent hover:border-gray-300'
+                        applied ? 'border-emerald-400' : partial ? 'border-amber-400' : 'border-transparent hover:border-gray-300'
                       }`}
-                      title={applied ? 'Ya está en tu lista' : `Usar el set "${set.name}"`}
+                      title={`Ver los regalos del set "${set.name}"`}
                     >
                       <img
                         src={set.items[0]?.imageUrl}
@@ -415,6 +458,11 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                           <Check className="w-7 h-7 text-white" />
                         </div>
                       )}
+                      {partial && (
+                        <span className="absolute bottom-1 right-1 bg-amber-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-xs">
+                          {inListCount}/{set.items.length}
+                        </span>
+                      )}
                     </button>
                     <div className="space-y-0.5">
                       <span className="inline-block text-[9px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
@@ -426,15 +474,16 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                     </div>
                     <button
                       type="button"
-                      onClick={() => handleUseSet(set)}
-                      disabled={applied}
+                      onClick={() => handleOpenSetPreview(set)}
                       className={`w-full py-1.5 rounded-xl text-[11px] font-bold transition-all cursor-pointer ${
                         applied
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 cursor-default'
+                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
+                          : partial
+                          ? 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'
                           : 'bg-gray-900 hover:bg-black text-white'
                       }`}
                     >
-                      {applied ? 'En tu lista ✓' : 'Usar este set'}
+                      {applied ? 'En tu lista ✓' : partial ? `${inListCount}/${set.items.length} en tu lista` : 'Ver y elegir'}
                     </button>
                   </div>
                 );
@@ -719,6 +768,84 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
       </section>
       )}
         </>
+      )}
+
+      {/* ========================================================================= */}
+      {/* MODAL: PREVIEW INTERACTIVO DE UN SET — tildá lo que querés sumar,          */}
+      {/* destildá lo que no; se puede reabrir y volver a ajustar cuando quieras.    */}
+      {/* ========================================================================= */}
+      {previewSet && (
+        <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-gray-100 max-h-[90vh] flex flex-col animate-fade-in">
+            <div className="p-5 sm:p-6 border-b border-gray-100 flex items-start justify-between gap-3">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wide text-gray-400">{previewSet.badge}</span>
+                <h3 className="text-lg font-bold text-gray-900">{previewSet.name}</h3>
+                <p className="text-xs text-gray-500 mt-0.5">{previewSet.description}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPreviewSet(null)}
+                className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer shrink-0"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-2.5">
+              <p className="text-[11px] text-gray-500 font-medium">
+                Tildá los que quieras sumar a tu lista. Destildá los que no querés.
+              </p>
+              {previewSet.items.map((item) => {
+                const checked = !!previewChecks[item.title];
+                return (
+                  <button
+                    key={item.title}
+                    type="button"
+                    onClick={() => togglePreviewItem(item.title)}
+                    className={`w-full flex items-center gap-3 p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                      checked ? 'border-gray-900 bg-gray-50' : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <img
+                      src={item.imageUrl}
+                      alt={item.title}
+                      className="w-12 h-12 rounded-lg object-cover shrink-0"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold text-gray-900 truncate">{item.title}</p>
+                      <p className="text-[11px] text-gray-500">${item.targetPrice.toLocaleString()}</p>
+                    </div>
+                    <div className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors ${
+                      checked ? 'bg-gray-900 border-gray-900' : 'border-gray-300'
+                    }`}>
+                      {checked && <Check className="w-3.5 h-3.5 text-white" />}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="p-5 sm:p-6 border-t border-gray-100 space-y-2.5">
+              <button
+                type="button"
+                onClick={() => { setPreviewSet(null); setIsCustomGiftOpen(true); }}
+                className="w-full py-2 text-xs font-semibold text-gray-600 hover:text-gray-900 inline-flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Sumar un regalo independiente que no está acá</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleApplyPreview}
+                className="w-full py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-sm font-semibold transition-all cursor-pointer shadow-xs"
+              >
+                Guardar selección
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* ========================================================================= */}
