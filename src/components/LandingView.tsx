@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppView } from '../types';
-import { Users, CalendarCheck, Gift, Globe, Check, ArrowRight, Heart } from 'lucide-react';
+import { Users, CalendarCheck, Gift, Globe, Check } from 'lucide-react';
 import { pricingPlans } from '../data/initialData';
 
 interface LandingViewProps {
@@ -11,35 +11,39 @@ interface LandingViewProps {
 export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExample }) => {
   return (
     <div className="min-h-screen bg-white text-gray-900 flex flex-col font-sans">
+      {/* Header + Hero + Herramientas Integradas: reproducción exacta del diseño de
+          referencia (Figma), con su propia tipografía (Quicksand) y marco oscuro,
+          aislados del resto de la landing (planes, pasos, testimonios, footer),
+          que no forman parte de esa referencia y mantienen su estilo actual. */}
+      <div className="bg-[#171310] p-2 sm:p-3" style={{ fontFamily: "'Quicksand', sans-serif" }}>
+      <div className="bg-[#F7F1E4] text-[#2A2318]">
       {/* Navigation Header */}
-      <header className="border-b border-gray-100 bg-white/95 backdrop-blur-xs sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
-          <div 
+      <header className="bg-[#F7F1E4] px-4 sm:px-8">
+        <div className="max-w-6xl mx-auto h-16 sm:h-20 flex items-center justify-between">
+          <div
             onClick={() => onNavigate('landing')}
-            className="cursor-pointer flex items-center gap-2"
+            className="cursor-pointer flex items-center gap-3"
           >
-            <span className="text-2xl font-bold tracking-tight text-gray-900">Weda</span>
+            <span className="text-lg sm:text-xl font-semibold tracking-[0.1em] uppercase text-[#2A2318]">
+              Weda
+            </span>
+            <span className="text-[9px] tracking-[0.15em] uppercase text-[#2A2318] border border-[#2A2318]/40 rounded-full px-2.5 py-1">
+              Casamientos
+            </span>
           </div>
 
-          <div className="flex items-center gap-3 sm:gap-6">
+          <div className="flex items-center gap-5 sm:gap-7">
             <button
               id="landing-header-login-btn"
               onClick={() => onNavigate('login')}
-              className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+              className="text-sm text-[#2A2318] hover:opacity-70 transition-opacity cursor-pointer"
             >
               Iniciar sesión
             </button>
             <button
-              id="landing-header-register-btn"
-              onClick={() => onNavigate('register')}
-              className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors hidden sm:inline-block"
-            >
-              Registrarse
-            </button>
-            <button
               id="landing-header-create-btn"
               onClick={() => onNavigate('register')}
-              className="px-4 py-2 text-sm font-medium text-white bg-[#0f172a] hover:bg-black rounded-lg transition-all shadow-xs cursor-pointer"
+              className="text-xs uppercase tracking-wider font-medium bg-[#F7F1E4] text-[#2A2318] border border-[#2A2318]/40 px-5 py-2.5 hover:bg-[#EFE6D3] transition-colors cursor-pointer"
             >
               Crear mi lista
             </button>
@@ -47,109 +51,96 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative pt-6 pb-16 sm:py-20 px-4 sm:px-6 max-w-6xl mx-auto w-full">
-        {/* Hero Banner Image Card */}
-        <div className="relative rounded-2xl overflow-hidden shadow-xl aspect-16/10 sm:aspect-21/9 max-h-[500px] w-full mb-10 flex items-center justify-center text-center p-6 sm:p-12">
-          <img 
-            src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80" 
-            alt="Pareja de novios sonriendo en su casamiento" 
-            className="absolute inset-0 w-full h-full object-cover object-center"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/40 backdrop-brightness-95"></div>
+      {/* Hero Section — foto a sangre completa, sin card ni márgenes laterales */}
+      <section className="relative w-full aspect-4/5 sm:aspect-16/9 overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80"
+          alt="Pareja de novios celebrando su casamiento"
+          className="absolute inset-0 w-full h-full object-cover object-center grayscale"
+          referrerPolicy="no-referrer"
+        />
+        <div className="absolute inset-0 bg-black/10"></div>
 
-          <div className="relative z-10 max-w-3xl mx-auto text-white flex flex-col items-center">
-            <span className="text-[11px] sm:text-xs font-bold tracking-[0.2em] uppercase text-white/90 mb-3 bg-white/15 px-3.5 py-1 rounded-full backdrop-blur-md">
-              Planificá tu casamiento
-            </span>
-            <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white mb-4 leading-tight">
-              Armá la lista de invitados y regalos de tu casamiento en un solo lugar.
-            </h1>
-            <p className="text-sm sm:text-base md:text-lg text-white/85 max-w-2xl mx-auto mb-8 font-normal leading-relaxed">
-              Creá tu sitio, gestioná confirmaciones, organizá invitados y recibí regalos digitales.
-            </p>
+        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
+          <span className="text-[11px] tracking-[0.3em] uppercase text-white/85 mb-5">
+            Planificá tu casamiento
+          </span>
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-medium text-white leading-[1.2] max-w-3xl">
+            Armá tu lista de regalos e invitados de tu casamiento en un solo lugar.
+          </h1>
 
-            <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto justify-center">
-              <button
-                id="hero-create-list-btn"
-                onClick={() => onNavigate('register')}
-                className="w-full sm:w-auto px-6 py-3.5 bg-white text-gray-900 hover:bg-gray-100 font-semibold rounded-lg text-sm transition-all shadow-md cursor-pointer flex items-center justify-center gap-2"
-              >
-                Crear mi lista gratis
-                <ArrowRight className="w-4 h-4" />
-              </button>
-              <button
-                id="hero-view-example-btn"
-                onClick={onOpenExample}
-                className="w-full sm:w-auto px-6 py-3.5 bg-white/20 hover:bg-white/30 text-white font-medium rounded-lg text-sm transition-all backdrop-blur-md border border-white/30 cursor-pointer"
-              >
-                Ver ejemplo
-              </button>
-            </div>
+          <div className="flex items-center gap-3 mt-9">
+            <button
+              id="hero-create-list-btn"
+              onClick={() => onNavigate('register')}
+              className="text-xs uppercase tracking-wider font-medium bg-[#F7F1E4] text-[#2A2318] px-6 py-3 hover:bg-white transition-colors cursor-pointer"
+            >
+              Crear mi lista
+            </button>
+            <button
+              id="hero-view-example-btn"
+              onClick={onOpenExample}
+              className="text-xs uppercase tracking-wider font-medium border border-white/70 text-white px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer"
+            >
+              Ver ejemplo
+            </button>
           </div>
         </div>
       </section>
 
       {/* Herramientas Integradas */}
-      <section className="py-14 bg-gray-50/70 border-y border-gray-100 px-4 sm:px-6">
+      <section className="py-20 sm:py-24 bg-[#F0E8D8] px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <span className="text-xs font-bold tracking-widest text-gray-500 uppercase">
+          <div className="text-center mb-14">
+            <span className="text-xs font-semibold tracking-widest text-[#A9795A] uppercase">
               Herramientas integradas
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">
+            <h2 className="text-3xl sm:text-4xl font-medium text-[#2A2318] mt-3">
               Todo lo que necesitás para organizar tu evento.
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
             {/* Card 1 */}
-            <div className="bg-white p-6 rounded-xl border border-gray-200/80 shadow-2xs hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-gray-800 mb-5">
-                <Users className="w-6 h-6 text-gray-700" />
-              </div>
-              <h3 className="font-semibold text-lg text-gray-900 mb-1.5">Invitados</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                Gestioná asistencia y acompañantes.
+            <div>
+              <Users className="w-6 h-6 text-[#A9795A] mb-4" strokeWidth={1.5} />
+              <h3 className="font-semibold text-base text-[#2A2318] mb-1.5">Invitados</h3>
+              <p className="text-sm text-[#7A6F5F] leading-relaxed">
+                Gestioná tu lista completa, confirmaciones y datos de cada invitado en un solo lugar.
               </p>
             </div>
 
             {/* Card 2 */}
-            <div className="bg-white p-6 rounded-xl border border-gray-200/80 shadow-2xs hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-gray-800 mb-5">
-                <CalendarCheck className="w-6 h-6 text-gray-700" />
-              </div>
-              <h3 className="font-semibold text-lg text-gray-900 mb-1.5">RSVP</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                Confirmaciones online en tiempo real.
+            <div>
+              <CalendarCheck className="w-6 h-6 text-[#A9795A] mb-4" strokeWidth={1.5} />
+              <h3 className="font-semibold text-base text-[#2A2318] mb-1.5">RSVP</h3>
+              <p className="text-sm text-[#7A6F5F] leading-relaxed">
+                Confirmaciones online en tiempo real, sin planillas ni seguimientos manuales.
               </p>
             </div>
 
             {/* Card 3 */}
-            <div className="bg-white p-6 rounded-xl border border-gray-200/80 shadow-2xs hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-gray-800 mb-5">
-                <Gift className="w-6 h-6 text-gray-700" />
-              </div>
-              <h3 className="font-semibold text-lg text-gray-900 mb-1.5">Regalos</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                Recibí aportes y regalos digitales.
+            <div>
+              <Gift className="w-6 h-6 text-[#A9795A] mb-4" strokeWidth={1.5} />
+              <h3 className="font-semibold text-base text-[#2A2318] mb-1.5">Regalos</h3>
+              <p className="text-sm text-[#7A6F5F] leading-relaxed">
+                Recibí aportes y regalos digitales con total transparencia y sin intermediarios.
               </p>
             </div>
 
             {/* Card 4 */}
-            <div className="bg-white p-6 rounded-xl border border-gray-200/80 shadow-2xs hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-gray-800 mb-5">
-                <Globe className="w-6 h-6 text-gray-700" />
-              </div>
-              <h3 className="font-semibold text-lg text-gray-900 mb-1.5">Sitio Web</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                Compartí toda la información de tu evento.
+            <div>
+              <Globe className="w-6 h-6 text-[#A9795A] mb-4" strokeWidth={1.5} />
+              <h3 className="font-semibold text-base text-[#2A2318] mb-1.5">Sitio Web</h3>
+              <p className="text-sm text-[#7A6F5F] leading-relaxed">
+                Tu propia página de casamiento, diseñada con elegancia y lista en minutos.
               </p>
             </div>
           </div>
         </div>
       </section>
+      </div>
+      </div>
 
       {/* Planes y Precios */}
       <section className="py-20 px-4 sm:px-6 max-w-6xl mx-auto w-full">
