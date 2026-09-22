@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { WeddingData, GiftItem, WeddingEvent, ReceivedGift } from '../types';
-import { CoupleNameDisplay } from './CoupleNameDisplay';
 import {
   X,
   Heart,
@@ -279,8 +278,8 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
               <span className="text-xs uppercase tracking-[0.3em] font-medium text-white/90 mb-2">
                 ¡Nos casamos!
               </span>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white mb-3">
-                <CoupleNameDisplay name={wedding.coupleName} scriptClassName="text-amber-200" />
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white mb-3">
+                {wedding.coupleName}
               </h1>
               <p className="text-sm sm:text-base text-white/90 font-light max-w-md mx-auto mb-6">
                 15 de Noviembre de 2027 • Buenos Aires
@@ -311,7 +310,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
           {/* Couple Story & Dress Code */}
           <div className="py-12 px-6 max-w-2xl mx-auto text-center">
             <Heart className="w-6 h-6 text-rose-500 fill-rose-500 mx-auto mb-3" />
-            <h2 className="text-2xl font-semibold tracking-tight text-gray-900 mb-3">Nuestra Historia</h2>
+            <h2 className="text-2xl font-serif font-semibold text-gray-900 mb-3">Nuestra Historia</h2>
             <p className="text-gray-600 text-sm leading-relaxed mb-6">
               {wedding.storyText}
             </p>
@@ -324,7 +323,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
           {/* Itinerary Events */}
           <div className="bg-stone-50 py-12 px-6 border-y border-stone-200">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-2xl font-bold tracking-tight text-center text-gray-900 mb-8">
+              <h2 className="text-2xl font-serif font-bold text-center text-gray-900 mb-8">
                 Cuándo y Dónde
               </h2>
 
@@ -361,7 +360,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
                 Confirmación de Asistencia
               </span>
-              <h2 className="text-2xl font-bold tracking-tight text-gray-900 mt-1">
+              <h2 className="text-2xl font-serif font-bold text-gray-900 mt-1">
                 ¿Nos acompañás?
               </h2>
               <p className="text-xs text-gray-500 mt-1">
@@ -445,7 +444,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
 
                 <button
                   type="submit"
-                  className="w-full py-3 bg-gray-950 hover:bg-black text-white font-medium rounded-lg text-xs sm:text-sm transition-all shadow-xs cursor-pointer mt-2"
+                  className="w-full py-3 bg-[#0f172a] hover:bg-black text-white font-medium rounded-lg text-xs sm:text-sm transition-all shadow-xs cursor-pointer mt-2"
                 >
                   Enviar confirmación
                 </button>
@@ -457,7 +456,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
           <div className="bg-stone-50 py-12 px-6 border-t border-stone-200 text-center">
             <div className="max-w-md mx-auto">
               <Gift className="w-7 h-7 text-gray-700 mx-auto mb-3" />
-              <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+              <h2 className="text-2xl font-serif font-bold text-gray-900">
                 ¿Nos querés regalar algo?
               </h2>
               <p className="text-xs sm:text-sm text-gray-600 mt-2">
@@ -500,7 +499,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
             <div className="max-w-3xl mx-auto">
               <div className="text-center mb-8">
                 <Gift className="w-6 h-6 text-gray-700 mx-auto mb-2" />
-                <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+                <h2 className="text-2xl font-serif font-bold text-gray-900">
                   Lista de Regalos
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-md mx-auto">

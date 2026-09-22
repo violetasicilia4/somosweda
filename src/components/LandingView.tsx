@@ -39,7 +39,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             <button
               id="landing-header-create-btn"
               onClick={() => onNavigate('register')}
-              className="px-4 py-2 text-sm font-medium text-white bg-gray-950 hover:bg-black rounded-lg transition-all shadow-xs cursor-pointer"
+              className="px-4 py-2 text-sm font-medium text-white bg-[#0f172a] hover:bg-black rounded-lg transition-all shadow-xs cursor-pointer"
             >
               Crear mi lista
             </button>

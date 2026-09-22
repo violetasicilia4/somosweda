@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { GiftItem, WeddingData } from '../../types';
 import { suggestedGiftsByCategory } from '../../data/initialData';
-import { CoupleNameDisplay } from '../CoupleNameDisplay';
 import {
   Plus,
   Trash2,
@@ -277,7 +276,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
               Estás armando la lista de regalos de
             </span>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white drop-shadow-sm">
-              <CoupleNameDisplay name={wedding.coupleName || 'Sofía & Martín'} scriptClassName="text-amber-200" />
+              {wedding.coupleName || 'Sofía & Martín'}
             </h1>
             <p className="text-xs sm:text-sm font-medium text-white/90 flex flex-wrap items-center gap-2 drop-shadow-xs">
               <span className="inline-flex items-center gap-1.5">
