@@ -225,7 +225,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
       {/* ================= 1. HEADER ================= */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-gray-100">
         <div className="space-y-1">
-          <h1 className="font-serif text-2xl sm:text-3xl font-medium tracking-tight text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
             Micrositio
           </h1>
           <p className="text-sm sm:text-base text-gray-500 font-normal leading-relaxed">
@@ -336,7 +336,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
           <div className="flex items-center gap-2">
             <SlidersHorizontal className="w-4 h-4 text-gray-700" />
-            <h3 className="font-serif text-xs font-medium uppercase tracking-wider text-gray-900">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900">
               Módulos del sitio: tildá o destildá lo que querés mostrar
             </h3>
           </div>
@@ -564,7 +564,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               </div>
 
               <div className="space-y-1.5 min-w-0 flex-1">
-                <h3 className="font-serif text-lg font-medium text-gray-900 tracking-tight">
+                <h3 className="text-lg font-bold text-gray-900 tracking-tight">
                   {coupleName}
                 </h3>
                 <div className="flex items-center gap-2 text-xs text-gray-500">
@@ -682,7 +682,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                       {features.events ? '✓ Activa' : '○ Oculta'}
                     </span>
                   </div>
-                  <h3 className="font-serif text-base font-medium text-gray-900">
+                  <h3 className="text-base font-bold text-gray-900">
                     Eventos de la boda ({eventList.length})
                   </h3>
                 </div>
@@ -786,7 +786,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                       {features.guestInfo ? '✓ Activa' : '○ Oculta'}
                     </span>
                   </div>
-                  <h3 className="font-serif text-base font-medium text-gray-900">
+                  <h3 className="text-base font-bold text-gray-900">
                     Información clave (Dress code, hospedaje, mapa)
                   </h3>
                 </div>
@@ -921,7 +921,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                       {features.gallery ? '✓ Activa' : '○ Oculta'}
                     </span>
                   </div>
-                  <h3 className="font-serif text-base font-medium text-gray-900">
+                  <h3 className="text-base font-bold text-gray-900">
                     Galería de fotos ({galleryImages.length})
                   </h3>
                 </div>
@@ -1011,7 +1011,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                       {features.giftRegistry ? '✓ Activa' : '○ Oculta'}
                     </span>
                   </div>
-                  <h3 className="font-serif text-base font-medium text-gray-900 flex items-center gap-2">
+                  <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
                     <Gift className="w-4 h-4 text-gray-600" />
                     <span>Lista de regalos ({gifts.length} regalos activos)</span>
                   </h3>
@@ -1081,7 +1081,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                       {features.rsvp ? '✓ Activa' : '○ Oculta'}
                     </span>
                   </div>
-                  <h3 className="font-serif text-base font-medium text-gray-900 flex items-center gap-2">
+                  <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
                     <UserCheck className="w-4 h-4 text-gray-600" />
                     <span>Confirmación de asistencia (RSVP)</span>
                   </h3>
@@ -1148,7 +1148,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                       {features.music ? '✓ Activa' : '○ Opcional'}
                     </span>
                   </div>
-                  <h3 className="font-serif text-base font-medium text-gray-900 flex items-center gap-2">
+                  <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
                     <Music className="w-4 h-4 text-gray-600" />
                     <span>Sugerir música para el DJ</span>
                   </h3>
@@ -1219,7 +1219,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <span className="text-[10px] uppercase font-semibold tracking-widest text-gray-300">
                   Nos casamos
                 </span>
-                <h2 className="font-serif text-2xl font-medium tracking-tight text-white leading-tight">
+                <h2 className="text-2xl font-bold tracking-tight text-white leading-tight">
                   {coupleName}
                 </h2>
               </div>
@@ -1249,7 +1249,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in">
             <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-              <h3 className="font-serif text-base font-medium text-gray-900">Editar portada</h3>
+              <h3 className="text-base font-bold text-gray-900">Editar portada</h3>
               <button 
                 onClick={() => setActiveModal(null)}
                 className="text-gray-400 hover:text-gray-700 p-1"
@@ -1352,7 +1352,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in">
             <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-              <h3 className="font-serif text-base font-medium text-gray-900">Editar nuestra historia</h3>
+              <h3 className="text-base font-bold text-gray-900">Editar nuestra historia</h3>
               <button 
                 onClick={() => setActiveModal(null)}
                 className="text-gray-400 hover:text-gray-700 p-1"
@@ -1402,7 +1402,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-              <h3 className="font-serif text-base font-medium text-gray-900">Editar eventos</h3>
+              <h3 className="text-base font-bold text-gray-900">Editar eventos</h3>
               <button 
                 onClick={() => setActiveModal(null)}
                 className="text-gray-400 hover:text-gray-700 p-1"
@@ -1490,7 +1490,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in">
             <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-              <h3 className="font-serif text-base font-medium text-gray-900">Editar información para invitados</h3>
+              <h3 className="text-base font-bold text-gray-900">Editar información para invitados</h3>
               <button 
                 onClick={() => setActiveModal(null)}
                 className="text-gray-400 hover:text-gray-700 p-1"
@@ -1577,7 +1577,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-              <h3 className="font-serif text-base font-medium text-gray-900">Administrar galería de fotos</h3>
+              <h3 className="text-base font-bold text-gray-900">Administrar galería de fotos</h3>
               <button 
                 onClick={() => setActiveModal(null)}
                 className="text-gray-400 hover:text-gray-700 p-1"

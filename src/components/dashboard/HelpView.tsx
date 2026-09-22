@@ -24,7 +24,7 @@ export const HelpView: React.FC = () => {
   return (
     <div className="space-y-6 animate-fade-in max-w-3xl">
       <div>
-        <h2 className="font-serif text-2xl sm:text-3xl font-medium text-gray-900">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
           Centro de Ayuda & Concierge Weda
         </h2>
         <p className="text-sm text-gray-500 mt-1">
@@ -39,7 +39,7 @@ export const HelpView: React.FC = () => {
             <MessageCircle className="w-4 h-4 text-emerald-600" />
             <span>Asistencia por WhatsApp</span>
           </div>
-          <h3 className="font-serif text-base font-medium text-gray-900">¿Tenés alguna consulta puntual?</h3>
+          <h3 className="text-base font-bold text-gray-900">¿Tenés alguna consulta puntual?</h3>
           <p className="text-xs text-gray-600 max-w-md">
             Nuestro equipo de soporte y asesores de boda responde en minutos de lunes a sábados.
           </p>
@@ -58,7 +58,7 @@ export const HelpView: React.FC = () => {
 
       {/* FAQs */}
       <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-7 shadow-xs space-y-4">
-        <h3 className="font-serif font-medium text-base text-gray-900">Preguntas Frecuentes</h3>
+        <h3 className="font-bold text-base text-gray-900">Preguntas Frecuentes</h3>
 
         <div className="divide-y divide-gray-100">
           {faqs.map((faq, idx) => (

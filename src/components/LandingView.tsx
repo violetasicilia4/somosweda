@@ -10,7 +10,7 @@ interface LandingViewProps {
 
 export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExample }) => {
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col font-sans">
+    <div className="min-h-screen bg-white text-gray-900 flex flex-col font-sans">
       {/* Navigation Header */}
       <header className="border-b border-gray-100 bg-white/95 backdrop-blur-xs sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
@@ -18,7 +18,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             onClick={() => onNavigate('landing')}
             className="cursor-pointer flex items-center gap-2"
           >
-            <span className="font-serif text-2xl font-medium tracking-tight text-gray-900">Weda</span>
+            <span className="text-2xl font-bold tracking-tight text-gray-900">Weda</span>
           </div>
 
           <div className="flex items-center gap-3 sm:gap-6">
@@ -39,7 +39,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             <button
               id="landing-header-create-btn"
               onClick={() => onNavigate('register')}
-              className="px-4 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-black rounded-none transition-all shadow-xs cursor-pointer"
+              className="px-4 py-2 text-sm font-medium text-white bg-[#0f172a] hover:bg-black rounded-lg transition-all shadow-xs cursor-pointer"
             >
               Crear mi lista
             </button>
@@ -63,7 +63,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             <span className="text-[11px] sm:text-xs font-bold tracking-[0.2em] uppercase text-white/90 mb-3 bg-white/15 px-3.5 py-1 rounded-full backdrop-blur-md">
               Planificá tu casamiento
             </span>
-            <h1 className="font-serif text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight text-white mb-4 leading-tight">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white mb-4 leading-tight">
               Armá la lista de invitados y regalos de tu casamiento en un solo lugar.
             </h1>
             <p className="text-sm sm:text-base md:text-lg text-white/85 max-w-2xl mx-auto mb-8 font-normal leading-relaxed">
@@ -74,7 +74,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
               <button
                 id="hero-create-list-btn"
                 onClick={() => onNavigate('register')}
-                className="w-full sm:w-auto px-6 py-3.5 bg-white text-gray-900 hover:bg-gray-100 font-semibold rounded-none text-sm transition-all shadow-md cursor-pointer flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-6 py-3.5 bg-white text-gray-900 hover:bg-gray-100 font-semibold rounded-lg text-sm transition-all shadow-md cursor-pointer flex items-center justify-center gap-2"
               >
                 Crear mi lista gratis
                 <ArrowRight className="w-4 h-4" />
@@ -82,7 +82,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
               <button
                 id="hero-view-example-btn"
                 onClick={onOpenExample}
-                className="w-full sm:w-auto px-6 py-3.5 bg-transparent hover:bg-white/10 text-white font-medium rounded-none text-sm transition-all border border-white/40 hover:border-white cursor-pointer"
+                className="w-full sm:w-auto px-6 py-3.5 bg-white/20 hover:bg-white/30 text-white font-medium rounded-lg text-sm transition-all backdrop-blur-md border border-white/30 cursor-pointer"
               >
                 Ver ejemplo
               </button>
@@ -92,13 +92,13 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
       </section>
 
       {/* Herramientas Integradas */}
-      <section className="py-24 sm:py-32 bg-gray-100/50 border-y border-gray-200 px-4 sm:px-6">
+      <section className="py-14 bg-gray-50/70 border-y border-gray-100 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-xs font-bold tracking-widest text-gray-500 uppercase">
               Herramientas integradas
             </span>
-            <h2 className="font-serif text-2xl sm:text-3xl font-medium text-gray-900 mt-2">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">
               Todo lo que necesitás para organizar tu evento.
             </h2>
           </div>
@@ -109,7 +109,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
               <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-gray-800 mb-5">
                 <Users className="w-6 h-6 text-gray-700" />
               </div>
-              <h3 className="font-serif font-semibold text-lg text-gray-900 mb-1.5">Invitados</h3>
+              <h3 className="font-semibold text-lg text-gray-900 mb-1.5">Invitados</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
                 Gestioná asistencia y acompañantes.
               </p>
@@ -120,7 +120,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
               <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-gray-800 mb-5">
                 <CalendarCheck className="w-6 h-6 text-gray-700" />
               </div>
-              <h3 className="font-serif font-semibold text-lg text-gray-900 mb-1.5">RSVP</h3>
+              <h3 className="font-semibold text-lg text-gray-900 mb-1.5">RSVP</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
                 Confirmaciones online en tiempo real.
               </p>
@@ -131,7 +131,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
               <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-gray-800 mb-5">
                 <Gift className="w-6 h-6 text-gray-700" />
               </div>
-              <h3 className="font-serif font-semibold text-lg text-gray-900 mb-1.5">Regalos</h3>
+              <h3 className="font-semibold text-lg text-gray-900 mb-1.5">Regalos</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
                 Recibí aportes y regalos digitales.
               </p>
@@ -142,7 +142,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
               <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-gray-800 mb-5">
                 <Globe className="w-6 h-6 text-gray-700" />
               </div>
-              <h3 className="font-serif font-semibold text-lg text-gray-900 mb-1.5">Sitio Web</h3>
+              <h3 className="font-semibold text-lg text-gray-900 mb-1.5">Sitio Web</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
                 Compartí toda la información de tu evento.
               </p>
@@ -152,9 +152,9 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
       </section>
 
       {/* Planes y Precios */}
-      <section className="py-24 sm:py-32 px-4 sm:px-6 max-w-6xl mx-auto w-full">
+      <section className="py-20 px-4 sm:px-6 max-w-6xl mx-auto w-full">
         <div className="text-center mb-14">
-          <h2 className="font-serif text-2xl sm:text-3xl font-medium text-gray-900">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
             Elegí tu plan ideal.
           </h2>
           <p className="text-sm sm:text-base text-gray-600 mt-2">
@@ -179,7 +179,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
               )}
 
               <div>
-                <h3 className="font-serif text-xl font-medium text-gray-900 mb-1">{plan.name}</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-1">{plan.name}</h3>
                 <p className="text-xs text-gray-500 min-h-[36px]">{plan.tagline}</p>
 
                 <div className="my-6 pt-4 border-t border-gray-100">
@@ -200,7 +200,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
               <button
                 id={`plan-choose-${plan.id}`}
                 onClick={() => onNavigate('register')}
-                className={`w-full py-3 px-4 rounded-none text-sm font-semibold transition-all cursor-pointer ${
+                className={`w-full py-3 px-4 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
                   plan.recommended
                     ? 'bg-gray-900 text-white hover:bg-black shadow-xs'
                     : 'bg-white border border-gray-300 text-gray-800 hover:bg-gray-50'
@@ -214,13 +214,13 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
       </section>
 
       {/* Simplificá tu Organización (Steps 01-04) */}
-      <section className="py-24 sm:py-32 bg-gray-100/50 border-t border-gray-200 px-4 sm:px-6">
+      <section className="py-16 bg-gray-50/70 border-t border-gray-100 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-xs font-bold tracking-widest text-gray-500 uppercase">
               Simplificá tu organización
             </span>
-            <h2 className="font-serif text-2xl sm:text-3xl font-medium text-gray-900 mt-2">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">
               Tu evento listo en pocos pasos.
             </h2>
           </div>
@@ -230,7 +230,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
               <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-900 text-white text-xs font-bold mb-4">
                 01
               </span>
-              <h3 className="font-serif font-semibold text-gray-900 text-base mb-1.5">Crear cuenta</h3>
+              <h3 className="font-semibold text-gray-900 text-base mb-1.5">Crear cuenta</h3>
               <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                 Registrate en segundos para acceder al panel.
               </p>
@@ -240,7 +240,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
               <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-900 text-white text-xs font-bold mb-4">
                 02
               </span>
-              <h3 className="font-serif font-semibold text-gray-900 text-base mb-1.5">Configurar tu evento</h3>
+              <h3 className="font-semibold text-gray-900 text-base mb-1.5">Configurar tu evento</h3>
               <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                 Personalizá el diseño, fecha y datos clave.
               </p>
@@ -250,7 +250,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
               <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-900 text-white text-xs font-bold mb-4">
                 03
               </span>
-              <h3 className="font-serif font-semibold text-gray-900 text-base mb-1.5">Agregar invitados</h3>
+              <h3 className="font-semibold text-gray-900 text-base mb-1.5">Agregar invitados</h3>
               <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                 Cargá tu lista de contactos fácilmente.
               </p>
@@ -260,7 +260,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
               <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-900 text-white text-xs font-bold mb-4">
                 04
               </span>
-              <h3 className="font-serif font-semibold text-gray-900 text-base mb-1.5">Compartir y recibir</h3>
+              <h3 className="font-semibold text-gray-900 text-base mb-1.5">Compartir y recibir</h3>
               <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                 Enviá tu sitio y recibí confirmaciones.
               </p>
@@ -270,12 +270,12 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
       </section>
 
       {/* Testimonios */}
-      <section className="py-24 sm:py-32 px-4 sm:px-6 max-w-6xl mx-auto w-full">
+      <section className="py-20 px-4 sm:px-6 max-w-6xl mx-auto w-full">
         <div className="text-center mb-14">
           <span className="text-xs font-bold tracking-widest text-gray-500 uppercase">
             Parejas felices
           </span>
-          <h2 className="font-serif text-2xl sm:text-3xl font-medium text-gray-900 mt-2">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">
             Testimonios con amor.
           </h2>
         </div>
@@ -349,7 +349,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
           <div className="absolute inset-0 bg-black/65 backdrop-blur-xs"></div>
 
           <div className="relative z-10 max-w-xl mx-auto">
-            <h2 className="font-serif text-2xl sm:text-3xl font-medium mb-3">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3">
               Tu historia merece algo más que una invitación.
             </h2>
             <p className="text-sm sm:text-base text-white/80 mb-6 font-normal">
@@ -358,7 +358,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             <button
               id="cta-create-list-bottom"
               onClick={() => onNavigate('register')}
-              className="px-6 py-3.5 bg-white text-gray-900 hover:bg-gray-100 font-semibold rounded-none text-sm transition-all shadow-md cursor-pointer mb-3"
+              className="px-6 py-3.5 bg-white text-gray-900 hover:bg-gray-100 font-semibold rounded-lg text-sm transition-all shadow-md cursor-pointer mb-3"
             >
               Crear mi lista gratis
             </button>
@@ -373,7 +373,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
       <footer className="bg-white border-t border-gray-200 mt-auto py-12 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
-            <span className="font-serif text-2xl font-medium text-gray-900 block mb-2">Weda</span>
+            <span className="text-2xl font-bold text-gray-900 block mb-2">Weda</span>
             <p className="text-xs sm:text-sm text-gray-500 max-w-sm leading-relaxed">
               La plataforma definitiva para organizar los preparativos y lista de regalos de tu casamiento sin estrés.
             </p>

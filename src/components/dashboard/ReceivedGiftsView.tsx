@@ -67,7 +67,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="font-serif text-2xl sm:text-3xl font-medium text-gray-900">Regalos recibidos</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Regalos recibidos</h2>
         <p className="text-sm text-gray-500 mt-1">
           Seguimiento de aportes, dedicatorias y agradecimientos.
         </p>
@@ -165,7 +165,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
                 <span className="text-[10px] uppercase font-bold tracking-wider text-rose-500 block">
                   Agradecimiento a
                 </span>
-                <h3 className="font-serif font-medium text-base text-gray-900">{activeThankGift.giverName}</h3>
+                <h3 className="font-bold text-base text-gray-900">{activeThankGift.giverName}</h3>
               </div>
               <button
                 onClick={() => setActiveThankGift(null)}
@@ -232,7 +232,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
                 <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">
                   Comprobante de transferencia
                 </span>
-                <h3 className="font-serif font-medium text-base text-gray-900">
+                <h3 className="font-bold text-base text-gray-900">
                   {activeReceiptGift.giverName} • AR$ {activeReceiptGift.amount.toLocaleString()}
                 </h3>
               </div>

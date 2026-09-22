@@ -33,7 +33,7 @@ export const PlanBillingView: React.FC<PlanBillingViewProps> = ({
     <div className="space-y-8 animate-fade-in max-w-5xl">
       {/* HEADER */}
       <div>
-        <h2 className="font-serif text-2xl sm:text-3xl font-medium text-gray-900">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
           Plan y Facturación
         </h2>
         <p className="text-sm text-gray-500 mt-1">
@@ -51,7 +51,7 @@ export const PlanBillingView: React.FC<PlanBillingViewProps> = ({
             </div>
 
             <div>
-              <h3 className="font-serif text-xl sm:text-2xl font-medium text-gray-900">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
                 Plan seleccionado: {currentPlan.name}
               </h3>
               <p className="text-sm text-gray-600 mt-1 max-w-lg">
@@ -91,7 +91,7 @@ export const PlanBillingView: React.FC<PlanBillingViewProps> = ({
       {/* PLAN COMPARISON CARDS */}
       <div className="space-y-4">
         <div>
-          <h3 className="font-serif text-base font-medium text-gray-900">Comparativa de Planes Weda</h3>
+          <h3 className="text-base font-bold text-gray-900">Comparativa de Planes Weda</h3>
           <p className="text-xs text-gray-500">Elegí el plan que mejor se adapte a las necesidades de su boda.</p>
         </div>
 

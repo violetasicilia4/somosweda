@@ -278,7 +278,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
               <span className="text-xs uppercase tracking-[0.3em] font-medium text-white/90 mb-2">
                 ¡Nos casamos!
               </span>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-medium text-white mb-3">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white mb-3">
                 {wedding.coupleName}
               </h1>
               <p className="text-sm sm:text-base text-white/90 font-light max-w-md mx-auto mb-6">
@@ -323,7 +323,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
           {/* Itinerary Events */}
           <div className="bg-stone-50 py-12 px-6 border-y border-stone-200">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-2xl font-serif font-medium text-center text-gray-900 mb-8">
+              <h2 className="text-2xl font-serif font-bold text-center text-gray-900 mb-8">
                 Cuándo y Dónde
               </h2>
 
@@ -334,7 +334,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                       <Clock className="w-3.5 h-3.5" />
                       <span>{ev.time}</span>
                     </div>
-                    <h3 className="font-serif text-lg font-medium text-gray-900 mb-1">{ev.title}</h3>
+                    <h3 className="text-lg font-bold text-gray-900 mb-1">{ev.title}</h3>
                     <p className="text-xs font-medium text-gray-700 mb-2">{ev.locationName}</p>
                     <p className="text-xs text-gray-500 mb-4">{ev.address}</p>
                     <p className="text-xs text-gray-600 mb-4 italic">{ev.description}</p>
@@ -360,7 +360,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
                 Confirmación de Asistencia
               </span>
-              <h2 className="text-2xl font-serif font-medium text-gray-900 mt-1">
+              <h2 className="text-2xl font-serif font-bold text-gray-900 mt-1">
                 ¿Nos acompañás?
               </h2>
               <p className="text-xs text-gray-500 mt-1">
@@ -371,7 +371,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
             {rsvpSubmitted ? (
               <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 text-center text-emerald-900 animate-fade-in">
                 <Check className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
-                <h3 className="font-serif font-medium text-base mb-1">¡Gracias por confirmar!</h3>
+                <h3 className="font-bold text-base mb-1">¡Gracias por confirmar!</h3>
                 <p className="text-xs text-emerald-700">
                   Hemos registrado tu respuesta exitosamente. ¡Nos vemos en la fiesta!
                 </p>
@@ -444,7 +444,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
 
                 <button
                   type="submit"
-                  className="w-full py-3 bg-gray-900 hover:bg-black text-white font-medium rounded-lg text-xs sm:text-sm transition-all shadow-xs cursor-pointer mt-2"
+                  className="w-full py-3 bg-[#0f172a] hover:bg-black text-white font-medium rounded-lg text-xs sm:text-sm transition-all shadow-xs cursor-pointer mt-2"
                 >
                   Enviar confirmación
                 </button>
@@ -456,7 +456,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
           <div className="bg-stone-50 py-12 px-6 border-t border-stone-200 text-center">
             <div className="max-w-md mx-auto">
               <Gift className="w-7 h-7 text-gray-700 mx-auto mb-3" />
-              <h2 className="text-2xl font-serif font-medium text-gray-900">
+              <h2 className="text-2xl font-serif font-bold text-gray-900">
                 ¿Nos querés regalar algo?
               </h2>
               <p className="text-xs sm:text-sm text-gray-600 mt-2">
@@ -499,7 +499,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
             <div className="max-w-3xl mx-auto">
               <div className="text-center mb-8">
                 <Gift className="w-6 h-6 text-gray-700 mx-auto mb-2" />
-                <h2 className="text-2xl font-serif font-medium text-gray-900">
+                <h2 className="text-2xl font-serif font-bold text-gray-900">
                   Lista de Regalos
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-md mx-auto">
@@ -507,7 +507,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                 </p>
 
                 {/* Bank alias card */}
-                <div className="mt-4 inline-flex items-center gap-3 bg-white px-4 py-2.5 rounded-xl border border-gray-200">
+                <div className="mt-4 inline-flex items-center gap-3 bg-white px-4 py-2.5 rounded-xl border border-gray-200 shadow-2xs">
                   <div className="text-left text-xs">
                     <span className="text-gray-400 block text-[10px] uppercase font-semibold">Alias CBU / Mercado Pago</span>
                     <span className="font-mono font-bold text-gray-900">{wedding.bankAlias}</span>
@@ -523,38 +523,46 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
               </div>
 
               {/* Gifts Grid - Total collected amount is hidden per user request */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8">
-                {gifts.map((gift) => {
-                  const inCart = cartItems.some(g => g.id === gift.id);
-                  return (
-                    <div key={gift.id} className="text-left">
-                      <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
-                        <img
-                          src={gift.imageUrl}
-                          alt={gift.title}
-                          className="w-full h-full object-cover"
-                          referrerPolicy="no-referrer"
-                        />
-                        <span className="absolute top-2.5 left-2.5 bg-white/95 text-gray-500 text-[10px] font-semibold uppercase tracking-[0.09em] px-2 py-1 rounded-full">
-                          {gift.category}
-                        </span>
-                      </div>
-                      <h4 className="pt-3 text-[15px] font-medium text-gray-900 leading-snug line-clamp-2">{gift.title}</h4>
-                      <p className="text-[15px] font-medium text-gray-900 mb-2.5">AR$ {gift.targetPrice.toLocaleString()}</p>
-                      <button
-                        type="button"
-                        onClick={() => handleAddToCart(gift)}
-                        className={`w-full py-2.5 rounded-none text-xs font-semibold transition-all cursor-pointer ${
-                          inCart
-                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
-                            : 'bg-gray-900 text-white hover:bg-black'
-                        }`}
-                      >
-                        {inCart ? 'En tu carrito ✓' : 'Regalá'}
-                      </button>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {gifts.map((gift) => (
+                  <div key={gift.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-2xs flex flex-col justify-between hover:border-gray-300 transition-colors">
+                    <div className="h-36 overflow-hidden relative">
+                      <img
+                        src={gift.imageUrl}
+                        alt={gift.title}
+                        className="w-full h-full object-cover"
+                        referrerPolicy="no-referrer"
+                      />
+                      <span className="absolute top-2 right-2 bg-black/60 backdrop-blur-xs text-white text-[10px] font-semibold px-2 py-0.5 rounded uppercase">
+                        {gift.category}
+                      </span>
                     </div>
-                  );
-                })}
+                    <div className="p-4 flex-1 flex flex-col justify-between">
+                      <div>
+                        <h4 className="font-bold text-sm text-gray-900 mb-1">{gift.title}</h4>
+                        <p className="text-xs text-gray-500 mb-3">{gift.description}</p>
+                      </div>
+                      <div>
+                        <div className="flex justify-between items-center text-xs mb-3 bg-gray-50 p-2 rounded-lg border border-gray-100">
+                          <span className="text-gray-500 text-[11px]">Valor sugerido:</span>
+                          <span className="font-bold text-gray-900">AR$ {gift.targetPrice.toLocaleString()}</span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => handleAddToCart(gift)}
+                          className={`w-full py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer shadow-xs ${
+                            cartItems.some(g => g.id === gift.id)
+                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
+                              : 'bg-gray-900 text-white hover:bg-black'
+                          }`}
+                        >
+                          {cartItems.some(g => g.id === gift.id) ? 'En tu carrito ✓' : 'Regalá'}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -588,11 +596,11 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                     Regalo para {wedding.coupleName}
                   </div>
                   {giftFlowStep === 'cart' ? (
-                    <h3 className="font-serif font-medium text-base text-gray-900">
+                    <h3 className="font-bold text-base text-gray-900">
                       {cartItems.length === 1 ? cartItems[0].title : `${cartItems.length} regalos elegidos`}
                     </h3>
                   ) : (
-                    <h3 className="font-serif font-medium text-base text-gray-900">
+                    <h3 className="font-bold text-base text-gray-900">
                       {cartItems.length === 1 ? cartItems[0].title : `${cartItems.length} regalos`}
                     </h3>
                   )}
