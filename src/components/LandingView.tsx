@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppView } from '../types';
-import { Users, CalendarCheck, Gift, Globe, Check } from 'lucide-react';
+import { Users, CalendarCheck, Gift, Globe, Check, ArrowRight, Heart } from 'lucide-react';
 import { pricingPlans } from '../data/initialData';
 
 interface LandingViewProps {
@@ -10,35 +10,36 @@ interface LandingViewProps {
 
 export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExample }) => {
   return (
-    <div className="bg-[#171310] p-2 sm:p-3">
     <div className="min-h-screen bg-white text-gray-900 flex flex-col font-sans">
-      {/* Navigation Header — franja oscura, continua con el marco exterior */}
-      <header className="bg-[#171310] px-4 sm:px-8">
-        <div className="max-w-6xl mx-auto h-16 sm:h-[72px] flex items-center justify-between">
-          <div
+      {/* Navigation Header */}
+      <header className="border-b border-gray-100 bg-white/95 backdrop-blur-xs sticky top-0 z-40">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
+          <div 
             onClick={() => onNavigate('landing')}
-            className="cursor-pointer flex items-center gap-3"
+            className="cursor-pointer flex items-center gap-2"
           >
-            <span style={{ fontFamily: "'Playfair Display', serif" }} className="text-lg sm:text-xl tracking-[0.15em] uppercase text-[#F4EEE1]">
-              Weda
-            </span>
-            <span className="text-[9px] tracking-[0.2em] uppercase text-[#F4EEE1]/85 border border-[#F4EEE1]/30 rounded-full px-2.5 py-1">
-              Casamientos
-            </span>
+            <span className="text-2xl font-bold tracking-tight text-gray-900">Weda</span>
           </div>
 
-          <div className="flex items-center gap-5 sm:gap-7">
+          <div className="flex items-center gap-3 sm:gap-6">
             <button
               id="landing-header-login-btn"
               onClick={() => onNavigate('login')}
-              className="text-xs uppercase tracking-wider text-[#F4EEE1]/90 hover:text-white transition-colors cursor-pointer"
+              className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
             >
               Iniciar sesión
             </button>
             <button
+              id="landing-header-register-btn"
+              onClick={() => onNavigate('register')}
+              className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors hidden sm:inline-block"
+            >
+              Registrarse
+            </button>
+            <button
               id="landing-header-create-btn"
               onClick={() => onNavigate('register')}
-              className="text-xs uppercase tracking-wider bg-[#F4EEE1] text-[#171310] px-5 py-2.5 hover:bg-white transition-colors cursor-pointer"
+              className="px-4 py-2 text-sm font-medium text-white bg-[#0f172a] hover:bg-black rounded-lg transition-all shadow-xs cursor-pointer"
             >
               Crear mi lista
             </button>
@@ -46,42 +47,46 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
         </div>
       </header>
 
-      {/* Hero Section — foto en blanco y negro a sangre completa, sin card ni sombra */}
-      <section className="relative w-full aspect-4/5 sm:aspect-16/9 overflow-hidden">
-        <img
-          src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80"
-          alt="Pareja de novios celebrando su casamiento"
-          className="absolute inset-0 w-full h-full object-cover object-center grayscale"
-          referrerPolicy="no-referrer"
-        />
-        <div className="absolute inset-0 bg-black/15"></div>
+      {/* Hero Section */}
+      <section className="relative pt-6 pb-16 sm:py-20 px-4 sm:px-6 max-w-6xl mx-auto w-full">
+        {/* Hero Banner Image Card */}
+        <div className="relative rounded-2xl overflow-hidden shadow-xl aspect-16/10 sm:aspect-21/9 max-h-[500px] w-full mb-10 flex items-center justify-center text-center p-6 sm:p-12">
+          <img 
+            src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80" 
+            alt="Pareja de novios sonriendo en su casamiento" 
+            className="absolute inset-0 w-full h-full object-cover object-center"
+            referrerPolicy="no-referrer"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/40 backdrop-brightness-95"></div>
 
-        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
-          <span className="text-[11px] tracking-[0.3em] uppercase text-white/85 mb-5">
-            Planificá tu casamiento
-          </span>
-          <h1
-            style={{ fontFamily: "'Playfair Display', serif" }}
-            className="text-3xl sm:text-5xl md:text-6xl font-normal text-white leading-[1.2] max-w-3xl"
-          >
-            Armá tu lista de regalos e invitados de tu casamiento en un solo lugar.
-          </h1>
+          <div className="relative z-10 max-w-3xl mx-auto text-white flex flex-col items-center">
+            <span className="text-[11px] sm:text-xs font-bold tracking-[0.2em] uppercase text-white/90 mb-3 bg-white/15 px-3.5 py-1 rounded-full backdrop-blur-md">
+              Planificá tu casamiento
+            </span>
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white mb-4 leading-tight">
+              Armá la lista de invitados y regalos de tu casamiento en un solo lugar.
+            </h1>
+            <p className="text-sm sm:text-base md:text-lg text-white/85 max-w-2xl mx-auto mb-8 font-normal leading-relaxed">
+              Creá tu sitio, gestioná confirmaciones, organizá invitados y recibí regalos digitales.
+            </p>
 
-          <div className="flex items-center gap-3 mt-9">
-            <button
-              id="hero-create-list-btn"
-              onClick={() => onNavigate('register')}
-              className="text-xs uppercase tracking-wider bg-[#F4EEE1] text-[#171310] px-6 py-3 hover:bg-white transition-colors cursor-pointer"
-            >
-              Crear mi lista
-            </button>
-            <button
-              id="hero-view-example-btn"
-              onClick={onOpenExample}
-              className="text-xs uppercase tracking-wider border border-white/70 text-white px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer"
-            >
-              Ver ejemplo
-            </button>
+            <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto justify-center">
+              <button
+                id="hero-create-list-btn"
+                onClick={() => onNavigate('register')}
+                className="w-full sm:w-auto px-6 py-3.5 bg-white text-gray-900 hover:bg-gray-100 font-semibold rounded-lg text-sm transition-all shadow-md cursor-pointer flex items-center justify-center gap-2"
+              >
+                Crear mi lista gratis
+                <ArrowRight className="w-4 h-4" />
+              </button>
+              <button
+                id="hero-view-example-btn"
+                onClick={onOpenExample}
+                className="w-full sm:w-auto px-6 py-3.5 bg-white/20 hover:bg-white/30 text-white font-medium rounded-lg text-sm transition-all backdrop-blur-md border border-white/30 cursor-pointer"
+              >
+                Ver ejemplo
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -411,7 +416,6 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
           <span>Hecho con amor para parejas de todo el mundo.</span>
         </div>
       </footer>
-    </div>
     </div>
   );
 };
