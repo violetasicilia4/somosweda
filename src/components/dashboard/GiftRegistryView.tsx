@@ -3,12 +3,10 @@ import { GiftItem, WeddingData } from '../../types';
 import { suggestedGiftsByCategory } from '../../data/initialData';
 import {
   Plus,
-  Trash2,
   Check,
   CheckCircle2,
   X,
   Share2,
-  Edit3,
   Lock,
   Calendar,
   MapPin,
@@ -262,7 +260,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
               </>
             ) : (
               <>
-                <Lock className="w-3.5 h-3.5 text-amber-300" />
+                <Lock className="w-3.5 h-3.5 text-white/70" />
                 <span>Borrador Privado</span>
               </>
             )}
@@ -275,19 +273,19 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             <span className="text-[11px] font-semibold uppercase tracking-wider text-white/60">
               Estás armando la lista de regalos de
             </span>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white drop-shadow-sm">
+            <h1 className="font-serif text-2xl sm:text-3xl font-medium tracking-tight text-white drop-shadow-sm">
               {wedding.coupleName || 'Sofía & Martín'}
             </h1>
             <p className="text-xs sm:text-sm font-medium text-white/90 flex flex-wrap items-center gap-2 drop-shadow-xs">
               <span className="inline-flex items-center gap-1.5">
-                <Calendar className="w-4 h-4 text-amber-300" />
+                <Calendar className="w-4 h-4 text-white/70" />
                 {formattedDate}
               </span>
               {wedding.venue && (
                 <>
                   <span className="text-white/50">•</span>
                   <span className="inline-flex items-center gap-1.5 text-white/85">
-                    <MapPin className="w-3.5 h-3.5 text-amber-300/90" />
+                    <MapPin className="w-3.5 h-3.5 text-white/70" />
                     {wedding.venue}
                   </span>
                 </>
@@ -333,7 +331,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
           No depende de tener métodos de cobro configurados. */}
       <section className="space-y-5">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900">
+          <h2 className="font-serif text-xl sm:text-2xl font-medium tracking-tight text-gray-900">
             Armá tu lista de regalos
           </h2>
           <p className="text-xs sm:text-sm text-gray-600 mt-1">
@@ -362,25 +360,25 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   key={cat.id}
                   type="button"
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`p-3 rounded-2xl text-left transition-all cursor-pointer border flex flex-col justify-between ${
+                  className={`p-3 rounded-lg text-left transition-all cursor-pointer border flex flex-col justify-between ${
                     isSelected
-                      ? 'bg-amber-50/70 border-amber-300 shadow-xs'
+                      ? 'bg-white border-gray-900'
                       : 'bg-white hover:bg-gray-50 text-gray-800 border-gray-200'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <Icon className={`w-4.5 h-4.5 ${isSelected ? 'text-amber-600' : 'text-gray-400'}`} />
+                    <Icon className={`w-4.5 h-4.5 ${isSelected ? 'text-gray-900' : 'text-gray-400'}`} />
                     <span className={`inline-flex items-center gap-0.5 text-[10px] font-bold px-2 py-0.5 rounded-full ${
                       addedInCategory > 0
                         ? 'bg-emerald-100 text-emerald-700'
-                        : isSelected ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600'
+                        : isSelected ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'
                     }`}>
                       {addedInCategory > 0 && <CheckCheck className="w-3 h-3" />}
                       {addedInCategory > 0 ? `${addedInCategory}/${itemsCount}` : itemsCount}
                     </span>
                   </div>
                   <div>
-                    <h3 className="text-xs sm:text-sm font-bold leading-tight text-gray-900">
+                    <h3 className="font-serif text-xs sm:text-sm font-medium leading-tight text-gray-900">
                       {cat.name}
                     </h3>
                     <p className="text-[10px] leading-snug line-clamp-1 mt-0.5 text-gray-400">
@@ -398,9 +396,9 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             const categoryItems = suggestedGiftsByCategory[selectedCategory] || [];
             const allAdded = categoryItems.length > 0 && categoryItems.every(item => isGiftInList(item.title));
             return (
-              <div className="flex flex-wrap items-center justify-between gap-2.5">
-                <h3 className="text-sm font-bold text-gray-900">
-                  {selectedCategory} <span className="text-gray-400 font-medium">· {categoryItems.length} regalos</span>
+              <div className="flex flex-wrap items-end justify-between gap-2.5 pt-4">
+                <h3 className="font-serif text-2xl sm:text-3xl font-medium tracking-tight text-gray-900">
+                  {selectedCategory} <span className="font-sans text-base text-gray-400 font-medium">· {categoryItems.length} regalos</span>
                 </h3>
                 <div className="flex items-center gap-2">
                   {allAdded ? (
@@ -435,8 +433,10 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             );
           })()}
 
-          {/* Regalos de la categoría activa: tarjetas circulares tildables, sin modal ni pasos extra */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {/* Regalos de la categoría activa — al estilo Ferm Living: foto + dos líneas
+              de texto, sin borde ni sombra de card. Agregar es un toque sobre la foto
+              (el círculo arriba a la derecha), no un botón aparte debajo. */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8">
             {(suggestedGiftsByCategory[selectedCategory] || []).map((item, idx) => {
               const checked = isGiftInList(item.title);
               return (
@@ -444,82 +444,74 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   key={idx}
                   type="button"
                   onClick={() => handleToggleSuggestion(item)}
-                  className={`text-center bg-white rounded-2xl border transition-all overflow-hidden shadow-2xs cursor-pointer p-4 flex flex-col items-center ${
-                    checked ? 'border-gray-900 ring-1 ring-gray-900' : 'border-gray-200 hover:border-gray-300 hover:shadow-xs'
-                  }`}
+                  className="text-left cursor-pointer group"
                 >
-                  <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden bg-gray-100 shrink-0">
+                  <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
                     <img
                       src={item.imageUrl}
                       alt={item.title}
                       className="w-full h-full object-cover"
                       referrerPolicy="no-referrer"
                     />
-                    <div className={`absolute bottom-0.5 right-0.5 w-7 h-7 rounded-full flex items-center justify-center border-2 border-white transition-colors ${
-                      checked ? 'bg-gray-900' : 'bg-white/90'
+                    <span className="absolute top-2.5 left-2.5 bg-white/95 text-gray-500 text-[10px] font-semibold uppercase tracking-[0.09em] px-2 py-1 rounded-full">
+                      {selectedCategory}
+                    </span>
+                    <span className={`absolute top-2.5 right-2.5 w-7 h-7 rounded-full flex items-center justify-center transition-colors ${
+                      checked ? 'bg-gray-900' : 'border border-white/80 bg-gray-900/10 group-hover:bg-gray-900/20'
                     }`}>
-                      {checked && <Check className="w-4 h-4 text-white" />}
-                    </div>
+                      {checked && <Check className="w-3.5 h-3.5 text-white" />}
+                    </span>
                   </div>
 
-                  <div className="pt-3 space-y-0.5 w-full">
-                    <h3 className="text-sm font-bold text-gray-900 leading-snug line-clamp-2">
+                  <div className="pt-3 flex items-start justify-between gap-2">
+                    <h3 className="font-serif text-[15px] font-medium text-gray-900 leading-snug line-clamp-2">
                       {item.title}
                     </h3>
-                    <p className="text-sm font-bold text-gray-700">
-                      Monto: ${item.targetPrice.toLocaleString()}
-                    </p>
-                    {checked && (
-                      <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold text-emerald-700 pt-1">
-                        <Check className="w-3.5 h-3.5" />
-                        <span>Agregado a tu lista</span>
-                      </div>
-                    )}
                   </div>
+                  <p className="text-[15px] font-medium text-gray-900">
+                    ${item.targetPrice.toLocaleString()}
+                  </p>
                 </button>
               );
             })}
 
             {/* Regalos personalizados que la pareja cargó dentro de esta categoría */}
             {gifts.filter(g => g.isCustom && g.category === selectedCategory).map((gift) => (
-              <div
-                key={gift.id}
-                className="relative bg-white rounded-2xl border-2 border-gray-900 overflow-hidden shadow-2xs p-4 flex flex-col items-center text-center"
-              >
-                <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden bg-gray-100 shrink-0">
+              <div key={gift.id} className="text-left">
+                <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
                   <img
                     src={gift.imageUrl}
                     alt={gift.title}
                     className="w-full h-full object-cover"
                     referrerPolicy="no-referrer"
                   />
+                  <span className="absolute top-2.5 left-2.5 bg-white/95 text-gray-500 text-[10px] font-semibold uppercase tracking-[0.09em] px-2 py-1 rounded-full">
+                    Personalizado
+                  </span>
                 </div>
-                <span className="mt-2 bg-gray-900 text-white text-[9px] font-semibold px-2 py-0.5 rounded-full uppercase">
-                  Personalizado
-                </span>
-                <div className="pt-2 space-y-0.5 w-full">
-                  <h3 className="text-sm font-bold text-gray-900 leading-snug line-clamp-2">
+                <div className="pt-3 flex items-start justify-between gap-2">
+                  <h3 className="font-serif text-[15px] font-medium text-gray-900 leading-snug line-clamp-2">
                     {gift.title}
                   </h3>
-                  <p className="text-sm font-bold text-gray-700">
-                    Monto: ${gift.targetPrice.toLocaleString()}
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-[15px] font-medium text-gray-900">
+                    ${gift.targetPrice.toLocaleString()}
                   </p>
-                  <div className="flex items-center justify-center gap-1.5 pt-2 border-t border-gray-100 mt-1.5">
+                  <div className="flex items-center gap-3 shrink-0">
                     <button
                       type="button"
                       onClick={() => handleOpenEdit(gift)}
-                      className="px-2.5 py-1 text-xs font-semibold text-gray-700 hover:text-gray-900 border border-gray-200 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1"
+                      className="text-xs font-medium text-gray-500 hover:text-gray-900 cursor-pointer"
                     >
-                      <Edit3 className="w-3 h-3 text-gray-400" />
-                      <span>Editar</span>
+                      Editar
                     </button>
                     <button
                       type="button"
                       onClick={() => onDeleteGift(gift.id)}
-                      className="px-2.5 py-1 text-xs font-semibold text-gray-500 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1"
+                      className="text-xs font-medium text-gray-500 hover:text-rose-600 cursor-pointer"
                     >
-                      <Trash2 className="w-3 h-3" />
-                      <span>Eliminar</span>
+                      Eliminar
                     </button>
                   </div>
                 </div>
@@ -536,7 +528,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 space-y-6 animate-fade-in max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-gray-100 pb-3">
               <div>
-                <h3 className="text-lg font-bold text-gray-900">Crear regalo</h3>
+                <h3 className="font-serif text-lg font-medium text-gray-900">Crear regalo</h3>
                 <p className="text-xs text-gray-500">Ingresá el nombre, categoría y monto para este regalo.</p>
               </div>
               <button
@@ -647,7 +639,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 space-y-6 animate-fade-in max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-gray-100 pb-3">
               <div>
-                <h3 className="text-lg font-bold text-gray-900">Editar regalo</h3>
+                <h3 className="font-serif text-lg font-medium text-gray-900">Editar regalo</h3>
                 <p className="text-xs text-gray-500">Modificá el nombre, descripción, categoría o monto.</p>
               </div>
               <button

@@ -136,7 +136,7 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
       {/* SECTION HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <h2 className="font-serif text-2xl sm:text-3xl font-medium text-gray-900">
             Invitados & Mesas
           </h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -394,7 +394,7 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h3 className="text-lg font-bold text-gray-900">Distribución de Mesas</h3>
+              <h3 className="font-serif text-lg font-medium text-gray-900">Distribución de Mesas</h3>
               <p className="text-xs text-gray-500">
                 Organizá a los invitados confirmados por afinidad familiar y de amigos.
               </p>
@@ -472,7 +472,7 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-gray-100 animate-fade-in space-y-4">
             <div className="flex justify-between items-center pb-2 border-b border-gray-100">
-              <h3 className="font-bold text-base text-gray-900">+ Agregar invitado</h3>
+              <h3 className="font-serif font-medium text-base text-gray-900">+ Agregar invitado</h3>
               <button 
                 onClick={() => setIsAddGuestModalOpen(false)}
                 className="text-gray-400 hover:text-gray-700 text-xs font-semibold p-1"
@@ -593,7 +593,7 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
       {isAddTableOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl border border-gray-100 animate-fade-in space-y-4">
-            <h3 className="font-bold text-base text-gray-900">+ Crear nueva mesa</h3>
+            <h3 className="font-serif font-medium text-base text-gray-900">+ Crear nueva mesa</h3>
             <form onSubmit={handleCreateTable} className="space-y-3.5">
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1">

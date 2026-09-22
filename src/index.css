@@ -1,7 +1,75 @@
 @import "tailwindcss";
 
+/*
+ * Identidad visual "Ferm Living" — ver el sistema de diseño completo en
+ * https://claude.ai/artifact/DUY6eDVEh1KRLdboXwpNMU (diagnóstico, tokens,
+ * componentes). Resumen: Fraunces (serif, SOLO 400/500 — nunca negrita/black)
+ * para momentos editoriales puntuales; Onest para todo lo demás. La escala
+ * gray-* de Tailwind se convierte en una rampa marfil → carbón cálido (así
+ * toda la app hereda el fondo/tinta sin tocar cada archivo), y emerald/
+ * amber/rose — que ya se usaban semánticamente como éxito/pendiente/error —
+ * se convierten en sus versiones apagadas: salvia/ocre/ladrillo. Ningún
+ * color saturado de "SaaS" queda en la paleta.
+ */
+@theme {
+  --font-sans: 'Onest', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: 'Fraunces', ui-serif, Georgia, serif;
+
+  /* marfil → carbón cálido (reemplaza la escala gray-* por defecto) */
+  --color-gray-50: #FCF7EE;
+  --color-gray-100: #ECE4D3;
+  --color-gray-200: #E4DCC7;
+  --color-gray-300: #D8CCAE;
+  --color-gray-400: #A89C86;
+  --color-gray-500: #74695A;
+  --color-gray-600: #5A5040;
+  --color-gray-700: #453D2E;
+  --color-gray-800: #362F23;
+  --color-gray-900: #2B271F;
+  --color-gray-950: #1D1911;
+
+  /* éxito / confirmado — salvia apagada, reemplaza emerald-* */
+  --color-emerald-50: #F1F3EA;
+  --color-emerald-100: #E1E6D2;
+  --color-emerald-200: #C7D0AC;
+  --color-emerald-300: #A9B583;
+  --color-emerald-400: #8B9A63;
+  --color-emerald-500: #6E7A54;
+  --color-emerald-600: #5B6644;
+  --color-emerald-700: #495234;
+  --color-emerald-800: #3A4029;
+  --color-emerald-900: #2D321F;
+  --color-emerald-950: #1D2114;
+
+  /* pendiente / borrador — ocre apagado, reemplaza amber-* */
+  --color-amber-50: #FAF1E1;
+  --color-amber-100: #F3E6CF;
+  --color-amber-200: #E8D1A8;
+  --color-amber-300: #D9B87A;
+  --color-amber-400: #C49E54;
+  --color-amber-500: #A97D3D;
+  --color-amber-600: #8D652F;
+  --color-amber-700: #6F4F25;
+  --color-amber-800: #573E1D;
+  --color-amber-900: #402D15;
+  --color-amber-950: #2A1D0D;
+
+  /* error / no asiste — ladrillo apagado, reemplaza rose-* */
+  --color-rose-50: #F8ECE9;
+  --color-rose-100: #F1DCD6;
+  --color-rose-200: #E2BAB0;
+  --color-rose-300: #CE9184;
+  --color-rose-400: #B66C5C;
+  --color-rose-500: #9C4A3A;
+  --color-rose-600: #833C2E;
+  --color-rose-700: #663025;
+  --color-rose-800: #4E251C;
+  --color-rose-900: #391B15;
+  --color-rose-950: #24110D;
+}
+
 @layer base {
   body {
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--font-sans);
   }
 }

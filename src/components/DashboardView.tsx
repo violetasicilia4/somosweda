@@ -235,7 +235,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full inline-block mb-1">
                   Publicación Definitiva
                 </span>
-                <h3 className="font-bold text-lg text-gray-900">
+                <h3 className="font-serif font-medium text-lg text-gray-900">
                   Publicar tu boda en Weda
                 </h3>
               </div>

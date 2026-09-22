@@ -52,14 +52,14 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
           <button
             type="button"
             onClick={() => onNavigate('landing')}
-            className="text-3xl font-bold tracking-tight text-gray-900 cursor-pointer inline-block hover:opacity-85 transition-opacity"
+            className="font-serif text-3xl font-medium tracking-tight text-gray-900 cursor-pointer inline-block hover:opacity-85 transition-opacity"
           >
             Weda
           </button>
         </div>
 
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-1.5">Creemos tu boda</h1>
+          <h1 className="font-serif text-2xl font-medium text-gray-900 mb-1.5">Creemos tu boda</h1>
           <p className="text-sm text-gray-500">Necesitamos algunos datos para empezar.</p>
         </div>
 
@@ -234,7 +234,7 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
           <button
             id="create-wedding-btn"
             type="submit"
-            className="w-full py-3.5 bg-[#0f172a] hover:bg-black text-white font-medium rounded-lg text-sm transition-all shadow-xs cursor-pointer mt-4"
+            className="w-full py-3.5 bg-gray-900 hover:bg-black text-white font-medium rounded-lg text-sm transition-all shadow-xs cursor-pointer mt-4"
           >
             Crear boda
           </button>
