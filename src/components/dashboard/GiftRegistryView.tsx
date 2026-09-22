@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { GiftItem, WeddingData } from '../../types';
-import { suggestedGiftsByCategory, predefinedGiftSets, GiftSet } from '../../data/initialData';
+import { suggestedGiftsByCategory } from '../../data/initialData';
 import { CobrosView } from './CobrosView';
 import {
   Plus,
@@ -11,30 +11,24 @@ import {
   X,
   Share2,
   Edit3,
-  ArrowUp,
-  ArrowDown,
   Lock,
   Calendar,
   MapPin,
   Wallet,
   Gift as GiftIcon,
-  PartyPopper,
-  ExternalLink,
 } from 'lucide-react';
 
 interface GiftRegistryViewProps {
   wedding: WeddingData;
   gifts: GiftItem[];
   onAddGift: (gift: Omit<GiftItem, 'id' | 'currentAmount'>) => void;
-  onAddGiftsFromSet: (items: Omit<GiftItem, 'id'>[]) => void;
   onDeleteGift: (giftId: string) => void;
   onUpdateGift?: (giftId: string, updates: Partial<GiftItem>) => void;
-  onReorderGifts?: (newGifts: GiftItem[]) => void;
-  onOpenMicrosite?: () => void;
   onUpdateWedding: (updated: Partial<WeddingData>) => void;
 }
 
-// 5 Categorías pensadas desde la perspectiva de los novios
+// 5 Categorías pensadas desde la perspectiva de los novios — son los únicos
+// "lotes" de regalos: todo lo que se puede sumar a la lista vive dentro de una.
 interface CategoryMeta {
   id: string;
   name: string;
@@ -54,11 +48,8 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
   wedding,
   gifts,
   onAddGift,
-  onAddGiftsFromSet,
   onDeleteGift,
   onUpdateGift,
-  onReorderGifts,
-  onOpenMicrosite,
   onUpdateWedding,
 }) => {
   // Setup del registro: métodos de pago primero si todavía no están cargados,
@@ -68,7 +59,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
     isPaymentConfigured ? 'lista' : 'pago'
   );
 
-  // Category filter for suggested gifts catalog
+  // Category filter for the gift catalog
   const [selectedCategory, setSelectedCategory] = useState<string>('Luna de miel');
 
   // Custom gift modal
@@ -132,18 +123,6 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
     setTimeout(() => setCopiedShare(false), 3000);
   };
 
-  // Reorder gifts
-  const handleMoveGift = (index: number, direction: 'up' | 'down') => {
-    const newIndex = direction === 'up' ? index - 1 : index + 1;
-    if (newIndex < 0 || newIndex >= gifts.length) return;
-    const updated = [...gifts];
-    const item = updated.splice(index, 1)[0];
-    updated.splice(newIndex, 0, item);
-    if (onReorderGifts) {
-      onReorderGifts(updated);
-    }
-  };
-
   // Open Edit Modal for a gift
   const handleOpenEdit = (gift: GiftItem) => {
     setEditingGift(gift);
@@ -172,7 +151,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
     setTimeout(() => setAddedFeedback(null), 3000);
   };
 
-  // Create custom gift
+  // Create custom gift — siempre queda anclado a una categoría, como cualquier otro regalo
   const handleCreateCustomGift = (e: React.FormEvent) => {
     e.preventDefault();
     if (!customTitle.trim()) return;
@@ -193,8 +172,18 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
     setTimeout(() => setAddedFeedback(null), 3000);
   };
 
-  // Add suggestion to list
-  const handleAddSuggestion = (item: { title: string; description: string; targetPrice: number; category: string; imageUrl: string }) => {
+  const handleOpenCustomGift = () => {
+    setCustomCategory(selectedCategory);
+    setIsCustomGiftOpen(true);
+  };
+
+  // Tildar / destildar un regalo del catálogo: un solo gesto para sumar o sacar
+  const handleToggleSuggestion = (item: { title: string; description: string; targetPrice: number; category: string; imageUrl: string }) => {
+    const existing = gifts.find(g => g.title.toLowerCase().trim() === item.title.toLowerCase().trim());
+    if (existing) {
+      onDeleteGift(existing.id);
+      return;
+    }
     onAddGift({
       title: item.title,
       description: item.description,
@@ -205,54 +194,6 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
     setAddedFeedback(`"${item.title}" agregado a tu lista`);
     setTimeout(() => setAddedFeedback(null), 3000);
   };
-
-  // Predefined gift sets: "Elegí un estilo para tu lista", igual que los sets de Confites.
-  // No se agregan a ciegas: el set se abre en una previsualización con un toggle por regalo,
-  // para poder ver qué entra y qué no antes de tocar la lista — y volver a editar cuando quieras.
-  const isSetApplied = (set: GiftSet) => set.items.every(item => isGiftInList(item.title));
-  const countInList = (set: GiftSet) => set.items.filter(item => isGiftInList(item.title)).length;
-
-  const [previewSet, setPreviewSet] = useState<GiftSet | null>(null);
-  const [previewChecks, setPreviewChecks] = useState<Record<string, boolean>>({});
-
-  const handleOpenSetPreview = (set: GiftSet) => {
-    const initial: Record<string, boolean> = {};
-    set.items.forEach(item => { initial[item.title] = isGiftInList(item.title); });
-    setPreviewChecks(initial);
-    setPreviewSet(set);
-  };
-
-  const togglePreviewItem = (title: string) => {
-    setPreviewChecks(prev => ({ ...prev, [title]: !prev[title] }));
-  };
-
-  const handleApplyPreview = () => {
-    if (!previewSet) return;
-
-    const toAdd = previewSet.items.filter(item => previewChecks[item.title] && !isGiftInList(item.title));
-    const toRemove = previewSet.items.filter(item => !previewChecks[item.title] && isGiftInList(item.title));
-
-    if (toAdd.length > 0) onAddGiftsFromSet(toAdd);
-    toRemove.forEach(item => {
-      const existing = gifts.find(g => g.title.toLowerCase().trim() === item.title.toLowerCase().trim());
-      if (existing) onDeleteGift(existing.id);
-    });
-
-    if (toAdd.length > 0 || toRemove.length > 0) {
-      const parts: string[] = [];
-      if (toAdd.length > 0) parts.push(`+${toAdd.length}`);
-      if (toRemove.length > 0) parts.push(`-${toRemove.length}`);
-      setAddedFeedback(`Lista actualizada (${parts.join(' / ')}) con "${previewSet.name}"`);
-      setTimeout(() => setAddedFeedback(null), 3000);
-    }
-
-    setPreviewSet(null);
-  };
-
-  const handleGoToPersonalize = () => {
-    setIsCustomGiftOpen(true);
-  };
-
 
   return (
     <div className="space-y-8 animate-fade-in font-sans pb-24">
@@ -277,7 +218,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/35" />
         </div>
 
-        {/* Top Badges Row: Estado + acciones secundarias de previsualización */}
+        {/* Top Badges Row: Estado + acción secundaria de compartir */}
         <div className="relative z-10 flex flex-wrap items-center justify-between gap-3">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-white/20 text-xs font-medium text-white">
             {wedding.status === 'PUBLICADO' ? (
@@ -294,7 +235,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
           </div>
 
           {/* Secundario a propósito: previsualizar no es la acción principal de esta pantalla.
-              Un solo botón, como el "Compartir Lista" de Confites — sin duplicar "Ver mi web". */}
+              Un solo botón, como el "Compartir Lista" de Confites. */}
           <button
             type="button"
             onClick={handleSharePreview}
@@ -381,7 +322,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
               Lista de regalos {gifts.length > 0 && `(${gifts.length})`}
             </span>
             <span className={`block text-[11px] ${activeSection === 'lista' ? 'text-white/70' : 'text-gray-500'}`}>
-              Elegí un set armado o personalizá el tuyo
+              Tildá los regalos que quieras recibir
             </span>
           </span>
           {gifts.length > 0 ? (
@@ -395,457 +336,189 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
       {activeSection === 'pago' ? (
         <CobrosView wedding={wedding} onUpdateWedding={onUpdateWedding} />
       ) : (
-        <>
-          {/* Felicitaciones: aparece en cuanto hay al menos un regalo elegido */}
-          {gifts.length > 0 && (
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
-              <div className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                <PartyPopper className="w-4.5 h-4.5 text-emerald-700" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-emerald-900">¡Tu lista de regalos ya está lista!</p>
-                <p className="text-xs text-emerald-700 mt-0.5">
-                  Tus invitados van a poder verla y elegirte un regalo desde la sección "¿Nos querés regalar algo?" de tu micrositio.
-                </p>
-              </div>
-              {onOpenMicrosite && (
-                <button
-                  type="button"
-                  onClick={onOpenMicrosite}
-                  className="shrink-0 px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold cursor-pointer inline-flex items-center justify-center gap-1.5"
-                >
-                  <span>Ver micrositio</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </button>
-              )}
-            </div>
-          )}
-
-          {/* 3. SECCIÓN: ELEGÍ UN ESTILO PARA TU LISTA — sets armados o personalizado, como en Confites */}
-          <section className="space-y-4">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900">
-                Elegí un estilo para tu lista
-              </h2>
-              <p className="text-xs sm:text-sm text-gray-600 mt-1">
-                Empezá con un set ya armado y después sumá o sacá lo que quieras. También podés armar la tuya desde cero.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-              {predefinedGiftSets.map((set) => {
-                const applied = isSetApplied(set);
-                const inListCount = countInList(set);
-                const partial = inListCount > 0 && !applied;
-                return (
-                  <div key={set.id} className="flex flex-col items-center text-center gap-2.5">
-                    <button
-                      type="button"
-                      onClick={() => handleOpenSetPreview(set)}
-                      className={`relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 transition-all cursor-pointer ${
-                        applied ? 'border-emerald-400' : partial ? 'border-amber-400' : 'border-transparent hover:border-gray-300'
-                      }`}
-                      title={`Ver los regalos del set "${set.name}"`}
-                    >
-                      <img
-                        src={set.items[0]?.imageUrl}
-                        alt={set.name}
-                        className="w-full h-full object-cover"
-                        referrerPolicy="no-referrer"
-                      />
-                      {applied && (
-                        <div className="absolute inset-0 bg-emerald-900/50 flex items-center justify-center">
-                          <Check className="w-7 h-7 text-white" />
-                        </div>
-                      )}
-                      {partial && (
-                        <span className="absolute bottom-1 right-1 bg-amber-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-xs">
-                          {inListCount}/{set.items.length}
-                        </span>
-                      )}
-                    </button>
-                    <div className="space-y-0.5">
-                      <span className="inline-block text-[9px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
-                        {set.badge}
-                      </span>
-                      <h3 className="text-xs font-bold text-gray-900 leading-tight">
-                        {set.name}
-                      </h3>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => handleOpenSetPreview(set)}
-                      className={`w-full py-1.5 rounded-xl text-[11px] font-bold transition-all cursor-pointer ${
-                        applied
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
-                          : partial
-                          ? 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'
-                          : 'bg-gray-900 hover:bg-black text-white'
-                      }`}
-                    >
-                      {applied ? 'En tu lista ✓' : partial ? `${inListCount}/${set.items.length} en tu lista` : 'Ver y elegir'}
-                    </button>
-                  </div>
-                );
-              })}
-
-              {/* Opción de personalizar, como el "Personalizar" de Confites */}
-              <div className="flex flex-col items-center text-center gap-2.5">
-                <button
-                  type="button"
-                  onClick={handleGoToPersonalize}
-                  className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border-2 border-dashed border-gray-300 hover:border-gray-500 flex items-center justify-center text-gray-400 hover:text-gray-700 transition-colors cursor-pointer"
-                  title="Crear un regalo personalizado"
-                >
-                  <Plus className="w-7 h-7" />
-                </button>
-                <div className="space-y-0.5">
-                  <span className="inline-block text-[9px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
-                    A tu gusto
-                  </span>
-                  <h3 className="text-xs font-bold text-gray-900 leading-tight">
-                    Personalizar
-                  </h3>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleGoToPersonalize}
-                  className="w-full py-1.5 rounded-xl text-[11px] font-bold bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 transition-all cursor-pointer"
-                >
-                  Crear regalo
-                </button>
-              </div>
-            </div>
-          </section>
-
-          {/* 4. SECCIÓN: IDEAS PARA AGREGAR A TU LISTA */}
-          <section id="ideas-para-agregar" className="space-y-5 pt-6 border-t border-gray-200">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
-                  Ideas para agregar a tu lista
-                </h2>
-                <p className="text-xs sm:text-sm text-gray-600 mt-1">
-                  Inspiración organizada por momentos. Sumá ideas a tu lista en un solo clic.
-                </p>
-              </div>
-
-              <span className="text-xs font-medium text-gray-500 bg-gray-50 border border-gray-200 px-3 py-1 rounded-full self-start sm:self-auto">
-                Seleccioná una categoría:
-              </span>
-            </div>
-
-            {/* 5 CATEGORÍAS CERCANAS AL PENSAMIENTO DE LOS NOVIOS */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2.5">
-              {REGISTRY_CATEGORIES.map((cat) => {
-                const isSelected = selectedCategory === cat.id;
-                const itemsCount = (suggestedGiftsByCategory[cat.id] || []).length;
-                return (
-                  <button
-                    key={cat.id}
-                    type="button"
-                    onClick={() => setSelectedCategory(cat.id)}
-                    className={`p-3 rounded-2xl text-left transition-all cursor-pointer border flex flex-col justify-between ${
-                      isSelected
-                        ? 'bg-gray-900 text-white border-gray-900 shadow-xs'
-                        : 'bg-white hover:bg-gray-50 text-gray-800 border-gray-200'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-2 mb-1.5">
-                      <span className="text-lg">{cat.emoji}</span>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                        isSelected ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-600'
-                      }`}>
-                        {itemsCount}
-                      </span>
-                    </div>
-                    <div>
-                      <h3 className={`text-xs sm:text-sm font-bold leading-tight ${isSelected ? 'text-white' : 'text-gray-900'}`}>
-                        {cat.name}
-                      </h3>
-                      <p className={`text-[10px] leading-snug line-clamp-1 mt-0.5 ${isSelected ? 'text-white/70' : 'text-gray-400'}`}>
-                        {cat.examples}
-                      </p>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* GRID DE SUGERENCIAS DE LA CATEGORÍA ACTIVA */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {(suggestedGiftsByCategory[selectedCategory] || []).map((item, idx) => {
-                const alreadyAdded = isGiftInList(item.title);
-                return (
-                  <div
-                    key={idx}
-                    className={`bg-white rounded-2xl border transition-all flex flex-col justify-between overflow-hidden shadow-2xs ${
-                      alreadyAdded 
-                        ? 'border-emerald-200 bg-emerald-50/15' 
-                        : 'border-gray-200 hover:border-gray-300 hover:shadow-xs'
-                    }`}
-                  >
-                    <div>
-                      <div className="relative h-36 w-full overflow-hidden bg-gray-100">
-                        <img
-                          src={item.imageUrl}
-                          alt={item.title}
-                          className="w-full h-full object-cover"
-                          referrerPolicy="no-referrer"
-                        />
-                        <span className="absolute top-2 right-2 bg-black/70 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] font-semibold text-white">
-                          {item.category}
-                        </span>
-                      </div>
-
-                      <div className="p-3.5 space-y-1">
-                        <h3 className="text-xs sm:text-sm font-bold text-gray-900 leading-snug">
-                          {item.title}
-                        </h3>
-                        <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="p-3 pt-2 border-t border-gray-100 space-y-2 bg-gray-50/40">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-gray-500 font-medium">Aporte sugerido:</span>
-                        <span className="text-xs font-bold text-gray-900">
-                          ${item.targetPrice.toLocaleString()}
-                        </span>
-                      </div>
-
-                      {alreadyAdded ? (
-                        <div className="w-full py-1.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-bold text-emerald-800 flex items-center justify-center gap-1.5">
-                          <Check className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>Ya está en tu lista</span>
-                        </div>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => handleAddSuggestion(item)}
-                          className="w-full py-1.5 bg-white hover:bg-gray-900 text-gray-900 hover:text-white border border-gray-300 hover:border-gray-900 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-[0.98]"
-                        >
-                          <Plus className="w-3.5 h-3.5" />
-                          <span>Agregar a mi lista</span>
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-
-      {/* 5. SECCIÓN: NUESTRA LISTA DE REGALOS — solo aparece una vez que hay algo que mostrar */}
-      {gifts.length > 0 && (
-      <section className="space-y-5 pt-6 border-t border-gray-200">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-200">
+        // 3. UNA SOLA EXPERIENCIA: elegir categoría, tildar/destildar regalos y ver
+        // en todo momento lo que ya sumaste — sin secciones separadas ni pasos extra.
+        <section className="space-y-5">
           <div>
-            <div className="flex items-center gap-2.5">
-              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
-                Nuestra lista de regalos
-              </h2>
-              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-800 border border-gray-200">
-                {gifts.length} {gifts.length === 1 ? 'regalo' : 'regalos'}
-              </span>
-            </div>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900">
+              Armá tu lista de regalos
+            </h2>
             <p className="text-xs sm:text-sm text-gray-600 mt-1">
-              Elegí los regalos, experiencias o aportes que les gustaría recibir para esta nueva etapa.
+              Elegí una categoría y tildá los regalos que quieras recibir. Podés destildarlos cuando quieras y combinar todas las categorías.
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setIsCustomGiftOpen(true)}
-            className="px-3.5 py-2 text-xs font-semibold text-gray-800 bg-white hover:bg-gray-50 border border-gray-300 rounded-xl transition-all cursor-pointer self-start sm:self-auto inline-flex items-center gap-1.5 shadow-2xs"
-          >
-            <Plus className="w-3.5 h-3.5 text-gray-500" />
-            <span>+ Agregar otro</span>
-          </button>
-        </div>
-
-        {/* LISTA DE REGALOS ACTIVOS */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {gifts.map((gift, index) => (
-                  <div
-                    key={gift.id}
-                    className="group bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-2xs hover:shadow-xs hover:border-gray-300 transition-all flex flex-col justify-between"
+          {/* Resumen liviano de lo ya elegido — siempre visible, se puede sacar desde acá */}
+          {gifts.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2 p-3 rounded-xl bg-gray-50 border border-gray-200">
+              <span className="text-xs font-bold text-gray-700 shrink-0">
+                Tu lista ({gifts.length}):
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {gifts.map((g) => (
+                  <span
+                    key={g.id}
+                    className="inline-flex items-center gap-1.5 bg-white border border-gray-200 rounded-full pl-2.5 pr-1.5 py-1 text-[11px] font-medium text-gray-700"
                   >
-                    <div>
-                      {/* Photo with category badge */}
-                      <div className="relative h-40 w-full overflow-hidden bg-gray-100">
-                        <img
-                          src={gift.imageUrl}
-                          alt={gift.title}
-                          className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
-                          referrerPolicy="no-referrer"
-                        />
-                        <span className="absolute top-2.5 right-2.5 bg-black/75 backdrop-blur-xs px-2 py-0.5 rounded-md text-[10px] font-medium tracking-wide text-white shadow-2xs">
-                          {gift.category || 'Regalo'}
-                        </span>
-                      </div>
-
-                      {/* Title & Description */}
-                      <div className="p-4 space-y-1">
-                        <h3 className="text-sm font-bold text-gray-900 line-clamp-1 leading-snug">
-                          {gift.title}
-                        </h3>
-                        <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">
-                          {gift.description}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Card Footer: Aporte sugerido & Actions */}
-                    <div className="p-3.5 pt-2 border-t border-gray-100 space-y-2.5 bg-gray-50/50">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-gray-500 font-medium">Aporte sugerido:</span>
-                        <span className="text-sm font-bold text-gray-900">
-                          ${gift.targetPrice.toLocaleString()}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center justify-between pt-2 border-t border-gray-200/60">
-                        {/* Reorder controls */}
-                        <div className="flex items-center gap-1">
-                          <button
-                            type="button"
-                            onClick={() => handleMoveGift(index, 'up')}
-                            disabled={index === 0}
-                            className={`p-1 rounded-lg border transition-colors ${
-                              index === 0
-                                ? 'text-gray-300 border-gray-200/50 cursor-not-allowed'
-                                : 'text-gray-600 border-gray-200 hover:bg-white cursor-pointer'
-                            }`}
-                            title="Subir posición"
-                          >
-                            <ArrowUp className="w-3.5 h-3.5" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleMoveGift(index, 'down')}
-                            disabled={index === gifts.length - 1}
-                            className={`p-1 rounded-lg border transition-colors ${
-                              index === gifts.length - 1
-                                ? 'text-gray-300 border-gray-200/50 cursor-not-allowed'
-                                : 'text-gray-600 border-gray-200 hover:bg-white cursor-pointer'
-                            }`}
-                            title="Bajar posición"
-                          >
-                            <ArrowDown className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-
-                        {/* Edit & Remove buttons */}
-                        <div className="flex items-center gap-1.5">
-                          <button
-                            type="button"
-                            onClick={() => handleOpenEdit(gift)}
-                            className="px-2.5 py-1 text-xs font-semibold text-gray-700 hover:text-gray-900 border border-gray-200 hover:bg-white rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1"
-                            title="Editar regalo"
-                          >
-                            <Edit3 className="w-3 h-3 text-gray-400" />
-                            <span>Editar</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => onDeleteGift(gift.id)}
-                            className="px-2.5 py-1 text-xs font-semibold text-gray-500 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1"
-                            title="Eliminar de la lista"
-                          >
-                            <Trash2 className="w-3 h-3" />
-                            <span>Eliminar</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    {g.title}
+                    <button
+                      type="button"
+                      onClick={() => onDeleteGift(g.id)}
+                      className="p-0.5 rounded-full hover:bg-rose-50 text-gray-400 hover:text-rose-600 cursor-pointer transition-colors"
+                      title="Sacar de la lista"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
                 ))}
               </div>
-      </section>
-      )}
-        </>
-      )}
-
-      {/* ========================================================================= */}
-      {/* MODAL: PREVIEW INTERACTIVO DE UN SET — tildá lo que querés sumar,          */}
-      {/* destildá lo que no; se puede reabrir y volver a ajustar cuando quieras.    */}
-      {/* ========================================================================= */}
-      {previewSet && (
-        <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-gray-100 max-h-[90vh] flex flex-col animate-fade-in">
-            <div className="p-5 sm:p-6 border-b border-gray-100 flex items-start justify-between gap-3">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wide text-gray-400">{previewSet.badge}</span>
-                <h3 className="text-lg font-bold text-gray-900">{previewSet.name}</h3>
-                <p className="text-xs text-gray-500 mt-0.5">{previewSet.description}</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setPreviewSet(null)}
-                className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer shrink-0"
-              >
-                <X className="w-5 h-5" />
-              </button>
             </div>
+          )}
 
-            <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-2.5">
-              <p className="text-[11px] text-gray-500 font-medium">
-                Tildá los que quieras sumar a tu lista. Destildá los que no querés.
-              </p>
-              {previewSet.items.map((item) => {
-                const checked = !!previewChecks[item.title];
-                return (
-                  <button
-                    key={item.title}
-                    type="button"
-                    onClick={() => togglePreviewItem(item.title)}
-                    className={`w-full flex items-center gap-3 p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-                      checked ? 'border-gray-900 bg-gray-50' : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
+          {/* Categorías: los únicos "lotes" de regalos */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2.5">
+            {REGISTRY_CATEGORIES.map((cat) => {
+              const isSelected = selectedCategory === cat.id;
+              const itemsCount = (suggestedGiftsByCategory[cat.id] || []).length;
+              const addedInCategory = gifts.filter(g => g.category === cat.name).length;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`p-3 rounded-2xl text-left transition-all cursor-pointer border flex flex-col justify-between ${
+                    isSelected
+                      ? 'bg-gray-900 text-white border-gray-900 shadow-xs'
+                      : 'bg-white hover:bg-gray-50 text-gray-800 border-gray-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <span className="text-lg">{cat.emoji}</span>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                      addedInCategory > 0
+                        ? isSelected ? 'bg-emerald-400/90 text-emerald-950' : 'bg-emerald-100 text-emerald-700'
+                        : isSelected ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-600'
+                    }`}>
+                      {addedInCategory > 0 ? `${addedInCategory} ✓` : itemsCount}
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className={`text-xs sm:text-sm font-bold leading-tight ${isSelected ? 'text-white' : 'text-gray-900'}`}>
+                      {cat.name}
+                    </h3>
+                    <p className={`text-[10px] leading-snug line-clamp-1 mt-0.5 ${isSelected ? 'text-white/70' : 'text-gray-400'}`}>
+                      {cat.examples}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Regalos de la categoría activa: tarjetas tildables, sin modal ni pasos extra */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {(suggestedGiftsByCategory[selectedCategory] || []).map((item, idx) => {
+              const checked = isGiftInList(item.title);
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => handleToggleSuggestion(item)}
+                  className={`text-left bg-white rounded-2xl border transition-all overflow-hidden shadow-2xs cursor-pointer ${
+                    checked ? 'border-gray-900 ring-1 ring-gray-900' : 'border-gray-200 hover:border-gray-300 hover:shadow-xs'
+                  }`}
+                >
+                  <div className="relative h-36 w-full overflow-hidden bg-gray-100">
                     <img
                       src={item.imageUrl}
                       alt={item.title}
-                      className="w-12 h-12 rounded-lg object-cover shrink-0"
+                      className="w-full h-full object-cover"
                       referrerPolicy="no-referrer"
                     />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-gray-900 truncate">{item.title}</p>
-                      <p className="text-[11px] text-gray-500">${item.targetPrice.toLocaleString()}</p>
-                    </div>
-                    <div className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors ${
-                      checked ? 'bg-gray-900 border-gray-900' : 'border-gray-300'
+                    <div className={`absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center border-2 transition-colors ${
+                      checked ? 'bg-gray-900 border-gray-900' : 'bg-white/90 border-white'
                     }`}>
                       {checked && <Check className="w-3.5 h-3.5 text-white" />}
                     </div>
-                  </button>
-                );
-              })}
-            </div>
+                  </div>
 
-            <div className="p-5 sm:p-6 border-t border-gray-100 space-y-2.5">
-              <button
-                type="button"
-                onClick={() => { setPreviewSet(null); setIsCustomGiftOpen(true); }}
-                className="w-full py-2 text-xs font-semibold text-gray-600 hover:text-gray-900 inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                  <div className="p-3.5 space-y-1">
+                    <h3 className="text-xs sm:text-sm font-bold text-gray-900 leading-snug">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
+                      {item.description}
+                    </p>
+                    <div className="flex items-center justify-between text-xs pt-1.5">
+                      <span className="text-gray-500 font-medium">Aporte sugerido:</span>
+                      <span className="font-bold text-gray-900">${item.targetPrice.toLocaleString()}</span>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+
+            {/* Regalos personalizados que la pareja cargó dentro de esta categoría */}
+            {gifts.filter(g => g.isCustom && g.category === selectedCategory).map((gift) => (
+              <div
+                key={gift.id}
+                className="relative bg-white rounded-2xl border-2 border-gray-900 overflow-hidden shadow-2xs"
               >
-                <Plus className="w-3.5 h-3.5" />
-                <span>Sumar un regalo independiente que no está acá</span>
-              </button>
-              <button
-                type="button"
-                onClick={handleApplyPreview}
-                className="w-full py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-sm font-semibold transition-all cursor-pointer shadow-xs"
-              >
-                Guardar selección
-              </button>
-            </div>
+                <div className="relative h-36 w-full overflow-hidden bg-gray-100">
+                  <img
+                    src={gift.imageUrl}
+                    alt={gift.title}
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                  <span className="absolute top-2 left-2 bg-gray-900 text-white text-[10px] font-semibold px-2 py-0.5 rounded uppercase">
+                    Personalizado
+                  </span>
+                </div>
+                <div className="p-3.5 space-y-1">
+                  <h3 className="text-xs sm:text-sm font-bold text-gray-900 leading-snug">
+                    {gift.title}
+                  </h3>
+                  <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
+                    {gift.description}
+                  </p>
+                  <div className="flex items-center justify-between text-xs pt-1.5">
+                    <span className="text-gray-500 font-medium">Aporte sugerido:</span>
+                    <span className="font-bold text-gray-900">${gift.targetPrice.toLocaleString()}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 pt-2 border-t border-gray-100 mt-1.5">
+                    <button
+                      type="button"
+                      onClick={() => handleOpenEdit(gift)}
+                      className="px-2.5 py-1 text-xs font-semibold text-gray-700 hover:text-gray-900 border border-gray-200 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1"
+                    >
+                      <Edit3 className="w-3 h-3 text-gray-400" />
+                      <span>Editar</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onDeleteGift(gift.id)}
+                      className="px-2.5 py-1 text-xs font-semibold text-gray-500 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                      <span>Eliminar</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
+
+          {/* Siempre disponible: un regalo puntual que no está en el catálogo */}
+          <button
+            type="button"
+            onClick={handleOpenCustomGift}
+            className="w-full sm:w-auto px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-800 border border-dashed border-gray-300 hover:border-gray-400 rounded-xl text-sm font-semibold inline-flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+          >
+            <Plus className="w-4 h-4 text-gray-400" />
+            <span>Crear un regalo específico en "{selectedCategory}"</span>
+          </button>
+        </section>
       )}
 
       {/* ========================================================================= */}

@@ -36,10 +36,8 @@ interface DashboardViewProps {
   onUpdateGuestStatus: (guestId: string, status: Guest['status']) => void;
   onDeleteGuest: (guestId: string) => void;
   onAddGift: (gift: Omit<GiftItem, 'id' | 'currentAmount'>) => void;
-  onAddGiftsFromSet: (items: Omit<GiftItem, 'id'>[]) => void;
   onDeleteGift: (giftId: string) => void;
   onUpdateGift?: (giftId: string, updates: Partial<GiftItem>) => void;
-  onReorderGifts?: (newGifts: GiftItem[]) => void;
   onUpdateReceivedGift: (giftId: string, updates: Partial<ReceivedGift>) => void;
   onOpenMicrosite: () => void;
   onNavigate: (view: AppView) => void;
@@ -56,10 +54,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onUpdateGuestStatus,
   onDeleteGuest,
   onAddGift,
-  onAddGiftsFromSet,
   onDeleteGift,
   onUpdateGift,
-  onReorderGifts,
   onUpdateReceivedGift,
   onOpenMicrosite,
   onNavigate,
@@ -168,11 +164,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               wedding={wedding}
               gifts={gifts}
               onAddGift={onAddGift}
-              onAddGiftsFromSet={onAddGiftsFromSet}
               onDeleteGift={onDeleteGift}
               onUpdateGift={onUpdateGift}
-              onReorderGifts={onReorderGifts}
-              onOpenMicrosite={onOpenMicrosite}
               onUpdateWedding={onUpdateWedding}
             />
           )}

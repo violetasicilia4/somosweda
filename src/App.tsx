@@ -66,25 +66,12 @@ export default function App() {
     setGifts(prev => [gift, ...prev]);
   };
 
-  const handleAddGiftsFromSet = (newGifts: Omit<GiftItem, 'id'>[]) => {
-    const created: GiftItem[] = newGifts.map((g, idx) => ({
-      ...g,
-      id: `gf_set_${Date.now()}_${idx}`,
-      currentAmount: 0,
-    }));
-    setGifts(prev => [...prev, ...created]);
-  };
-
   const handleDeleteGift = (giftId: string) => {
     setGifts(prev => prev.filter(g => g.id !== giftId));
   };
 
   const handleUpdateGift = (giftId: string, updates: Partial<GiftItem>) => {
     setGifts(prev => prev.map(g => g.id === giftId ? { ...g, ...updates } : g));
-  };
-
-  const handleReorderGifts = (newGifts: GiftItem[]) => {
-    setGifts(newGifts);
   };
 
   const handleAddReceivedGift = (newReceived: Omit<ReceivedGift, 'id'>) => {
@@ -174,10 +161,8 @@ export default function App() {
             onUpdateGuestStatus={handleUpdateGuestStatus}
             onDeleteGuest={handleDeleteGuest}
             onAddGift={handleAddGift}
-            onAddGiftsFromSet={handleAddGiftsFromSet}
             onDeleteGift={handleDeleteGift}
             onUpdateGift={handleUpdateGift}
-            onReorderGifts={handleReorderGifts}
             onUpdateReceivedGift={handleUpdateReceivedGift}
             onOpenMicrosite={handleOpenMicrosite}
             onNavigate={(view) => setCurrentView(view)}
