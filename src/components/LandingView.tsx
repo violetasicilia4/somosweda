@@ -63,18 +63,19 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
         />
         <div className="absolute inset-0 bg-black/10"></div>
 
-        {/* Bloque de texto según Figma dev-mode: absolute, left 189 / bottom 68, 1062x500,
-            padding 40px 56px, flex column, align center, gap 28px, radius 2px. El alto
-            fijo de 500 solo aplica desde xl, donde el hero es lo bastante alto. */}
-        <div className="absolute z-10 left-1/2 -translate-x-1/2 bottom-6 xl:bottom-[68px] w-[calc(100%-2rem)] xl:w-[1062px] xl:h-[500px] px-4 py-6 xl:px-14 xl:py-10 flex flex-col items-center gap-7 text-center rounded-[2px]">
+        {/* Bloque de texto según Figma dev-mode (1440px: 1062x500, bottom 68, padding
+            40/56, gap 28, radius 2). Todo escala con el ancho del viewport (vw) y
+            se detiene en los valores de Figma, así que a 1440px+ es exacto y por
+            debajo se achica de forma proporcional. En mobile queda anclado abajo. */}
+        <div className="absolute z-10 left-1/2 -translate-x-1/2 bottom-6 sm:bottom-[min(68px,4.72vw)] w-[calc(100%-2rem)] sm:w-[min(1062px,73.75vw)] sm:h-[min(500px,34.72vw)] px-[clamp(16px,3.89vw,56px)] py-[clamp(16px,2.78vw,40px)] gap-[clamp(16px,1.94vw,28px)] flex flex-col items-center text-center rounded-[2px]">
           <span
-            className="text-[14px] font-normal uppercase text-center text-[#F5F0E9] leading-[1.4] tracking-[1.4px]"
+            className="text-[clamp(11px,0.97vw,14px)] font-normal uppercase text-center text-[#F5F0E9] leading-[1.4] tracking-[0.1em]"
             style={{ fontFamily: "'Schibsted Grotesk', sans-serif", textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}
           >
             Planificá tu casamiento
           </span>
           <h1
-            className="text-4xl md:text-5xl xl:text-[56px] font-normal text-[#F5F0EA] text-center leading-[1.05] w-full"
+            className="text-[clamp(30px,3.89vw,56px)] font-normal text-[#F5F0EA] text-center leading-[1.05] w-full"
             style={{ fontFamily: "'Schibsted Grotesk', sans-serif", textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}
           >
             Armá tu lista de regalos e invitados de tu casamiento en un solo lugar.
