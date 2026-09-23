@@ -39,14 +39,16 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             <button
               id="landing-header-login-btn"
               onClick={() => onNavigate('login')}
-              className="text-sm text-[#2A2318] hover:opacity-70 transition-opacity cursor-pointer"
+              className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] hover:opacity-70 transition-opacity cursor-pointer"
+              style={{ fontFamily: "'Schibsted Grotesk', sans-serif" }}
             >
               Iniciar sesión
             </button>
             <button
               id="landing-header-create-btn"
               onClick={() => onNavigate('register')}
-              className="text-xs uppercase tracking-wider font-medium bg-white text-[#2A2318] border border-[#2A2318]/40 px-5 py-2.5 hover:bg-[#F7F1E4] transition-colors cursor-pointer"
+              className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] bg-white border border-[#2A2318]/40 px-5 py-2.5 hover:bg-[#F7F1E4] transition-colors cursor-pointer"
+              style={{ fontFamily: "'Schibsted Grotesk', sans-serif" }}
             >
               Crear mi lista
             </button>
@@ -85,14 +87,16 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             <button
               id="hero-create-list-btn"
               onClick={() => onNavigate('register')}
-              className="text-xs uppercase tracking-wider font-medium bg-[#F7F1E4] text-[#2A2318] px-6 py-3 hover:bg-white transition-colors cursor-pointer"
+              className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] bg-[#F7F1E4] px-6 py-3 hover:bg-white transition-colors cursor-pointer"
+              style={{ fontFamily: "'Schibsted Grotesk', sans-serif" }}
             >
               Crear mi lista
             </button>
             <button
               id="hero-view-example-btn"
               onClick={onOpenExample}
-              className="text-xs uppercase tracking-wider font-medium border border-white/70 text-white px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer"
+              className="text-[12px] font-normal leading-normal uppercase border border-white/70 text-[#F5F0EA] px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer"
+              style={{ fontFamily: "'Schibsted Grotesk', sans-serif" }}
             >
               Ver ejemplo
             </button>
