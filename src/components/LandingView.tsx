@@ -25,7 +25,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             className="cursor-pointer flex items-center gap-3"
           >
             <span
-              className="text-[22px] font-normal leading-normal uppercase text-[#2C1A0E]"
+              className="text-[28px] font-normal leading-normal uppercase text-[#2C1A0E]"
               style={{ fontFamily: "'Schibsted Grotesk', sans-serif" }}
             >
               Weda
