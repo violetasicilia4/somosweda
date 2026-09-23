@@ -24,7 +24,10 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             onClick={() => onNavigate('landing')}
             className="cursor-pointer flex items-center gap-3"
           >
-            <span className="text-lg sm:text-xl font-semibold tracking-[0.1em] uppercase text-[#2A2318]">
+            <span
+              className="text-[22px] font-normal leading-normal uppercase text-[#2C1A0E]"
+              style={{ fontFamily: "'Schibsted Grotesk', sans-serif" }}
+            >
               Weda
             </span>
             <span className="text-[9px] tracking-[0.15em] uppercase text-[#2A2318] border border-[#2A2318]/40 rounded-full px-2.5 py-1">
