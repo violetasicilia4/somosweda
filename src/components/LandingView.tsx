@@ -55,7 +55,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
       </header>
 
       {/* Hero Section — foto a sangre completa, sin card ni márgenes laterales */}
-      <section className="relative w-full aspect-4/5 sm:aspect-16/9 overflow-hidden">
+      <section className="relative w-full aspect-4/5 sm:aspect-[1440/781] overflow-hidden">
         <img
           src="/hero-couple.webp"
           alt="Pareja de novios celebrando su casamiento"
@@ -63,21 +63,24 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
         />
         <div className="absolute inset-0 bg-black/10"></div>
 
-        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
+        {/* Bloque de texto según Figma dev-mode: absolute, left 189 / bottom 68, 1062x500,
+            padding 40px 56px, flex column, align center, gap 28px, radius 2px. El alto
+            fijo de 500 solo aplica desde xl, donde el hero es lo bastante alto. */}
+        <div className="absolute z-10 left-1/2 -translate-x-1/2 bottom-6 xl:bottom-[68px] w-[calc(100%-2rem)] xl:w-[1062px] xl:h-[500px] px-4 py-6 xl:px-14 xl:py-10 flex flex-col items-center gap-7 text-center rounded-[2px]">
           <span
-            className="text-[14px] font-normal uppercase text-center text-[#F5F0E9] leading-[1.4] tracking-[1.4px] mb-5"
+            className="text-[14px] font-normal uppercase text-center text-[#F5F0E9] leading-[1.4] tracking-[1.4px]"
             style={{ fontFamily: "'Schibsted Grotesk', sans-serif", textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}
           >
             Planificá tu casamiento
           </span>
           <h1
-            className="text-4xl sm:text-[56px] font-normal text-[#F5F0EA] text-center leading-[1.05] max-w-4xl"
+            className="text-4xl md:text-5xl xl:text-[56px] font-normal text-[#F5F0EA] text-center leading-[1.05] w-full"
             style={{ fontFamily: "'Schibsted Grotesk', sans-serif", textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}
           >
             Armá tu lista de regalos e invitados de tu casamiento en un solo lugar.
           </h1>
 
-          <div className="flex items-center gap-3 mt-9">
+          <div className="flex items-center gap-3">
             <button
               id="hero-create-list-btn"
               onClick={() => onNavigate('register')}
@@ -300,7 +303,10 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
           />
           <div className="absolute inset-0 bg-black/55"></div>
 
-          <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
+          {/* Bloque de texto según Figma dev-mode: absolute, left 189 / bottom 68, 1062x500,
+            padding 40px 56px, flex column, align center, gap 28px, radius 2px. El alto
+            fijo de 500 solo aplica desde xl, donde el hero es lo bastante alto. */}
+        <div className="absolute z-10 left-1/2 -translate-x-1/2 bottom-6 xl:bottom-[68px] w-[calc(100%-2rem)] xl:w-[1062px] xl:h-[500px] px-4 py-6 xl:px-14 xl:py-10 flex flex-col items-center gap-7 text-center rounded-[2px]">
             <h2 className="text-2xl sm:text-4xl font-medium text-white mb-3 max-w-xl">
               Tu historia merece algo más que una invitación.
             </h2>
