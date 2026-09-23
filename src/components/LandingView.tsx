@@ -30,9 +30,6 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             >
               Weda
             </span>
-            <span className="text-[9px] tracking-[0.15em] uppercase text-[#2A2318] border border-[#2A2318]/40 rounded-full px-2.5 py-1">
-              Casamientos
-            </span>
           </div>
 
           <div className="flex items-center gap-5 sm:gap-7">
