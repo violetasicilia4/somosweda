@@ -225,7 +225,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
       {/* ================= 1. HEADER ================= */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-gray-100">
         <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-normal tracking-tight text-gray-900">
             Micrositio
           </h1>
           <p className="text-sm sm:text-base text-gray-500 font-normal leading-relaxed">
@@ -237,7 +237,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={onOpenMicrosite}
-            className="px-4 py-2.5 bg-white hover:bg-gray-100 text-gray-700 rounded-xl text-xs sm:text-sm font-semibold border border-gray-200/90 transition-all shadow-2xs cursor-pointer inline-flex items-center gap-2"
+            className="uppercase px-4 py-2.5 bg-white hover:bg-gray-100 text-gray-700 rounded-xl text-xs sm:text-xs font-normal border border-gray-200/90 transition-all shadow-2xs cursor-pointer inline-flex items-center gap-2"
           >
             <Eye className="w-4 h-4 text-gray-400" />
             <span>Vista previa</span>
@@ -246,7 +246,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={onOpenMicrosite}
-            className="px-4 py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs sm:text-sm font-semibold transition-all shadow-xs cursor-pointer inline-flex items-center gap-2 active:scale-[0.98]"
+            className="uppercase px-4 py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs sm:text-xs font-normal transition-all shadow-xs cursor-pointer inline-flex items-center gap-2 active:scale-[0.98]"
           >
             <span>Abrir sitio</span>
             <ExternalLink className="w-4 h-4" />
@@ -350,11 +350,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={() => toggleFeature('countdown')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all inline-flex items-center gap-1.5 border ${
-              features.countdown
-                ? 'bg-gray-900 text-white border-gray-900 shadow-2xs'
-                : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600'
-            }`}
+            className={`uppercase px-3 py-1.5 rounded-xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.countdown ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
           >
             {features.countdown ? (
               <CheckSquare className="w-3.5 h-3.5 text-white" />
@@ -368,11 +364,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={() => toggleFeature('story')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all inline-flex items-center gap-1.5 border ${
-              features.story
-                ? 'bg-gray-900 text-white border-gray-900 shadow-2xs'
-                : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600'
-            }`}
+            className={`uppercase px-3 py-1.5 rounded-xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.story ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
           >
             {features.story ? (
               <CheckSquare className="w-3.5 h-3.5 text-white" />
@@ -386,11 +378,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={() => toggleFeature('events')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all inline-flex items-center gap-1.5 border ${
-              features.events
-                ? 'bg-gray-900 text-white border-gray-900 shadow-2xs'
-                : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600'
-            }`}
+            className={`uppercase px-3 py-1.5 rounded-xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.events ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
           >
             {features.events ? (
               <CheckSquare className="w-3.5 h-3.5 text-white" />
@@ -407,11 +395,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={() => toggleFeature('guestInfo')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all inline-flex items-center gap-1.5 border ${
-              features.guestInfo
-                ? 'bg-gray-900 text-white border-gray-900 shadow-2xs'
-                : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600'
-            }`}
+            className={`uppercase px-3 py-1.5 rounded-xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.guestInfo ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
           >
             {features.guestInfo ? (
               <CheckSquare className="w-3.5 h-3.5 text-white" />
@@ -425,11 +409,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={() => toggleFeature('gallery')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all inline-flex items-center gap-1.5 border ${
-              features.gallery
-                ? 'bg-gray-900 text-white border-gray-900 shadow-2xs'
-                : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600'
-            }`}
+            className={`uppercase px-3 py-1.5 rounded-xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.gallery ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
           >
             {features.gallery ? (
               <CheckSquare className="w-3.5 h-3.5 text-white" />
@@ -446,11 +426,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={() => toggleFeature('giftRegistry')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all inline-flex items-center gap-1.5 border ${
-              features.giftRegistry
-                ? 'bg-gray-900 text-white border-gray-900 shadow-2xs'
-                : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600'
-            }`}
+            className={`uppercase px-3 py-1.5 rounded-xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.giftRegistry ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
           >
             {features.giftRegistry ? (
               <CheckSquare className="w-3.5 h-3.5 text-white" />
@@ -464,11 +440,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={() => toggleFeature('rsvp')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all inline-flex items-center gap-1.5 border ${
-              features.rsvp
-                ? 'bg-gray-900 text-white border-gray-900 shadow-2xs'
-                : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600'
-            }`}
+            className={`uppercase px-3 py-1.5 rounded-xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.rsvp ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
           >
             {features.rsvp ? (
               <CheckSquare className="w-3.5 h-3.5 text-white" />
@@ -482,11 +454,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={() => toggleFeature('music')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all inline-flex items-center gap-1.5 border ${
-              features.music
-                ? 'bg-gray-900 text-white border-gray-900 shadow-2xs'
-                : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600'
-            }`}
+            className={`uppercase px-3 py-1.5 rounded-xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.music ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
           >
             {features.music ? (
               <CheckSquare className="w-3.5 h-3.5 text-white" />
@@ -521,11 +489,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => toggleFeature('countdown')}
-                  className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg border transition-all cursor-pointer inline-flex items-center gap-1.5 ${
-                    features.countdown 
-                      ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
-                      : 'bg-gray-50 text-gray-400 border-gray-200 hover:text-gray-600'
-                  }`}
+                  className={`uppercase px-2.5 py-1 text-[11px] font-normal rounded-lg border transition-all cursor-pointer inline-flex items-center gap-1.5 ${ features.countdown ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-gray-50 text-gray-400 border-gray-200 hover:text-gray-600' }`}
                   title="Tildar para mostrar u ocultar la cuenta regresiva"
                 >
                   {features.countdown ? (
@@ -544,7 +508,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveModal('portada')}
-                  className="px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-semibold rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
+                  className="uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   <span>Editar portada</span>
@@ -613,11 +577,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => toggleFeature('story')}
-                  className={`text-xs font-semibold px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${
-                    features.story
-                      ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
-                      : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs'
-                  }`}
+                  className={`uppercase text-xs font-normal px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${ features.story ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
                 >
                   {features.story ? 'Destildar' : 'Tildar y mostrar'}
                 </button>
@@ -625,7 +585,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveModal('historia')}
-                  className="px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-semibold rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
+                  className="uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   <span>Editar historia</span>
@@ -692,11 +652,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => toggleFeature('events')}
-                  className={`text-xs font-semibold px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${
-                    features.events
-                      ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
-                      : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs'
-                  }`}
+                  className={`uppercase text-xs font-normal px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${ features.events ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
                 >
                   {features.events ? 'Destildar' : 'Tildar y mostrar'}
                 </button>
@@ -704,7 +660,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveModal('eventos')}
-                  className="px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-semibold rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
+                  className="uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   <span>Editar eventos</span>
@@ -796,11 +752,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => toggleFeature('guestInfo')}
-                  className={`text-xs font-semibold px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${
-                    features.guestInfo
-                      ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
-                      : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs'
-                  }`}
+                  className={`uppercase text-xs font-normal px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${ features.guestInfo ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
                 >
                   {features.guestInfo ? 'Destildar' : 'Tildar y mostrar'}
                 </button>
@@ -808,7 +760,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveModal('info')}
-                  className="px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-semibold rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
+                  className="uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   <span>Editar información</span>
@@ -931,11 +883,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => toggleFeature('gallery')}
-                  className={`text-xs font-semibold px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${
-                    features.gallery
-                      ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
-                      : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs'
-                  }`}
+                  className={`uppercase text-xs font-normal px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${ features.gallery ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
                 >
                   {features.gallery ? 'Destildar' : 'Tildar y mostrar'}
                 </button>
@@ -943,7 +891,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveModal('galeria')}
-                  className="px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-semibold rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
+                  className="uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
                 >
                   <ImageIcon className="w-3.5 h-3.5" />
                   <span>Administrar galería</span>
@@ -1021,11 +969,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={() => toggleFeature('giftRegistry')}
-                className={`text-xs font-semibold px-3 py-1.5 rounded-xl border transition-colors cursor-pointer ${
-                  features.giftRegistry
-                    ? 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
-                    : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs'
-                }`}
+                className={`uppercase text-xs font-normal px-3 py-1.5 rounded-xl border transition-colors cursor-pointer ${ features.giftRegistry ? 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
               >
                 {features.giftRegistry ? 'Destildar' : 'Tildar y mostrar'}
               </button>
@@ -1091,11 +1035,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={() => toggleFeature('rsvp')}
-                className={`text-xs font-semibold px-3 py-1.5 rounded-xl border transition-colors cursor-pointer ${
-                  features.rsvp
-                    ? 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
-                    : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs'
-                }`}
+                className={`uppercase text-xs font-normal px-3 py-1.5 rounded-xl border transition-colors cursor-pointer ${ features.rsvp ? 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
               >
                 {features.rsvp ? 'Destildar' : 'Tildar y mostrar'}
               </button>
@@ -1158,11 +1098,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={() => toggleFeature('music')}
-                className={`text-xs font-semibold px-3 py-1.5 rounded-xl border transition-colors cursor-pointer ${
-                  features.music
-                    ? 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
-                    : 'bg-gray-900 text-white border-gray-900 hover:bg-black shadow-2xs'
-                }`}
+                className={`uppercase text-xs font-normal px-3 py-1.5 rounded-xl border transition-colors cursor-pointer ${ features.music ? 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100' : 'bg-gray-900 text-white border-gray-900 hover:bg-black shadow-2xs' }`}
               >
                 {features.music ? 'Destildar' : '+ Tildar y activar'}
               </button>
@@ -1219,7 +1155,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <span className="text-[10px] uppercase font-semibold tracking-widest text-gray-300">
                   Nos casamos
                 </span>
-                <h2 className="text-2xl font-bold tracking-tight text-white leading-tight">
+                <h2 className="text-2xl font-normal tracking-tight text-white leading-tight">
                   {coupleName}
                 </h2>
               </div>
@@ -1231,7 +1167,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={onOpenMicrosite}
-                className="w-full py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-sm font-semibold inline-flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer"
+                className="uppercase w-full py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal inline-flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer"
               >
                 <ExternalLink className="w-4 h-4" />
                 <span>Ver mi web</span>
@@ -1331,14 +1267,14 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="px-4 py-2 text-xs font-semibold text-gray-600 hover:text-gray-900 rounded-xl"
+                className="uppercase px-4 py-2 text-xs font-normal text-gray-600 hover:text-gray-900 rounded-xl"
               >
                 Cancelar
               </button>
               <button
                 type="button"
                 onClick={handleSaveCover}
-                className="px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-semibold rounded-xl shadow-xs"
+                className="uppercase px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-xl shadow-xs"
               >
                 Guardar cambios
               </button>
@@ -1381,14 +1317,14 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="px-4 py-2 text-xs font-semibold text-gray-600 hover:text-gray-900 rounded-xl"
+                className="uppercase px-4 py-2 text-xs font-normal text-gray-600 hover:text-gray-900 rounded-xl"
               >
                 Cancelar
               </button>
               <button
                 type="button"
                 onClick={handleSaveStory}
-                className="px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-semibold rounded-xl shadow-xs"
+                className="uppercase px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-xl shadow-xs"
               >
                 Guardar historia
               </button>
@@ -1466,7 +1402,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={handleAddEvent}
-                className="w-full py-1.5 bg-gray-900 hover:bg-black text-white text-xs font-semibold rounded-lg"
+                className="uppercase w-full py-1.5 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-lg"
               >
                 Agregar evento
               </button>
@@ -1476,7 +1412,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-semibold rounded-xl shadow-xs"
+                className="uppercase px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-xl shadow-xs"
               >
                 Listo
               </button>
@@ -1556,14 +1492,14 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="px-4 py-2 text-xs font-semibold text-gray-600 hover:text-gray-900 rounded-xl"
+                className="uppercase px-4 py-2 text-xs font-normal text-gray-600 hover:text-gray-900 rounded-xl"
               >
                 Cancelar
               </button>
               <button
                 type="button"
                 onClick={handleSaveInfo}
-                className="px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-semibold rounded-xl shadow-xs"
+                className="uppercase px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-xl shadow-xs"
               >
                 Guardar cambios
               </button>
@@ -1621,7 +1557,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={handleAddGalleryImage}
-                  className="px-4 py-1.5 bg-gray-900 hover:bg-black text-white text-xs font-semibold rounded-xl"
+                  className="uppercase px-4 py-1.5 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-xl"
                 >
                   Sumar
                 </button>
@@ -1632,7 +1568,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-semibold rounded-xl shadow-xs"
+                className="uppercase px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-xl shadow-xs"
               >
                 Listo
               </button>

@@ -67,7 +67,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Regalos recibidos</h2>
+        <h2 className="text-2xl sm:text-3xl font-normal text-gray-900">Regalos recibidos</h2>
         <p className="text-sm text-gray-500 mt-1">
           Seguimiento de aportes, dedicatorias y agradecimientos.
         </p>
@@ -94,9 +94,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
               key={opt.id}
               type="button"
               onClick={() => setFilter(opt.id)}
-              className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
-                filter === opt.id ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
-              }`}
+              className={`uppercase px-3.5 py-2 rounded-xl text-xs font-normal transition-colors cursor-pointer ${ filter === opt.id ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50' }`}
             >
               {opt.label}
             </button>
@@ -130,7 +128,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
                     <button
                       type="button"
                       onClick={() => setActiveReceiptGift(rec)}
-                      className="px-2.5 py-1 border border-gray-200 text-gray-600 hover:bg-gray-50 rounded-lg text-xs font-semibold cursor-pointer inline-flex items-center gap-1"
+                      className="uppercase px-2.5 py-1 border border-gray-200 text-gray-600 hover:bg-gray-50 rounded-lg text-xs font-normal cursor-pointer inline-flex items-center gap-1"
                     >
                       <FileText className="w-3.5 h-3.5" />
                       <span>Comprobante</span>
@@ -144,7 +142,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
                     <button
                       type="button"
                       onClick={() => handleOpenThankYou(rec)}
-                      className="px-2.5 py-1 bg-gray-900 text-white rounded-lg text-xs font-semibold cursor-pointer hover:bg-black transition-colors"
+                      className="uppercase px-2.5 py-1 bg-gray-900 text-white rounded-lg text-xs font-normal cursor-pointer hover:bg-black transition-colors"
                     >
                       Agradecer
                     </button>
@@ -206,13 +204,13 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveThankGift(null)}
-                  className="px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl text-xs font-semibold cursor-pointer"
+                  className="uppercase px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl text-xs font-normal cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold cursor-pointer shadow-xs flex items-center gap-1.5"
+                  className="uppercase px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-normal cursor-pointer shadow-xs flex items-center gap-1.5"
                 >
                   <Heart className="w-3.5 h-3.5 fill-white" />
                   <span>Guardar y enviar por WhatsApp</span>
@@ -262,7 +260,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveReceiptGift(null)}
-                className="px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl text-xs font-semibold cursor-pointer"
+                className="uppercase px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl text-xs font-normal cursor-pointer"
               >
                 Cerrar
               </button>
@@ -270,7 +268,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
                 <button
                   type="button"
                   onClick={handleConfirmReceiptPayment}
-                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold cursor-pointer shadow-xs flex items-center gap-1.5"
+                  className="uppercase px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-normal cursor-pointer shadow-xs flex items-center gap-1.5"
                 >
                   <Check className="w-3.5 h-3.5" />
                   <span>Confirmar acreditación en banco</span>

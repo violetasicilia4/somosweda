@@ -34,7 +34,7 @@ export const CobrosView: React.FC<CobrosViewProps> = ({ wedding, onUpdateWedding
     <div className={`space-y-6 animate-fade-in ${compact ? '' : 'max-w-2xl'}`}>
       {!compact && (
         <div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Cobros</h2>
+          <h2 className="text-2xl sm:text-3xl font-normal text-gray-900">Cobros</h2>
           <p className="text-sm text-gray-500 mt-1">
             ¿Cómo recibirán el dinero de los regalos? (CBU / Alias / Mercado Pago)
           </p>
@@ -109,7 +109,7 @@ export const CobrosView: React.FC<CobrosViewProps> = ({ wedding, onUpdateWedding
           <div className="flex justify-end pt-1">
             <button
               type="submit"
-              className="px-5 py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-sm font-semibold transition-all cursor-pointer"
+              className="uppercase px-5 py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal transition-all cursor-pointer"
             >
               Guardar datos de cobro
             </button>

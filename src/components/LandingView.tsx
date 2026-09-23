@@ -13,9 +13,9 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
     <div className="min-h-screen flex flex-col">
       {/* Reproducción pixel-fiel del diseño aprobado en Figma (frame
           "weda-editorial-landing"): marco oscuro alrededor de toda la página,
-          tipografía Quicksand y paleta marfil/terracota/tinta en todas las
+          tipografía Schibsted Grotesk y paleta marfil/terracota/tinta en todas las
           secciones, de punta a punta. */}
-      <div className="bg-[#171310] p-2 sm:p-3" style={{ fontFamily: "'Quicksand', sans-serif" }}>
+      <div className="bg-[#171310] p-2 sm:p-3">
       <div className="bg-[#F7F1E4] text-[#2A2318]">
       {/* Navigation Header */}
       <header className="bg-white px-4 sm:px-8">
@@ -108,7 +108,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             <span className="text-xs font-semibold tracking-widest text-[#A9795A] uppercase">
               Herramientas integradas
             </span>
-            <h2 className="text-3xl sm:text-4xl font-medium text-[#2A2318] mt-3">
+            <h2 className="text-3xl sm:text-4xl font-normal text-[#2A2318] mt-3">
               Todo lo que necesitás para organizar tu evento.
             </h2>
           </div>
@@ -160,7 +160,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             <span className="text-xs font-semibold tracking-widest text-[#A9795A] uppercase">
               Precios transparentes
             </span>
-            <h2 className="text-3xl sm:text-4xl font-medium text-[#2A2318] mt-3">
+            <h2 className="text-3xl sm:text-4xl font-normal text-[#2A2318] mt-3">
               Elegí tu plan ideal.
             </h2>
             <p className="text-sm text-[#7A6F5F] mt-2">
@@ -215,7 +215,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
                   <button
                     id={`plan-choose-${plan.id}`}
                     onClick={() => onNavigate('register')}
-                    className={`w-full py-3 px-4 text-xs uppercase tracking-wider font-medium transition-colors cursor-pointer mt-auto ${
+                    className={`w-full py-3 px-4 text-xs uppercase font-normal transition-colors cursor-pointer mt-auto ${
                       plan.recommended
                         ? 'bg-[#2A2318] text-white hover:bg-black'
                         : 'bg-white border border-[#2A2318]/30 text-[#2A2318] hover:bg-[#F7F1E4]'
@@ -237,7 +237,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             <span className="text-xs font-semibold tracking-widest text-[#A9795A] uppercase">
               Parejas felices
             </span>
-            <h2 className="text-3xl sm:text-4xl font-medium text-[#2A2318] mt-3">
+            <h2 className="text-3xl sm:text-4xl font-normal text-[#2A2318] mt-3">
               Testimonios con amor.
             </h2>
           </div>
@@ -309,7 +309,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             padding 40px 56px, flex column, align center, gap 28px, radius 2px. El alto
             fijo de 500 solo aplica desde xl, donde el hero es lo bastante alto. */}
         <div className="absolute z-10 left-1/2 -translate-x-1/2 bottom-6 xl:bottom-[68px] w-[calc(100%-2rem)] xl:w-[1062px] xl:h-[500px] px-4 py-6 xl:px-14 xl:py-10 flex flex-col items-center gap-7 text-center rounded-[2px]">
-            <h2 className="text-2xl sm:text-4xl font-medium text-white mb-3 max-w-xl">
+            <h2 className="text-2xl sm:text-4xl font-normal text-white mb-3 max-w-xl">
               Tu historia merece algo más que una invitación.
             </h2>
             <p className="text-sm text-white/80 mb-7 max-w-md">
@@ -318,7 +318,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             <button
               id="cta-create-list-bottom"
               onClick={() => onNavigate('register')}
-              className="text-xs uppercase tracking-wider font-medium border border-white/70 text-white px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer mb-4"
+              className="text-xs uppercase font-normal border border-white/70 text-white px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer mb-4"
             >
               Crear mi lista gratis
             </button>
@@ -333,7 +333,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
       <footer className="relative bg-[#171310] text-[#F7F1E4] px-4 sm:px-8 pt-16 pb-8 overflow-hidden">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 relative z-10">
           <div className="md:col-span-1">
-            <span className="text-lg font-semibold tracking-[0.1em] uppercase block mb-3">Weda</span>
+            <span className="text-[28px] font-normal leading-normal uppercase block mb-3">Weda</span>
             <p className="text-sm text-[#F7F1E4]/60 leading-relaxed">
               La plataforma contemporánea para organizar tu casamiento de punta a punta. Creada con orgullo en Argentina para celebraciones con sentido y belleza.
             </p>

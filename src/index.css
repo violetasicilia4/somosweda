@@ -1,7 +1,23 @@
 @import "tailwindcss";
 
+/*
+ * Tipografía única de Weda: Schibsted Grotesk en toda la app (sans, serif y
+ * mono apuntan a la misma familia, así ninguna pantalla cae a otra fuente).
+ * Sistema: logo/botones/etiquetas en MAYÚSCULAS, peso 400; títulos en
+ * capitalización normal, peso 400. Los números que antes iban en mono usan
+ * cifras tabulares para seguir alineados.
+ */
+@theme {
+  --font-sans: 'Schibsted Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: 'Schibsted Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'Schibsted Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
 @layer base {
   body {
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--font-sans);
+  }
+  .font-mono {
+    font-variant-numeric: tabular-nums;
   }
 }

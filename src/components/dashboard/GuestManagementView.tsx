@@ -136,7 +136,7 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
       {/* SECTION HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <h2 className="text-2xl sm:text-3xl font-normal text-gray-900">
             Invitados & Mesas
           </h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -146,7 +146,7 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
 
         <button
           onClick={() => setIsAddGuestModalOpen(true)}
-          className="px-4 py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 cursor-pointer shadow-xs transition-colors self-start sm:self-auto"
+          className="uppercase px-4 py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs sm:text-xs font-normal flex items-center gap-2 cursor-pointer shadow-xs transition-colors self-start sm:self-auto"
         >
           <UserPlus className="w-4 h-4" />
           <span>+ Agregar invitado</span>
@@ -157,7 +157,7 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
       <div className="flex border-b border-gray-200 gap-8 overflow-x-auto">
         <button
           onClick={() => setInternalTab('lista')}
-          className={`pb-3.5 text-sm font-semibold transition-all relative cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+          className={`pb-3.5 text-xs font-normal uppercase transition-all relative cursor-pointer flex items-center gap-2 whitespace-nowrap ${
             internalTab === 'lista'
               ? 'text-gray-900 border-b-2 border-gray-900'
               : 'text-gray-500 hover:text-gray-800'
@@ -171,7 +171,7 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
 
         <button
           onClick={() => setInternalTab('mesas')}
-          className={`pb-3.5 text-sm font-semibold transition-all relative cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+          className={`pb-3.5 text-xs font-normal uppercase transition-all relative cursor-pointer flex items-center gap-2 whitespace-nowrap ${
             internalTab === 'mesas'
               ? 'text-gray-900 border-b-2 border-gray-900'
               : 'text-gray-500 hover:text-gray-800'
@@ -249,25 +249,19 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
             <div className="flex flex-wrap items-center gap-1.5">
               <button
                 onClick={() => setStatusFilter('all')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer ${
-                  statusFilter === 'all' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
+                className={`uppercase px-2.5 py-1 rounded-lg text-xs font-normal cursor-pointer ${ statusFilter === 'all' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }`}
               >
                 Todos ({guests.length})
               </button>
               <button
                 onClick={() => setStatusFilter('confirmado')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer ${
-                  statusFilter === 'confirmado' ? 'bg-emerald-700 text-white' : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100'
-                }`}
+                className={`uppercase px-2.5 py-1 rounded-lg text-xs font-normal cursor-pointer ${ statusFilter === 'confirmado' ? 'bg-emerald-700 text-white' : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100' }`}
               >
                 Confirmados ({confirmedCount})
               </button>
               <button
                 onClick={() => setStatusFilter('pendiente')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer ${
-                  statusFilter === 'pendiente' ? 'bg-amber-600 text-white' : 'bg-amber-50 text-amber-800 hover:bg-amber-100'
-                }`}
+                className={`uppercase px-2.5 py-1 rounded-lg text-xs font-normal cursor-pointer ${ statusFilter === 'pendiente' ? 'bg-amber-600 text-white' : 'bg-amber-50 text-amber-800 hover:bg-amber-100' }`}
               >
                 Pendientes ({pendingCount})
               </button>
@@ -334,7 +328,7 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
                   <button
                     onClick={() => handleSendWhatsApp(guest)}
                     title="Enviar invitación personalizada por WhatsApp"
-                    className="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                    className="uppercase px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-lg text-xs font-normal flex items-center gap-1.5 transition-colors cursor-pointer"
                   >
                     <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
                     <span className="hidden sm:inline">WhatsApp</span>
@@ -402,7 +396,7 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
 
             <button
               onClick={() => setIsAddTableOpen(true)}
-              className="px-3.5 py-2 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="uppercase px-3.5 py-2 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal flex items-center gap-1.5 cursor-pointer shadow-xs"
             >
               <LayoutGrid className="w-3.5 h-3.5" />
               <span>+ Nueva mesa</span>
@@ -573,13 +567,13 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsAddGuestModalOpen(false)}
-                  className="px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl text-xs font-semibold cursor-pointer"
+                  className="uppercase px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl text-xs font-normal cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-semibold cursor-pointer shadow-xs"
+                  className="uppercase px-5 py-2 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal cursor-pointer shadow-xs"
                 >
                   Guardar invitado
                 </button>
@@ -627,13 +621,13 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsAddTableOpen(false)}
-                  className="px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl text-xs font-semibold cursor-pointer"
+                  className="uppercase px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl text-xs font-normal cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-gray-900 text-white rounded-xl text-xs font-semibold cursor-pointer shadow-xs"
+                  className="uppercase px-5 py-2 bg-gray-900 text-white rounded-xl text-xs font-normal cursor-pointer shadow-xs"
                 >
                   Crear mesa
                 </button>

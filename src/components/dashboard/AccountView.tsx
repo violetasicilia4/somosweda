@@ -39,7 +39,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
   return (
     <div className="space-y-6 animate-fade-in max-w-2xl">
       <div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+        <h2 className="text-2xl sm:text-3xl font-normal text-gray-900">
           Mi Boda
         </h2>
         <p className="text-sm text-gray-500 mt-1">
@@ -151,7 +151,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
           <div className="pt-2 flex justify-end">
             <button
               type="submit"
-              className="px-6 py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs sm:text-sm font-semibold cursor-pointer shadow-xs"
+              className="uppercase px-6 py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs sm:text-xs font-normal cursor-pointer shadow-xs"
             >
               Guardar cambios
             </button>
@@ -179,7 +179,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
           <button
             type="button"
             onClick={() => onNavigateTab('plan')}
-            className="px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-800 rounded-xl text-xs sm:text-sm font-semibold cursor-pointer inline-flex items-center gap-1.5 transition-colors shrink-0"
+            className="uppercase px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-800 rounded-xl text-xs sm:text-xs font-normal cursor-pointer inline-flex items-center gap-1.5 transition-colors shrink-0"
           >
             <span>Ver comparativa de planes</span>
             <ArrowRight className="w-3.5 h-3.5 text-gray-400" />

@@ -140,7 +140,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <button
               type="button"
               onClick={onOpenMicrosite}
-              className="px-3 py-1.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="uppercase px-3 py-1.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-normal inline-flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <ExternalLink className="w-3.5 h-3.5 text-gray-500" />
               <span>Ver sitio web</span>
@@ -150,7 +150,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <button
                 type="button"
                 onClick={handleOpenPublishModal}
-                className="px-4 py-1.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
+                className="uppercase px-4 py-1.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal inline-flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
               >
                 <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                 <span>Publicar boda</span>
@@ -280,11 +280,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       key={plan.id}
                       type="button"
                       onClick={() => setSelectedPlanId(plan.id)}
-                      className={`py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
-                        selectedPlanId === plan.id
-                          ? 'bg-gray-900 text-white border-gray-900'
-                          : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
-                      }`}
+                      className={`uppercase py-2 rounded-xl text-xs font-normal border transition-all cursor-pointer ${ selectedPlanId === plan.id ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300' }`}
                     >
                       {plan.name}
                     </button>
@@ -323,7 +319,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 type="button"
                 disabled={isPublishingInProgress || !isPaymentConfigured}
                 onClick={handleExecutePayment}
-                className="w-full py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-sm font-semibold cursor-pointer shadow-xs flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="uppercase w-full py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal cursor-pointer shadow-xs flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isPublishingInProgress ? (
                   <span>Activando boda...</span>
@@ -343,7 +339,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <button
                 type="button"
                 onClick={() => setIsPaymentModalOpen(false)}
-                className="w-full py-2 text-xs font-medium text-gray-500 hover:text-gray-800"
+                className="uppercase w-full py-2 text-xs font-normal text-gray-500 hover:text-gray-800"
               >
                 Seguir probando en borrador (gratis)
               </button>

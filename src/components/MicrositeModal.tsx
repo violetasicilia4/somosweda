@@ -238,7 +238,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                     // ignore
                   }
                 }}
-                className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-gray-200 hover:text-white text-[11px] font-medium transition-colors cursor-pointer"
+                className="uppercase hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-gray-200 hover:text-white text-[11px] font-normal transition-colors cursor-pointer"
                 title="Abrir en nueva pestaña"
               >
                 <span>Abrir en nueva pestaña</span>
@@ -278,7 +278,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
               <span className="text-xs uppercase tracking-[0.3em] font-medium text-white/90 mb-2">
                 ¡Nos casamos!
               </span>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white mb-3">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-normal text-white mb-3">
                 {wedding.coupleName}
               </h1>
               <p className="text-sm sm:text-base text-white/90 font-light max-w-md mx-auto mb-6">
@@ -310,7 +310,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
           {/* Couple Story & Dress Code */}
           <div className="py-12 px-6 max-w-2xl mx-auto text-center">
             <Heart className="w-6 h-6 text-rose-500 fill-rose-500 mx-auto mb-3" />
-            <h2 className="text-2xl font-serif font-semibold text-gray-900 mb-3">Nuestra Historia</h2>
+            <h2 className="text-2xl font-serif font-normal text-gray-900 mb-3">Nuestra Historia</h2>
             <p className="text-gray-600 text-sm leading-relaxed mb-6">
               {wedding.storyText}
             </p>
@@ -323,7 +323,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
           {/* Itinerary Events */}
           <div className="bg-stone-50 py-12 px-6 border-y border-stone-200">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-2xl font-serif font-bold text-center text-gray-900 mb-8">
+              <h2 className="text-2xl font-serif font-normal text-center text-gray-900 mb-8">
                 Cuándo y Dónde
               </h2>
 
@@ -360,7 +360,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
                 Confirmación de Asistencia
               </span>
-              <h2 className="text-2xl font-serif font-bold text-gray-900 mt-1">
+              <h2 className="text-2xl font-serif font-normal text-gray-900 mt-1">
                 ¿Nos acompañás?
               </h2>
               <p className="text-xs text-gray-500 mt-1">
@@ -444,7 +444,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
 
                 <button
                   type="submit"
-                  className="w-full py-3 bg-[#0f172a] hover:bg-black text-white font-medium rounded-lg text-xs sm:text-sm transition-all shadow-xs cursor-pointer mt-2"
+                  className="uppercase w-full py-3 bg-[#0f172a] hover:bg-black text-white font-normal rounded-lg text-xs sm:text-xs transition-all shadow-xs cursor-pointer mt-2"
                 >
                   Enviar confirmación
                 </button>
@@ -456,7 +456,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
           <div className="bg-stone-50 py-12 px-6 border-t border-stone-200 text-center">
             <div className="max-w-md mx-auto">
               <Gift className="w-7 h-7 text-gray-700 mx-auto mb-3" />
-              <h2 className="text-2xl font-serif font-bold text-gray-900">
+              <h2 className="text-2xl font-serif font-normal text-gray-900">
                 ¿Nos querés regalar algo?
               </h2>
               <p className="text-xs sm:text-sm text-gray-600 mt-2">
@@ -465,7 +465,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
               <button
                 type="button"
                 onClick={handleGoToGifts}
-                className="mt-5 inline-flex items-center gap-2 px-6 py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-sm font-semibold transition-all cursor-pointer shadow-xs"
+                className="uppercase mt-5 inline-flex items-center gap-2 px-6 py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal transition-all cursor-pointer shadow-xs"
               >
                 <Gift className="w-4 h-4" />
                 Ver lista de regalos
@@ -499,7 +499,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
             <div className="max-w-3xl mx-auto">
               <div className="text-center mb-8">
                 <Gift className="w-6 h-6 text-gray-700 mx-auto mb-2" />
-                <h2 className="text-2xl font-serif font-bold text-gray-900">
+                <h2 className="text-2xl font-serif font-normal text-gray-900">
                   Lista de Regalos
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-md mx-auto">
@@ -551,11 +551,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                         <button
                           type="button"
                           onClick={() => handleAddToCart(gift)}
-                          className={`w-full py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer shadow-xs ${
-                            cartItems.some(g => g.id === gift.id)
-                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
-                              : 'bg-gray-900 text-white hover:bg-black'
-                          }`}
+                          className={`uppercase w-full py-2 rounded-lg text-xs font-normal transition-all cursor-pointer shadow-xs ${ cartItems.some(g => g.id === gift.id) ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100' : 'bg-gray-900 text-white hover:bg-black' }`}
                         >
                           {cartItems.some(g => g.id === gift.id) ? 'En tu carrito ✓' : 'Regalá'}
                         </button>
@@ -575,7 +571,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
           <button
             type="button"
             onClick={() => setIsCartModalOpen(true)}
-            className="fixed bottom-5 right-5 z-50 flex items-center gap-2 bg-gray-900 hover:bg-black text-white pl-4 pr-3 py-3 rounded-full shadow-xl text-xs font-semibold transition-all cursor-pointer animate-fade-in"
+            className="uppercase fixed bottom-5 right-5 z-50 flex items-center gap-2 bg-gray-900 hover:bg-black text-white pl-4 pr-3 py-3 rounded-full shadow-xl text-xs font-normal transition-all cursor-pointer animate-fade-in"
           >
             <Gift className="w-4 h-4" />
             Tu carrito de regalos
@@ -665,7 +661,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setIsCartModalOpen(false)}
-                    className="w-full py-2.5 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 cursor-pointer"
+                    className="uppercase w-full py-2.5 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 cursor-pointer"
                   >
                     + Agregar otro regalo
                   </button>
@@ -673,7 +669,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setGiftFlowStep('how')}
-                    className="w-full py-3 bg-gray-900 hover:bg-black text-white font-semibold rounded-xl text-sm transition-all shadow-xs cursor-pointer"
+                    className="uppercase w-full py-3 bg-gray-900 hover:bg-black text-white font-normal rounded-xl text-xs transition-all shadow-xs cursor-pointer"
                   >
                     Continuar
                   </button>
@@ -737,7 +733,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                       <button
                         type="button"
                         onClick={() => setGiftFlowStep('cart')}
-                        className="w-full py-2.5 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 cursor-pointer"
+                        className="uppercase w-full py-2.5 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 cursor-pointer"
                       >
                         Volver
                       </button>
@@ -856,13 +852,13 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                         <button
                           type="button"
                           onClick={() => setGiftFlowStep('how')}
-                          className="flex-1 py-2.5 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 cursor-pointer"
+                          className="uppercase flex-1 py-2.5 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 cursor-pointer"
                         >
                           Volver
                         </button>
                         <button
                           type="submit"
-                          className="flex-1 py-2.5 bg-gray-900 hover:bg-black text-white font-semibold rounded-lg text-xs cursor-pointer"
+                          className="uppercase flex-1 py-2.5 bg-gray-900 hover:bg-black text-white font-normal rounded-lg text-xs cursor-pointer"
                         >
                           Siguiente
                         </button>
@@ -912,14 +908,14 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                         <button
                           type="button"
                           onClick={() => setGiftFlowStep('data')}
-                          className="flex-1 py-2.5 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 cursor-pointer"
+                          className="uppercase flex-1 py-2.5 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 cursor-pointer"
                         >
                           Volver
                         </button>
                         <button
                           type="button"
                           onClick={() => setGiftFlowStep('payment')}
-                          className="flex-1 py-2.5 bg-gray-900 hover:bg-black text-white font-semibold rounded-lg text-xs cursor-pointer"
+                          className="uppercase flex-1 py-2.5 bg-gray-900 hover:bg-black text-white font-normal rounded-lg text-xs cursor-pointer"
                         >
                           Confirmar y pagar
                         </button>
@@ -950,7 +946,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                             <button
                               type="button"
                               onClick={handleCopyAlias}
-                              className="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-[11px] font-semibold text-gray-700 cursor-pointer"
+                              className="uppercase px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-[11px] font-normal text-gray-700 cursor-pointer"
                             >
                               {copiedAlias ? 'Copiado!' : 'Copiar'}
                             </button>
@@ -964,7 +960,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                             <button
                               type="button"
                               onClick={handleCopyCbu}
-                              className="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-[11px] font-semibold text-gray-700 cursor-pointer shrink-0"
+                              className="uppercase px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-[11px] font-normal text-gray-700 cursor-pointer shrink-0"
                             >
                               {copiedCbu ? 'Copiado!' : 'Copiar'}
                             </button>
@@ -1042,7 +1038,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                         <button
                           type="button"
                           onClick={() => setGiftFlowStep('confirm')}
-                          className="flex-1 py-2.5 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 cursor-pointer"
+                          className="uppercase flex-1 py-2.5 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 cursor-pointer"
                         >
                           Volver
                         </button>
@@ -1050,7 +1046,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                           type="button"
                           onClick={handleConfirmPayment}
                           disabled={isProcessingMp}
-                          className="flex-[2] py-3 bg-gray-900 hover:bg-black text-white font-semibold rounded-xl text-xs sm:text-sm transition-all shadow-xs cursor-pointer disabled:opacity-50"
+                          className="uppercase flex-[2] py-3 bg-gray-900 hover:bg-black text-white font-normal rounded-xl text-xs sm:text-xs transition-all shadow-xs cursor-pointer disabled:opacity-50"
                         >
                           {isProcessingMp
                             ? 'Confirmando con Mercado Pago...'

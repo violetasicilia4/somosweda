@@ -33,7 +33,7 @@ export const PlanBillingView: React.FC<PlanBillingViewProps> = ({
     <div className="space-y-8 animate-fade-in max-w-5xl">
       {/* HEADER */}
       <div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+        <h2 className="text-2xl sm:text-3xl font-normal text-gray-900">
           Plan y Facturación
         </h2>
         <p className="text-sm text-gray-500 mt-1">
@@ -80,7 +80,7 @@ export const PlanBillingView: React.FC<PlanBillingViewProps> = ({
             <button
               type="button"
               onClick={onOpenEarlyPayment}
-              className="mt-4 w-full py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-semibold shadow-xs cursor-pointer transition-colors"
+              className="uppercase mt-4 w-full py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal shadow-xs cursor-pointer transition-colors"
             >
               Pagar ahora
             </button>
@@ -143,14 +143,14 @@ export const PlanBillingView: React.FC<PlanBillingViewProps> = ({
                   {isSelected ? (
                     <button
                       disabled
-                      className="w-full py-2 bg-gray-100 text-gray-400 rounded-xl text-xs font-semibold cursor-default"
+                      className="uppercase w-full py-2 bg-gray-100 text-gray-400 rounded-xl text-xs font-normal cursor-default"
                     >
                       Plan seleccionado
                     </button>
                   ) : (
                     <button
                       onClick={() => handleSelectPlan(plan.id as any)}
-                      className="w-full py-2 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-semibold cursor-pointer shadow-xs transition-colors"
+                      className="uppercase w-full py-2 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal cursor-pointer shadow-xs transition-colors"
                     >
                       Elegir {plan.name}
                     </button>

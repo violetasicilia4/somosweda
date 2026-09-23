@@ -52,14 +52,14 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
           <button
             type="button"
             onClick={() => onNavigate('landing')}
-            className="text-3xl font-bold tracking-tight text-gray-900 cursor-pointer inline-block hover:opacity-85 transition-opacity"
+            className="text-[28px] font-normal uppercase leading-normal text-gray-900 cursor-pointer inline-block hover:opacity-85 transition-opacity"
           >
             Weda
           </button>
         </div>
 
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-1.5">Creemos tu boda</h1>
+          <h1 className="text-2xl font-normal text-gray-900 mb-1.5">Creemos tu boda</h1>
           <p className="text-sm text-gray-500">Necesitamos algunos datos para empezar.</p>
         </div>
 
@@ -224,7 +224,7 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
             <button
               type="button"
               onClick={handleUploadClick}
-              className="w-full py-2 border border-dashed border-gray-300 hover:border-gray-400 hover:bg-gray-50 rounded-lg text-xs font-medium text-gray-600 inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+              className="uppercase w-full py-2 border border-dashed border-gray-300 hover:border-gray-400 hover:bg-gray-50 rounded-lg text-xs font-normal text-gray-600 inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
             >
               <Upload className="w-3.5 h-3.5 text-gray-400" />
               <span>Subir su propia foto</span>
@@ -234,7 +234,7 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
           <button
             id="create-wedding-btn"
             type="submit"
-            className="w-full py-3.5 bg-[#0f172a] hover:bg-black text-white font-medium rounded-lg text-sm transition-all shadow-xs cursor-pointer mt-4"
+            className="uppercase w-full py-3.5 bg-[#0f172a] hover:bg-black text-white font-normal rounded-lg text-xs transition-all shadow-xs cursor-pointer mt-4"
           >
             Crear boda
           </button>

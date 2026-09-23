@@ -24,7 +24,7 @@ export const HelpView: React.FC = () => {
   return (
     <div className="space-y-6 animate-fade-in max-w-3xl">
       <div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+        <h2 className="text-2xl sm:text-3xl font-normal text-gray-900">
           Centro de Ayuda & Concierge Weda
         </h2>
         <p className="text-sm text-gray-500 mt-1">
