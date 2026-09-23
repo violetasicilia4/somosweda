@@ -54,10 +54,9 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
       {/* Hero Section — foto a sangre completa, sin card ni márgenes laterales */}
       <section className="relative w-full aspect-4/5 sm:aspect-16/9 overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80"
+          src="/hero-couple.webp"
           alt="Pareja de novios celebrando su casamiento"
-          className="absolute inset-0 w-full h-full object-cover object-center grayscale"
-          referrerPolicy="no-referrer"
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/10"></div>
 
