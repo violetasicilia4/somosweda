@@ -67,15 +67,15 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             40/56, gap 28, radius 2). Todo escala con el ancho del viewport (vw) y
             se detiene en los valores de Figma, así que a 1440px+ es exacto y por
             debajo se achica de forma proporcional. En mobile queda anclado abajo. */}
-        <div className="absolute z-10 left-1/2 -translate-x-1/2 bottom-6 sm:bottom-[min(68px,4.72vw)] w-[calc(100%-2rem)] sm:w-[min(1062px,73.75vw)] sm:h-[min(500px,34.72vw)] px-[clamp(16px,3.89vw,56px)] py-[clamp(16px,2.78vw,40px)] gap-[clamp(16px,1.94vw,28px)] flex flex-col items-center text-center rounded-[2px]">
+        <div className="absolute z-10 left-1/2 -translate-x-1/2 bottom-6 sm:bottom-[min(68px,4.72vw)] w-[calc(100%-2rem)] sm:w-[min(1062px,73.75vw)] sm:h-[min(500px,34.72vw)] px-[clamp(16px,3.89vw,56px)] py-[clamp(16px,2.78vw,40px)] gap-[clamp(14px,1.67vw,24px)] flex flex-col items-center text-center rounded-[2px]">
           <span
-            className="text-[clamp(11px,0.97vw,14px)] font-normal uppercase text-center text-[#F5F0E9] leading-[1.4] tracking-[0.1em]"
+            className="text-[clamp(10px,0.9vw,13px)] font-normal uppercase text-center text-[#F5F0E9] leading-[1.4] tracking-[0.1em]"
             style={{ fontFamily: "'Schibsted Grotesk', sans-serif", textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}
           >
             Planificá tu casamiento
           </span>
           <h1
-            className="text-[clamp(30px,3.89vw,56px)] font-normal text-[#F5F0EA] text-center leading-[1.05] w-full"
+            className="text-[clamp(26px,3.33vw,48px)] font-normal text-[#F5F0EA] text-center leading-[1.05] w-full"
             style={{ fontFamily: "'Schibsted Grotesk', sans-serif", textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}
           >
             Armá tu lista de regalos e invitados de tu casamiento en un solo lugar.
