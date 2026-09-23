@@ -61,7 +61,10 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
         <div className="absolute inset-0 bg-black/10"></div>
 
         <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
-          <span className="text-[11px] tracking-[0.3em] uppercase text-white/85 mb-5">
+          <span
+            className="text-[14px] font-normal uppercase text-center text-[#F5F0E9] leading-[1.4] tracking-[1.4px] mb-5"
+            style={{ fontFamily: "'Schibsted Grotesk', sans-serif", textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}
+          >
             Planificá tu casamiento
           </span>
           <h1
