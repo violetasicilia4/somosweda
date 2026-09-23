@@ -64,7 +64,10 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
           <span className="text-[11px] tracking-[0.3em] uppercase text-white/85 mb-5">
             Planificá tu casamiento
           </span>
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-medium text-white leading-[1.2] max-w-3xl">
+          <h1
+            className="text-4xl sm:text-[56px] font-normal text-[#F5F0EA] text-center leading-[1.05] max-w-4xl"
+            style={{ fontFamily: "'Schibsted Grotesk', sans-serif", textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}
+          >
             Armá tu lista de regalos e invitados de tu casamiento en un solo lugar.
           </h1>
 
