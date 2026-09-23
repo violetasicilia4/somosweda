@@ -18,7 +18,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
       <div className="bg-[#171310] p-2 sm:p-3" style={{ fontFamily: "'Quicksand', sans-serif" }}>
       <div className="bg-[#F7F1E4] text-[#2A2318]">
       {/* Navigation Header */}
-      <header className="bg-[#F7F1E4] px-4 sm:px-8">
+      <header className="bg-white px-4 sm:px-8">
         <div className="max-w-6xl mx-auto h-16 sm:h-20 flex items-center justify-between">
           <div
             onClick={() => onNavigate('landing')}
@@ -43,7 +43,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             <button
               id="landing-header-create-btn"
               onClick={() => onNavigate('register')}
-              className="text-xs uppercase tracking-wider font-medium bg-[#F7F1E4] text-[#2A2318] border border-[#2A2318]/40 px-5 py-2.5 hover:bg-[#EFE6D3] transition-colors cursor-pointer"
+              className="text-xs uppercase tracking-wider font-medium bg-white text-[#2A2318] border border-[#2A2318]/40 px-5 py-2.5 hover:bg-[#F7F1E4] transition-colors cursor-pointer"
             >
               Crear mi lista
             </button>
