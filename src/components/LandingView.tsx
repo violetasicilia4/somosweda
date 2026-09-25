@@ -2,6 +2,7 @@ import React from 'react';
 import { AppView } from '../types';
 import { Users, CalendarCheck, Gift, Globe, Check } from 'lucide-react';
 import { pricingPlans } from '../data/initialData';
+import { HeroVideo } from './HeroVideo';
 
 interface LandingViewProps {
   onNavigate: (view: AppView) => void;
@@ -15,11 +16,11 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
           "weda-editorial-landing"): marco oscuro alrededor de toda la página,
           tipografía Schibsted Grotesk y paleta marfil/terracota/tinta en todas las
           secciones, de punta a punta. */}
-      <div className="bg-[#171310] p-2 sm:p-3">
+      <div className="bg-[#1A0E08] p-2 sm:p-3">
       <div className="bg-[#F7F1E4] text-[#2A2318]">
       {/* Navigation Header */}
-      <header className="bg-white px-4 sm:px-8">
-        <div className="max-w-6xl mx-auto h-16 sm:h-20 flex items-center justify-between">
+      <header className="sticky top-0 z-50 bg-white/75 backdrop-blur-md px-4 sm:px-8">
+        <div className="max-w-5xl mx-auto h-14 sm:h-16 flex items-center justify-between">
           <div
             onClick={() => onNavigate('landing')}
             className="cursor-pointer flex items-center gap-3"
@@ -55,12 +56,11 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
 
       {/* Hero Section — foto a sangre completa, sin card ni márgenes laterales */}
       <section className="relative w-full aspect-4/5 sm:aspect-[1440/781] overflow-hidden">
-        <img
-          src="/hero-couple.webp"
-          alt="Pareja de novios celebrando su casamiento"
+        <HeroVideo
+          src="/hero-video.mp4"
+          label="Pareja de novios celebrando su casamiento"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-black/10"></div>
 
         {/* Bloque de texto según Figma dev-mode (1440px: 1062x500, bottom 68, padding
             40/56, gap 28, radius 2). Todo escala con el ancho del viewport (vw) y
@@ -102,50 +102,43 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
       </section>
 
       {/* Herramientas Integradas */}
-      <section className="py-20 sm:py-24 bg-[#F0E8D8] px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto">
+      <section className="pt-14 sm:pt-16 pb-20 sm:pb-24 bg-white px-4 sm:px-8">
+        <div className="max-w-[1280px] mx-auto">
           <div className="text-center mb-14">
-            <span className="text-xs font-semibold tracking-widest text-[#A9795A] uppercase">
+            <span className="text-[11px] font-normal tracking-wide text-[#8A7A6E] uppercase">
               Herramientas integradas
             </span>
-            <h2 className="text-3xl sm:text-4xl font-normal text-[#2A2318] mt-3">
-              Todo lo que necesitás para organizar tu evento.
+            <h2 className="text-3xl sm:text-[40px] sm:leading-[1.15] font-normal text-[#2A1A10] mt-5 max-w-[760px] mx-auto text-balance">
+              Todo lo que necesitás para organizar tu evento
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-            {/* Card 1 */}
-            <div>
-              <Users className="w-6 h-6 text-[#A9795A] mb-4" strokeWidth={1.5} />
-              <h3 className="font-semibold text-base text-[#2A2318] mb-1.5">Invitados</h3>
-              <p className="text-sm text-[#7A6F5F] leading-relaxed">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+            <div className="rounded-[12px] border border-[#DDD3C8] bg-[#F3EFEA] p-6 pb-10">
+              <Users className="w-6 h-6 text-[#8A6A55] mb-5" strokeWidth={1.5} />
+              <h3 className="font-semibold text-base text-[#2A1A10] mb-2">Invitados</h3>
+              <p className="text-sm text-[#6F625A] leading-relaxed">
                 Gestioná tu lista completa, confirmaciones y datos de cada invitado en un solo lugar.
               </p>
             </div>
-
-            {/* Card 2 */}
-            <div>
-              <CalendarCheck className="w-6 h-6 text-[#A9795A] mb-4" strokeWidth={1.5} />
-              <h3 className="font-semibold text-base text-[#2A2318] mb-1.5">RSVP</h3>
-              <p className="text-sm text-[#7A6F5F] leading-relaxed">
+            <div className="rounded-[12px] border border-[#DDD3C8] bg-[#F3EFEA] p-6 pb-10">
+              <CalendarCheck className="w-6 h-6 text-[#8A6A55] mb-5" strokeWidth={1.5} />
+              <h3 className="font-semibold text-base text-[#2A1A10] mb-2">RSVP</h3>
+              <p className="text-sm text-[#6F625A] leading-relaxed">
                 Confirmaciones online en tiempo real, sin planillas ni seguimientos manuales.
               </p>
             </div>
-
-            {/* Card 3 */}
-            <div>
-              <Gift className="w-6 h-6 text-[#A9795A] mb-4" strokeWidth={1.5} />
-              <h3 className="font-semibold text-base text-[#2A2318] mb-1.5">Regalos</h3>
-              <p className="text-sm text-[#7A6F5F] leading-relaxed">
+            <div className="rounded-[12px] border border-[#DDD3C8] bg-[#F3EFEA] p-6 pb-10">
+              <Gift className="w-6 h-6 text-[#8A6A55] mb-5" strokeWidth={1.5} />
+              <h3 className="font-semibold text-base text-[#2A1A10] mb-2">Regalos</h3>
+              <p className="text-sm text-[#6F625A] leading-relaxed">
                 Recibí aportes y regalos digitales con total transparencia y sin intermediarios.
               </p>
             </div>
-
-            {/* Card 4 */}
-            <div>
-              <Globe className="w-6 h-6 text-[#A9795A] mb-4" strokeWidth={1.5} />
-              <h3 className="font-semibold text-base text-[#2A2318] mb-1.5">Sitio Web</h3>
-              <p className="text-sm text-[#7A6F5F] leading-relaxed">
+            <div className="rounded-[12px] border border-[#DDD3C8] bg-[#F3EFEA] p-6 pb-10">
+              <Globe className="w-6 h-6 text-[#8A6A55] mb-5" strokeWidth={1.5} />
+              <h3 className="font-semibold text-base text-[#2A1A10] mb-2">Sitio Web</h3>
+              <p className="text-sm text-[#6F625A] leading-relaxed">
                 Tu propia página de casamiento, diseñada con elegancia y lista en minutos.
               </p>
             </div>
@@ -154,7 +147,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
       </section>
 
       {/* Planes y Precios */}
-      <section className="py-20 sm:py-24 bg-white px-4 sm:px-6">
+      <section className="py-20 sm:py-24 bg-[#ECE6DF] px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <span className="text-xs font-semibold tracking-widest text-[#A9795A] uppercase">
@@ -172,7 +165,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             {pricingPlans.map((plan) => (
               <div
                 key={plan.id}
-                className="rounded-2xl overflow-hidden bg-white border border-[#E7DCC8] flex flex-col"
+                className="rounded-[16px] overflow-hidden bg-white border border-[#E7DCC8] flex flex-col"
               >
                 <div className="relative aspect-4/3">
                   <img
@@ -294,31 +287,36 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
         </div>
       </section>
 
-      {/* CTA Bottom Banner — foto a sangre completa, sin card ni márgenes */}
-      <section className="relative w-full">
-        <div className="relative aspect-4/5 sm:aspect-21/9 overflow-hidden">
-          <img
-            src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1600&q=80"
-            alt="Fondo romántico de boda"
-            className="absolute inset-0 w-full h-full object-cover"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-black/55"></div>
+      {/* CTA Bottom Banner — Figma "final-cta-section": 1440x600, padding 120, columna
+          centrada, gap 48. La foto va a sangre y el texto va sobre una capa #1A0E08 al 60% que cubre
+          toda la foto. */}
+      <section className="relative w-full min-h-[600px] flex flex-col justify-center items-center px-4 py-10 sm:px-[clamp(24px,8.33vw,120px)] sm:py-[clamp(40px,8.33vw,120px)] overflow-hidden">
+        <img
+          src="/cta-manos.webp"
+          alt="Manos de los novios entrelazadas junto a un ramo de flores blancas"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
 
-          {/* Bloque de texto según Figma dev-mode: absolute, left 189 / bottom 68, 1062x500,
-            padding 40px 56px, flex column, align center, gap 28px, radius 2px. El alto
-            fijo de 500 solo aplica desde xl, donde el hero es lo bastante alto. */}
-        <div className="absolute z-10 left-1/2 -translate-x-1/2 bottom-6 xl:bottom-[68px] w-[calc(100%-2rem)] xl:w-[1062px] xl:h-[500px] px-4 py-6 xl:px-14 xl:py-10 flex flex-col items-center gap-7 text-center rounded-[2px]">
-            <h2 className="text-2xl sm:text-4xl font-normal text-white mb-3 max-w-xl">
+        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(26, 14, 8, 0.6)' }}></div>
+
+        <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center gap-12 text-center px-6 py-10 sm:px-14">
+          <div className="flex flex-col items-center gap-5">
+            <span className="text-[11px] font-normal uppercase tracking-[0.1em] text-[#F5F0EA]/80">
+              Empezá hoy
+            </span>
+            <h2 className="text-[clamp(30px,4.4vw,64px)] leading-[1.05] font-normal text-[#F5F0EA] max-w-[16ch] sm:max-w-[20ch] text-balance">
               Tu historia merece algo más que una invitación.
             </h2>
-            <p className="text-sm text-white/80 mb-7 max-w-md">
+            <p className="text-sm sm:text-base text-[#F5F0EA]/80 max-w-xl">
               Creá tu sitio, organizá tus invitados y recibí regalos en un solo lugar. Sin estrés, sin complicaciones.
             </p>
+          </div>
+
+          <div className="flex flex-col items-center gap-4">
             <button
               id="cta-create-list-bottom"
               onClick={() => onNavigate('register')}
-              className="text-xs uppercase font-normal border border-white/70 text-white px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer mb-4"
+              className="text-xs uppercase font-normal border border-white/70 text-white px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer"
             >
               Crear mi lista gratis
             </button>
@@ -330,7 +328,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
       </section>
 
       {/* Footer */}
-      <footer className="relative bg-[#171310] text-[#F7F1E4] px-4 sm:px-8 pt-16 pb-8 overflow-hidden">
+      <footer className="relative bg-[#1A0E08] text-[#F7F1E4] px-4 sm:px-8 pt-16 pb-8 overflow-hidden">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 relative z-10">
           <div className="md:col-span-1">
             <span className="text-[28px] font-normal leading-normal uppercase block mb-3">Weda</span>

@@ -81,8 +81,8 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
   >(null);
 
   // Local editable values with live syncing to preview
-  const [coupleName, setCoupleName] = useState(wedding.coupleName || 'Sofía & Martín');
-  const [weddingDate, setWeddingDate] = useState(wedding.weddingDate || '2027-11-15');
+  const [coupleName, setCoupleName] = useState(wedding.coupleName || 'Milagros & Juan');
+  const [weddingDate, setWeddingDate] = useState(wedding.weddingDate || '2026-10-24');
   const [bannerImage, setBannerImage] = useState(
     wedding.bannerImage || 
     'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=80'
@@ -113,7 +113,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           {
             id: 'ev1',
             title: 'Ceremonia Religiosa',
-            date: '15 Noviembre 2027',
+            date: '24 Octubre 2026',
             time: '17:30 hs',
             locationName: 'Parroquia Nuestra Señora del Pilar',
             address: 'Junín 1904, Recoleta, CABA',
@@ -123,7 +123,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           {
             id: 'ev2',
             title: 'Recepción y Cena',
-            date: '15 Noviembre 2027',
+            date: '24 Octubre 2026',
             time: '19:30 hs',
             locationName: 'Estancia La Linda',
             address: 'Ruta 8 Km 54, Pilar',
@@ -187,7 +187,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
     const item: WeddingEvent = {
       id: `ev-${Date.now()}`,
       title: newEventTitle,
-      date: '15 Noviembre 2027',
+      date: '24 Octubre 2026',
       time: newEventTime || '01:30 hs',
       locationName: newEventLocation || wedding.venue,
       address: wedding.address,
@@ -979,7 +979,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-150 flex items-center justify-between text-xs text-gray-600">
                 <span>Tus invitados podrán elegir y transferir directo para sus regalos favoritos.</span>
                 <span className="font-semibold text-gray-900 bg-white px-2.5 py-1 rounded-lg border border-gray-200">
-                  {wedding.bankAlias || 'boda.sofia.martin'}
+                  {wedding.bankAlias || 'boda.milagros.juan'}
                 </span>
               </div>
             ) : (
@@ -1215,7 +1215,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   type="text"
                   value={weddingDate}
                   onChange={(e) => setWeddingDate(e.target.value)}
-                  placeholder="Ej. 15 de Noviembre, 2027"
+                  placeholder="Ej. 24 de Octubre, 2026"
                   className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
                 />
               </div>

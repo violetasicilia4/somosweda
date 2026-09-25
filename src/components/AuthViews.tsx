@@ -52,7 +52,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAuthSuccess({ name: 'Sofía Rossi', email });
+    onAuthSuccess({ name: 'Milagros', email });
     onNavigate('dashboard');
   };
 
@@ -87,7 +87,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
   return (
     <div className="min-h-[calc(100vh-45px)] bg-gray-50 flex flex-col justify-center items-center px-4 py-12">
       {/* Centered Auth Box matching screenshots */}
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-200/80 p-8 sm:p-10 transition-all">
+      <div className="w-full max-w-md bg-white border border-gray-200 p-8 sm:p-10 transition-all">
         {/* Brand header */}
         <div className="text-center mb-6">
           <button 
@@ -115,7 +115,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
 
             <form onSubmit={handleLoginSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1.5">
+                <label className="block text-[11px] font-semibold text-gray-900 mb-2">
                   Correo electrónico
                 </label>
                 <input
@@ -125,13 +125,13 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="tu@email.com"
-                  className="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-medium text-gray-700">
+                  <label className="block text-[11px] font-semibold text-gray-900 mb-2">
                     Contraseña
                   </label>
                   <button
@@ -149,14 +149,14 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
               <button
                 id="login-submit-btn"
                 type="submit"
-                className="uppercase w-full py-3 bg-[#0f172a] hover:bg-black text-white font-normal rounded-lg text-xs transition-all shadow-xs cursor-pointer mt-2"
+                className="uppercase w-full h-[41px] bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[12px] transition-all shadow-xs cursor-pointer mt-2"
               >
                 Iniciar sesión
               </button>
@@ -175,7 +175,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
               <button
                 type="button"
                 onClick={() => {
-                  onAuthSuccess({ name: 'Sofía Rossi', email: 'sofia.rossi@gmail.com' });
+                  onAuthSuccess({ name: 'Milagros', email: 'milagros@gmail.com' });
                   onNavigate('dashboard');
                 }}
                 className="uppercase w-full py-2.5 px-4 border border-gray-300 rounded-lg text-xs sm:text-xs font-normal text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors cursor-pointer"
@@ -192,7 +192,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
               <button
                 type="button"
                 onClick={() => {
-                  onAuthSuccess({ name: 'Martín Gómez', email: 'martin.gomez@icloud.com' });
+                  onAuthSuccess({ name: 'Juan', email: 'juan@icloud.com' });
                   onNavigate('dashboard');
                 }}
                 className="uppercase w-full py-2.5 px-4 border border-gray-300 rounded-lg text-xs sm:text-xs font-normal text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors cursor-pointer"
@@ -227,7 +227,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
 
             <form onSubmit={handleRegisterSubmit} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
+                <label className="block text-[11px] font-semibold text-gray-900 mb-2">
                   Nombre completo
                 </label>
                 <input
@@ -237,12 +237,12 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="Ej. Martina García"
-                  className="w-full px-3.5 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
+                <label className="block text-[11px] font-semibold text-gray-900 mb-2">
                   Correo electrónico
                 </label>
                 <input
@@ -252,12 +252,12 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="tu@email.com"
-                  className="w-full px-3.5 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
+                <label className="block text-[11px] font-semibold text-gray-900 mb-2">
                   Contraseña
                 </label>
                 <input
@@ -267,12 +267,12 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Creá una contraseña segura"
-                  className="w-full px-3.5 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
+                <label className="block text-[11px] font-semibold text-gray-900 mb-2">
                   Confirmar contraseña
                 </label>
                 <input
@@ -282,7 +282,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Repetí tu contraseña"
-                  className="w-full px-3.5 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
@@ -302,7 +302,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
               <button
                 id="register-submit-btn"
                 type="submit"
-                className="uppercase w-full py-3 bg-[#0f172a] hover:bg-black text-white font-normal rounded-lg text-xs transition-all shadow-xs cursor-pointer mt-2"
+                className="uppercase w-full h-[41px] bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[12px] transition-all shadow-xs cursor-pointer mt-2"
               >
                 Crear cuenta
               </button>
@@ -375,7 +375,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
 
             <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1.5">
+                <label className="block text-[11px] font-semibold text-gray-900 mb-2">
                   Correo electrónico
                 </label>
                 <input
@@ -385,14 +385,14 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="tu@email.com"
-                  className="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
               <button
                 id="forgot-submit-btn"
                 type="submit"
-                className="uppercase w-full py-3 bg-[#0f172a] hover:bg-black text-white font-normal rounded-lg text-xs transition-all shadow-xs cursor-pointer mt-2"
+                className="uppercase w-full h-[41px] bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[12px] transition-all shadow-xs cursor-pointer mt-2"
               >
                 Enviar enlace de recuperación
               </button>
@@ -441,7 +441,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
               <button
                 id="verify-pin-btn"
                 type="submit"
-                className="uppercase w-full py-3 bg-[#0f172a] hover:bg-black text-white font-normal rounded-lg text-xs transition-all shadow-xs cursor-pointer"
+                className="uppercase w-full h-[41px] bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[12px] transition-all shadow-xs cursor-pointer"
               >
                 Verificar código
               </button>
@@ -484,7 +484,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
 
             <form onSubmit={handleResetPasswordSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1.5">
+                <label className="block text-[11px] font-semibold text-gray-900 mb-2">
                   Nueva contraseña
                 </label>
                 <input
@@ -492,12 +492,12 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   type="password"
                   required
                   placeholder="••••••••••••"
-                  className="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1.5">
+                <label className="block text-[11px] font-semibold text-gray-900 mb-2">
                   Confirmar nueva contraseña
                 </label>
                 <input
@@ -505,7 +505,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   type="password"
                   required
                   placeholder="••••••••••••"
-                  className="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
@@ -526,7 +526,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
               <button
                 id="reset-password-submit-btn"
                 type="submit"
-                className="uppercase w-full py-3 bg-[#0f172a] hover:bg-black text-white font-normal rounded-lg text-xs transition-all shadow-xs cursor-pointer mt-2"
+                className="uppercase w-full h-[41px] bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[12px] transition-all shadow-xs cursor-pointer mt-2"
               >
                 Guardar nueva contraseña
               </button>

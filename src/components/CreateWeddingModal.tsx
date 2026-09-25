@@ -14,8 +14,8 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
   onUpdateWedding,
   onNavigate,
 }) => {
-  const [coupleName, setCoupleName] = useState(wedding.coupleName || 'Sofía & Martín');
-  const [weddingDate, setWeddingDate] = useState(wedding.weddingDate || '2027-11-15');
+  const [coupleName, setCoupleName] = useState(wedding.coupleName || 'Milagros & Juan');
+  const [weddingDate, setWeddingDate] = useState(wedding.weddingDate || '2026-10-24');
   const [locationQuery, setLocationQuery] = useState('Estancia La Linda, Pilar, Buenos Aires');
   const [locationDetected, setLocationDetected] = useState(true);
   const [zoomLevel, setZoomLevel] = useState(14);
@@ -46,7 +46,7 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
   return (
     <div className="min-h-[calc(100vh-45px)] bg-gray-50 flex flex-col justify-center items-center px-4 py-10 font-sans">
       {/* Container Box */}
-      <div className="w-full max-w-xl bg-white rounded-2xl shadow-sm border border-gray-200/80 p-6 sm:p-10">
+      <div className="w-full max-w-xl bg-white border border-gray-200 p-6 sm:p-10">
         {/* Brand header */}
         <div className="text-center mb-6">
           <button
@@ -66,7 +66,7 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Nombre de la pareja */}
           <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+            <label className="block text-[11px] font-semibold text-gray-900 mb-2">
               Nombre de la pareja
             </label>
             <div className="relative">
@@ -79,15 +79,15 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
                 required
                 value={coupleName}
                 onChange={(e) => setCoupleName(e.target.value)}
-                placeholder="Sofía & Martín"
-                className="w-full pl-10 pr-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900 font-medium"
+                placeholder="Milagros & Juan"
+                className="w-full pl-10 pr-3.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900 font-medium"
               />
             </div>
           </div>
 
           {/* Fecha principal del evento */}
           <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+            <label className="block text-[11px] font-semibold text-gray-900 mb-2">
               Fecha principal del evento
             </label>
             <div className="relative">
@@ -100,14 +100,14 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
                 required
                 value={weddingDate}
                 onChange={(e) => setWeddingDate(e.target.value)}
-                className="w-full pl-10 pr-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                className="w-full pl-10 pr-3.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
               />
             </div>
           </div>
 
           {/* Ubicación */}
           <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+            <label className="block text-[11px] font-semibold text-gray-900 mb-2">
               Ubicación
             </label>
             <div className="relative mb-3">
@@ -124,7 +124,7 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
                   setLocationDetected(e.target.value.length > 3);
                 }}
                 placeholder="Buscar dirección o ubicación..."
-                className="w-full pl-10 pr-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                className="w-full pl-10 pr-3.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
               />
             </div>
 
@@ -136,20 +136,20 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
               </div>
 
               {/* Map grid schematic preview */}
-              <div className="relative h-44 w-full bg-[#f4f3ef] overflow-hidden flex items-center justify-center">
+              <div className="relative h-44 w-full bg-[#F4F0EB] overflow-hidden flex items-center justify-center">
                 {/* SVG Map roads grid */}
                 <svg className="absolute inset-0 w-full h-full opacity-40" xmlns="http://www.w3.org/2000/svg">
                   <defs>
                     <pattern id="grid-pattern" width="60" height="60" patternUnits="userSpaceOnUse">
-                      <rect width="60" height="60" fill="none" stroke="#d1d5db" strokeWidth="1.5" />
-                      <line x1="0" y1="30" x2="60" y2="30" stroke="#e5e7eb" strokeWidth="1" />
-                      <line x1="30" y1="0" x2="30" y2="60" stroke="#e5e7eb" strokeWidth="1" />
+                      <rect width="60" height="60" fill="none" stroke="#D8D2C8" strokeWidth="1.5" />
+                      <line x1="0" y1="30" x2="60" y2="30" stroke="#E9E8E4" strokeWidth="1" />
+                      <line x1="30" y1="0" x2="30" y2="60" stroke="#E9E8E4" strokeWidth="1" />
                     </pattern>
                   </defs>
                   <rect width="100%" height="100%" fill="url(#grid-pattern)" />
-                  <line x1="0" y1="80" x2="100%" y2="80" stroke="#cbd5e1" strokeWidth="6" />
-                  <line x1="45%" y1="0" x2="45%" y2="100%" stroke="#cbd5e1" strokeWidth="5" />
-                  <line x1="20%" y1="0" x2="80%" y2="100%" stroke="#e2e8f0" strokeWidth="4" />
+                  <line x1="0" y1="80" x2="100%" y2="80" stroke="#D8D2C8" strokeWidth="6" />
+                  <line x1="45%" y1="0" x2="45%" y2="100%" stroke="#D8D2C8" strokeWidth="5" />
+                  <line x1="20%" y1="0" x2="80%" y2="100%" stroke="#E9E8E4" strokeWidth="4" />
                 </svg>
 
                 {/* Central pin badge */}
@@ -191,7 +191,7 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
 
           {/* Foto principal */}
           <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+            <label className="block text-[11px] font-semibold text-gray-900 mb-2">
               Foto principal
             </label>
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-2">
@@ -234,7 +234,7 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
           <button
             id="create-wedding-btn"
             type="submit"
-            className="uppercase w-full py-3.5 bg-[#0f172a] hover:bg-black text-white font-normal rounded-lg text-xs transition-all shadow-xs cursor-pointer mt-4"
+            className="uppercase w-full h-[41px] bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[12px] transition-all shadow-xs cursor-pointer mt-4"
           >
             Crear boda
           </button>

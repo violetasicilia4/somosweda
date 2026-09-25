@@ -64,7 +64,7 @@ export const CobrosView: React.FC<CobrosViewProps> = ({ wedding, onUpdateWedding
                 type="text"
                 value={bankAlias}
                 onChange={(e) => setBankAlias(e.target.value)}
-                placeholder="ej: boda.sofia.martin"
+                placeholder="ej: boda.milagros.juan"
                 className="w-full px-3.5 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm font-mono text-gray-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-gray-900"
               />
             </div>
@@ -100,7 +100,7 @@ export const CobrosView: React.FC<CobrosViewProps> = ({ wedding, onUpdateWedding
                 type="text"
                 value={mpAlias}
                 onChange={(e) => setMpAlias(e.target.value)}
-                placeholder="ej: sofia.martin.mp"
+                placeholder="ej: milagros.juan.mp"
                 className="w-full px-3.5 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm font-mono text-gray-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-gray-900"
               />
             </div>

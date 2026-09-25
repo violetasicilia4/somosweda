@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { WeddingData, GiftItem, WeddingEvent, ReceivedGift } from '../types';
 import {
   X,
@@ -81,21 +81,6 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
 
   const cartTotal = cartItems.reduce((sum, g) => sum + g.targetPrice, 0);
 
-  // Countdown timer calculations
-  const [timeLeft, setTimeLeft] = useState({ days: 420, hours: 14, minutes: 22, seconds: 40 });
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
-        if (prev.minutes > 0) return { ...prev, minutes: 59, seconds: 59 };
-        if (prev.hours > 0) return { ...prev, hours: 23, minutes: 59, seconds: 59 };
-        return { ...prev, days: Math.max(0, prev.days - 1), hours: 23, minutes: 59, seconds: 59 };
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
   if (!isOpen) return null;
 
   const handleRsvpSubmit = (e: React.FormEvent) => {
@@ -104,7 +89,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
   };
 
   const handleCopyAlias = () => {
-    navigator.clipboard.writeText(wedding.bankAlias || 'boda.sofia.martin');
+    navigator.clipboard.writeText(wedding.bankAlias || 'boda.milagros.juan');
     setCopiedAlias(true);
     setTimeout(() => setCopiedAlias(false), 2000);
   };
@@ -223,7 +208,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
             <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
             <span className="ml-2 text-gray-300 font-mono text-[11px] hidden sm:inline">
-              weda.ar/r/{wedding.slug || 'sofia-y-martin'}
+              weda.ar/r/{wedding.slug || 'milagros-y-juan'}
             </span>
           </div>
 
@@ -233,7 +218,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                 type="button"
                 onClick={() => {
                   try {
-                    window.open(`${window.location.origin}${window.location.pathname}?guest=1`, '_blank');
+                    window.open(`${window.location.origin}${window.location.pathname}?example=1`, '_blank');
                   } catch {
                     // ignore
                   }
@@ -282,28 +267,8 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                 {wedding.coupleName}
               </h1>
               <p className="text-sm sm:text-base text-white/90 font-light max-w-md mx-auto mb-6">
-                15 de Noviembre de 2027 • Buenos Aires
+                24 de Octubre de 2026 • Buenos Aires
               </p>
-
-              {/* Countdown timer */}
-              <div className="grid grid-cols-4 gap-2 sm:gap-4 bg-black/40 backdrop-blur-md px-4 py-3 rounded-xl border border-white/20 text-center">
-                <div>
-                  <span className="block text-xl sm:text-2xl font-bold font-mono">{timeLeft.days}</span>
-                  <span className="text-[10px] uppercase text-white/70">Días</span>
-                </div>
-                <div>
-                  <span className="block text-xl sm:text-2xl font-bold font-mono">{timeLeft.hours}</span>
-                  <span className="text-[10px] uppercase text-white/70">Horas</span>
-                </div>
-                <div>
-                  <span className="block text-xl sm:text-2xl font-bold font-mono">{timeLeft.minutes}</span>
-                  <span className="text-[10px] uppercase text-white/70">Min</span>
-                </div>
-                <div>
-                  <span className="block text-xl sm:text-2xl font-bold font-mono">{timeLeft.seconds}</span>
-                  <span className="text-[10px] uppercase text-white/70">Seg</span>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -364,7 +329,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                 ¿Nos acompañás?
               </h2>
               <p className="text-xs text-gray-500 mt-1">
-                Por favor confirmá tu asistencia antes del 15 de Octubre de 2027.
+                Por favor confirmá tu asistencia antes del 24 de Septiembre de 2026.
               </p>
             </div>
 
@@ -444,7 +409,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
 
                 <button
                   type="submit"
-                  className="uppercase w-full py-3 bg-[#0f172a] hover:bg-black text-white font-normal rounded-lg text-xs sm:text-xs transition-all shadow-xs cursor-pointer mt-2"
+                  className="uppercase w-full py-3 bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-normal rounded-lg text-xs sm:text-xs transition-all shadow-xs cursor-pointer mt-2"
                 >
                   Enviar confirmación
                 </button>

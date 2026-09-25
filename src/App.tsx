@@ -11,6 +11,7 @@ import { AuthViews } from './components/AuthViews';
 import { CreateWeddingModal } from './components/CreateWeddingModal';
 import { DashboardView } from './components/DashboardView';
 import { MicrositeModal } from './components/MicrositeModal';
+import { ExampleView } from './components/ExampleView';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<AppView>('landing');
@@ -18,6 +19,10 @@ export default function App() {
     if (typeof window === 'undefined') return false;
     const params = new URLSearchParams(window.location.search);
     return params.get('guest') === '1' || window.location.hash === '#guest';
+  });
+  const [isExample] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return new URLSearchParams(window.location.search).get('example') === '1';
   });
   const [wedding, setWedding] = useState<WeddingData>(initialWedding);
   const [guests, setGuests] = useState<Guest[]>(initialGuests);
@@ -28,10 +33,19 @@ export default function App() {
 
   // "Ver mi web" siempre abre el micrositio real (misma vista que verán los invitados),
   // nunca una simulación o preview dentro del dashboard.
+  const handleOpenExample = () => {
+    if (typeof window === 'undefined') return;
+    try {
+      window.open(`${window.location.origin}${window.location.pathname}?example=1`, '_blank');
+    } catch (err) {
+      console.warn('Could not open example tab:', err);
+    }
+  };
+
   const handleOpenMicrosite = () => {
     if (typeof window === 'undefined') return;
     try {
-      window.open(`${window.location.origin}${window.location.pathname}?guest=1`, '_blank');
+      window.open(`${window.location.origin}${window.location.pathname}?example=1`, '_blank');
     } catch (err) {
       console.warn('Could not open microsite tab:', err);
     }
@@ -107,6 +121,10 @@ export default function App() {
     }));
   };
 
+  if (isExample) {
+    return <ExampleView />;
+  }
+
   if (isGuestStandalone) {
     return (
       <MicrositeModal
@@ -134,7 +152,7 @@ export default function App() {
         {currentView === 'landing' && (
           <LandingView
             onNavigate={(view) => setCurrentView(view)}
-            onOpenExample={handleOpenMicrosite}
+            onOpenExample={handleOpenExample}
           />
         )}
 

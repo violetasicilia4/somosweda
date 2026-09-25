@@ -11,6 +11,58 @@
   --font-sans: 'Schibsted Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-serif: 'Schibsted Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: 'Schibsted Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /*
+   * Sistema visual de la landing y del ejemplo aplicado al resto de la app: los grises
+   * pasan a la escala cálida (crema, bordes #E9E8E4, tinta #2D1A0E), el verde de
+   * acento pasa a marrón tinta, las esquinas a 2px y sin sombras.
+   */
+  --color-gray-50: #FBF9F5;
+  --color-gray-100: #F4F0EB;
+  --color-gray-150: #EFEAE2;
+  --color-gray-200: #E9E8E4;
+  --color-gray-300: #D8D2C8;
+  --color-gray-400: #A89C90;
+  --color-gray-500: #8A7A6E;
+  --color-gray-600: #6F625A;
+  --color-gray-700: #544A42;
+  --color-gray-800: #3A2A1E;
+  --color-gray-900: #2D1A0E;
+  --color-gray-950: #1A0E08;
+
+  --color-stone-50: #FBF9F5;
+  --color-stone-100: #F4F0EB;
+  --color-stone-200: #E9E8E4;
+  --color-stone-300: #D8D2C8;
+  --color-stone-400: #A89C90;
+  --color-stone-500: #8A7A6E;
+
+  --color-emerald-50: #F4F0EB;
+  --color-emerald-100: #EFE6DA;
+  --color-emerald-200: #DDD3C8;
+  --color-emerald-300: #C4B4A4;
+  --color-emerald-400: #A9795A;
+  --color-emerald-500: #8A6A55;
+  --color-emerald-600: #2D1A0E;
+  --color-emerald-700: #1A0E08;
+  --color-emerald-800: #2D1A0E;
+  --color-emerald-900: #1A0E08;
+
+  --radius-md: 2px;
+  --radius-lg: 2px;
+  --radius-xl: 2px;
+  --radius-2xl: 2px;
+  --radius-3xl: 4px;
+
+  --shadow-2xs: none;
+  --shadow-xs: none;
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --shadow-xl: none;
+  --shadow-2xl: none;
+
+  --font-weight-bold: 600;
 }
 
 @layer base {
@@ -20,4 +72,10 @@
   .font-mono {
     font-variant-numeric: tabular-nums;
   }
+}
+
+/* Campos del formulario RSVP del ejemplo */
+.rsvp-field::placeholder {
+  color: #7F7369;
+  opacity: 1;
 }

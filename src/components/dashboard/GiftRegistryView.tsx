@@ -115,7 +115,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
   // Share the real, working link to the gift list (opens straight on the "Regalos" screen)
   const handleSharePreview = () => {
     if (typeof window !== 'undefined') {
-      const guestUrl = `${window.location.origin}${window.location.pathname}?guest=1`;
+      const guestUrl = `${window.location.origin}${window.location.pathname}?example=1`;
       navigator.clipboard.writeText(guestUrl);
     }
     setCopiedShare(true);
@@ -276,7 +276,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
               Estás armando la lista de regalos de
             </span>
             <h1 className="text-2xl sm:text-3xl font-normal tracking-tight text-white drop-shadow-sm">
-              {wedding.coupleName || 'Sofía & Martín'}
+              {wedding.coupleName || 'Milagros & Juan'}
             </h1>
             <p className="text-xs sm:text-sm font-medium text-white/90 flex flex-wrap items-center gap-2 drop-shadow-xs">
               <span className="inline-flex items-center gap-1.5">
@@ -435,95 +435,94 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             );
           })()}
 
-          {/* Regalos de la categoría activa: tarjetas circulares tildables, sin modal ni pasos extra */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {/* Regalos de la categoría activa: mismas tarjetas que ve el invitado en el ejemplo
+              (foto cuadrada, categoría, nombre en serif, monto), con el botón para
+              sumarlo o sacarlo de la lista, sin modal ni pasos extra */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-5 gap-y-9">
             {(suggestedGiftsByCategory[selectedCategory] || []).map((item, idx) => {
               const checked = isGiftInList(item.title);
               return (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => handleToggleSuggestion(item)}
-                  className={`text-center bg-white rounded-2xl border transition-all overflow-hidden shadow-2xs cursor-pointer p-4 flex flex-col items-center ${
-                    checked ? 'border-gray-900 ring-1 ring-gray-900' : 'border-gray-200 hover:border-gray-300 hover:shadow-xs'
-                  }`}
-                >
-                  <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden bg-gray-100 shrink-0">
-                    <img
-                      src={item.imageUrl}
-                      alt={item.title}
-                      className="w-full h-full object-cover"
-                      referrerPolicy="no-referrer"
-                    />
-                    <div className={`absolute bottom-0.5 right-0.5 w-7 h-7 rounded-full flex items-center justify-center border-2 border-white transition-colors ${
-                      checked ? 'bg-gray-900' : 'bg-white/90'
-                    }`}>
-                      {checked && <Check className="w-4 h-4 text-white" />}
-                    </div>
-                  </div>
-
-                  <div className="pt-3 space-y-0.5 w-full">
-                    <h3 className="text-sm font-bold text-gray-900 leading-snug line-clamp-2">
+                <article key={idx} className="flex flex-col">
+                  <img
+                    src={item.imageUrl}
+                    alt={item.title}
+                    className="w-full aspect-square object-cover rounded-[10px] bg-gray-100"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="px-2 pt-3 flex flex-col flex-1">
+                    <p className="uppercase text-[9px] tracking-[0.08em] leading-none text-gray-500">
+                      {item.category}
+                    </p>
+                    <h3
+                      className="font-normal text-[16px] leading-[1.1] text-[#2A1A10] mt-1.5 line-clamp-2"
+                      style={{ fontFamily: "'Instrument Serif', serif" }}
+                    >
                       {item.title}
                     </h3>
-                    <p className="text-sm font-bold text-gray-700">
-                      Monto: ${item.targetPrice.toLocaleString()}
+                    <p className="font-bold text-[13px] leading-none text-[#3A3330] mt-1.5">
+                      ARS {item.targetPrice.toLocaleString('es-AR')}
                     </p>
-                    {checked && (
-                      <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold text-emerald-700 pt-1">
-                        <Check className="w-3.5 h-3.5" />
-                        <span>Agregado a tu lista</span>
-                      </div>
-                    )}
+                    <button
+                      type="button"
+                      onClick={() => handleToggleSuggestion(item)}
+                      title={checked ? 'Quitar de la lista' : undefined}
+                      className={`mt-auto pt-0 uppercase text-[9px] tracking-[0.03em] h-[26px] rounded-[2px] cursor-pointer transition-colors inline-flex items-center justify-center gap-1 ${
+                        checked
+                          ? 'bg-white text-[#081034] border border-[#081034]'
+                          : 'bg-[#081034] text-white border border-[#081034] hover:opacity-90'
+                      }`}
+                      style={{ marginTop: 14 }}
+                    >
+                      {checked && <Check className="w-3 h-3" />}
+                      <span>{checked ? 'Agregado' : 'Agregar al regalo'}</span>
+                    </button>
                   </div>
-                </button>
+                </article>
               );
             })}
 
             {/* Regalos personalizados que la pareja cargó dentro de esta categoría */}
             {gifts.filter(g => g.isCustom && g.category === selectedCategory).map((gift) => (
-              <div
-                key={gift.id}
-                className="relative bg-white rounded-2xl border-2 border-gray-900 overflow-hidden shadow-2xs p-4 flex flex-col items-center text-center"
-              >
-                <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden bg-gray-100 shrink-0">
-                  <img
-                    src={gift.imageUrl}
-                    alt={gift.title}
-                    className="w-full h-full object-cover"
-                    referrerPolicy="no-referrer"
-                  />
-                </div>
-                <span className="mt-2 bg-gray-900 text-white text-[9px] font-semibold px-2 py-0.5 rounded-full uppercase">
-                  Personalizado
-                </span>
-                <div className="pt-2 space-y-0.5 w-full">
-                  <h3 className="text-sm font-bold text-gray-900 leading-snug line-clamp-2">
+              <article key={gift.id} className="flex flex-col">
+                <img
+                  src={gift.imageUrl}
+                  alt={gift.title}
+                  className="w-full aspect-square object-cover rounded-[10px] bg-gray-100"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="px-2 pt-3 flex flex-col flex-1">
+                  <p className="uppercase text-[9px] tracking-[0.08em] leading-none text-gray-500">
+                    Personalizado
+                  </p>
+                  <h3
+                    className="font-normal text-[16px] leading-[1.1] text-[#2A1A10] mt-1.5 line-clamp-2"
+                    style={{ fontFamily: "'Instrument Serif', serif" }}
+                  >
                     {gift.title}
                   </h3>
-                  <p className="text-sm font-bold text-gray-700">
-                    Monto: ${gift.targetPrice.toLocaleString()}
+                  <p className="font-bold text-[13px] leading-none text-[#3A3330] mt-1.5">
+                    ARS {gift.targetPrice.toLocaleString('es-AR')}
                   </p>
-                  <div className="flex items-center justify-center gap-1.5 pt-2 border-t border-gray-100 mt-1.5">
+                  <div className="mt-auto flex items-center gap-2" style={{ marginTop: 14 }}>
                     <button
                       type="button"
                       onClick={() => handleOpenEdit(gift)}
-                      className="uppercase px-2.5 py-1 text-xs font-normal text-gray-700 hover:text-gray-900 border border-gray-200 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1"
+                      className="uppercase flex-1 text-[9px] tracking-[0.03em] h-[26px] rounded-[2px] border border-[#081034] text-[#081034] hover:bg-[#081034]/5 transition-colors cursor-pointer inline-flex items-center justify-center gap-1"
                     >
-                      <Edit3 className="w-3 h-3 text-gray-400" />
+                      <Edit3 className="w-3 h-3" />
                       <span>Editar</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => onDeleteGift(gift.id)}
-                      className="uppercase px-2.5 py-1 text-xs font-normal text-gray-500 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1"
+                      aria-label="Eliminar regalo"
+                      className="w-[26px] h-[26px] rounded-[2px] border border-gray-200 text-gray-500 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 transition-colors cursor-pointer inline-flex items-center justify-center shrink-0"
                     >
                       <Trash2 className="w-3 h-3" />
-                      <span>Eliminar</span>
                     </button>
                   </div>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
       </section>
