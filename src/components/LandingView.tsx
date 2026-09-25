@@ -13,10 +13,9 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
   return (
     <div className="min-h-screen flex flex-col">
       {/* Reproducción pixel-fiel del diseño aprobado en Figma (frame
-          "weda-editorial-landing"): marco oscuro alrededor de toda la página,
-          tipografía Schibsted Grotesk y paleta marfil/terracota/tinta en todas las
+          "weda-editorial-landing"): tipografía Schibsted Grotesk y paleta marfil/terracota/tinta en todas las
           secciones, de punta a punta. */}
-      <div className="bg-[#1A0E08] p-2 sm:p-3">
+      <div>
       <div className="bg-[#F7F1E4] text-[#2A2318]">
       {/* Navigation Header */}
       <header className="sticky top-0 z-50 bg-white/75 backdrop-blur-md px-4 sm:px-8">
