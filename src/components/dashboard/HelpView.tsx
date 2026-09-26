@@ -4,20 +4,20 @@ import { MessageCircle, HelpCircle, Mail, Phone, ExternalLink, ShieldCheck } fro
 export const HelpView: React.FC = () => {
   const faqs = [
     {
-      q: '¿Cómo cobro el dinero de los regalos?',
-      a: 'Tus invitados transfieren directamente a tu CBU, Alias o Mercado Pago. Weda no retiene dinero ni cobra comisiones porcentuales sobre tus regalos.',
+      q: '¿Cómo recibo el dinero de los regalos?',
+      a: 'Tus invitados pagan con Mercado Pago o por transferencia bancaria, directo a tu cuenta. Weda nunca toca ni retiene el dinero y no cobra comisión por regalo.',
     },
     {
-      q: '¿Cuándo debo pagar el plan de Weda?',
-      a: 'Tenés tiempo ilimitado para diseñar tu micrositio y configurar regalos e invitados. Solo se abona el pago único cuando decidís publicar la boda para tus invitados.',
+      q: '¿Cuándo pago?',
+      a: 'Es un pago único, según cuánto tiempo querés mantener tu lista activa. Sin suscripción y sin comisión por regalo.',
     },
     {
-      q: '¿Los invitados necesitan crearse una cuenta para ver la web o confirmar?',
-      a: 'No. El acceso para tus invitados es 100% libre, sin contraseñas ni descargas. Ingresan con su enlace y confirman en 15 segundos.',
+      q: '¿Mis invitados necesitan crear una cuenta?',
+      a: 'No. Entran con el enlace, confirman su asistencia y regalan en menos de un minuto.',
     },
     {
-      q: '¿Puedo personalizar el enlace o dominio?',
-      a: 'Sí, todas las bodas cuentan con un enlace corto tipo weda.app/boda/nombre-y-nombre, y con el plan Signature podés conectar tu propio dominio .com.',
+      q: '¿Puedo cambiar el enlace de mi lista?',
+      a: 'Tu lista tiene un enlace corto con el formato weda.app/boda/nombre-y-nombre.',
     },
   ];
 
@@ -25,23 +25,23 @@ export const HelpView: React.FC = () => {
     <div className="space-y-6 animate-fade-in max-w-3xl">
       <div>
         <h2 className="text-2xl sm:text-3xl font-normal text-gray-900">
-          Centro de Ayuda & Concierge Weda
+          Ayuda
         </h2>
         <p className="text-sm text-gray-500 mt-1">
-          Estamos para acompañarte en cada detalle de la organización.
+          Respondemos tus dudas sobre tu lista de regalos y tus invitados.
         </p>
       </div>
 
-      {/* WhatsApp Concierge Banner */}
+      {/* Soporte */}
       <div className="bg-emerald-50 border border-emerald-200/80 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 uppercase tracking-wider">
             <MessageCircle className="w-4 h-4 text-emerald-600" />
-            <span>Asistencia por WhatsApp</span>
+            <span>Soporte</span>
           </div>
           <h3 className="text-base font-bold text-gray-900">¿Tenés alguna consulta puntual?</h3>
           <p className="text-xs text-gray-600 max-w-md">
-            Nuestro equipo de soporte y asesores de boda responde en minutos de lunes a sábados.
+            Escribinos a hola@weda.com.ar o por WhatsApp. Respondemos de lunes a viernes de 9 a 18 hs.
           </p>
         </div>
 
@@ -52,13 +52,13 @@ export const HelpView: React.FC = () => {
           className="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-xs transition-colors shrink-0"
         >
           <MessageCircle className="w-4 h-4" />
-          <span>Chatear con soporte</span>
+          <span>Escribir por WhatsApp</span>
         </a>
       </div>
 
       {/* FAQs */}
       <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-7 shadow-xs space-y-4">
-        <h3 className="font-bold text-base text-gray-900">Preguntas Frecuentes</h3>
+        <h3 className="font-bold text-base text-gray-900">Preguntas frecuentes</h3>
 
         <div className="divide-y divide-gray-100">
           {faqs.map((faq, idx) => (

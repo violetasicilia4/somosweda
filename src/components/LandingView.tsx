@@ -1,388 +1,217 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AppView } from '../types';
-import { Users, CalendarCheck, Gift, Globe, Check } from 'lucide-react';
-import { pricingPlans } from '../data/initialData';
 import { HeroVideo } from './HeroVideo';
+import {
+  ExampleScreen,
+  Faq,
+  GiftExamples,
+  HappyCouples,
+  HowItWorks,
+  MoneyTrust,
+} from './LandingSections';
 
 interface LandingViewProps {
   onNavigate: (view: AppView) => void;
-  onOpenExample: () => void;
+  onOpenExample: (screen?: ExampleScreen) => void;
 }
 
+const SANS = "'Schibsted Grotesk', sans-serif";
+
 export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExample }) => {
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const onCreate = () => onNavigate('register');
+
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const navLink =
+    'hidden md:inline text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] hover:opacity-70 transition-opacity cursor-pointer';
+
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Reproducción pixel-fiel del diseño aprobado en Figma (frame
-          "weda-editorial-landing"): tipografía Schibsted Grotesk y paleta marfil/terracota/tinta en todas las
-          secciones, de punta a punta. */}
       <div>
-      <div className="bg-[#F7F1E4] text-[#2A2318]">
-      {/* Navigation Header */}
-      <header className="sticky top-0 z-50 bg-white/75 backdrop-blur-md px-4 sm:px-8">
-        <div className="max-w-5xl mx-auto h-14 sm:h-16 flex items-center justify-between">
-          <div
-            onClick={() => onNavigate('landing')}
-            className="cursor-pointer flex items-center gap-3"
-          >
-            <span
-              className="text-[28px] font-normal leading-normal uppercase text-[#2C1A0E]"
-              style={{ fontFamily: "'Schibsted Grotesk', sans-serif" }}
-            >
-              Weda
-            </span>
-          </div>
+        <div className="bg-[#F7F1E4] text-[#2A2318]">
+          {/* Navigation Header */}
+          <header className="sticky top-0 z-50 bg-white/75 backdrop-blur-md px-4 sm:px-8">
+            <div className="max-w-5xl mx-auto h-14 sm:h-16 flex items-center justify-between">
+              <div onClick={() => onNavigate('landing')} className="cursor-pointer flex items-center gap-3">
+                <span
+                  className="text-[28px] font-normal leading-normal uppercase text-[#2C1A0E]"
+                  style={{ fontFamily: SANS }}
+                >
+                  Weda
+                </span>
+              </div>
 
-          <div className="flex items-center gap-5 sm:gap-7">
-            <button
-              id="landing-header-login-btn"
-              onClick={() => onNavigate('login')}
-              className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] hover:opacity-70 transition-opacity cursor-pointer"
-              style={{ fontFamily: "'Schibsted Grotesk', sans-serif" }}
-            >
-              Iniciar sesión
-            </button>
-            <button
-              id="landing-header-create-btn"
-              onClick={() => onNavigate('register')}
-              className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] bg-white border border-[#2A2318]/40 px-5 py-2.5 hover:bg-[#F7F1E4] transition-colors cursor-pointer"
-              style={{ fontFamily: "'Schibsted Grotesk', sans-serif" }}
-            >
-              Crear mi lista
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero Section — foto a sangre completa, sin card ni márgenes laterales */}
-      <section className="relative w-full aspect-4/5 sm:aspect-[1440/781] overflow-hidden">
-        <HeroVideo
-          src="/hero-video.mp4"
-          label="Pareja de novios celebrando su casamiento"
-          className="absolute inset-0 w-full h-full object-cover object-center"
-        />
-
-        {/* Bloque de texto según Figma dev-mode (1440px: 1062x500, bottom 68, padding
-            40/56, gap 28, radius 2). Todo escala con el ancho del viewport (vw) y
-            se detiene en los valores de Figma, así que a 1440px+ es exacto y por
-            debajo se achica de forma proporcional. En mobile queda anclado abajo. */}
-        <div className="absolute z-10 left-1/2 -translate-x-1/2 bottom-6 sm:bottom-[min(68px,4.72vw)] w-[calc(100%-2rem)] sm:w-[min(1062px,73.75vw)] sm:h-[min(500px,34.72vw)] px-[clamp(16px,3.89vw,56px)] py-[clamp(16px,2.78vw,40px)] gap-[clamp(14px,1.67vw,24px)] flex flex-col items-center text-center rounded-[2px]">
-          <span
-            className="text-[clamp(10px,0.9vw,13px)] font-normal uppercase text-center text-[#F5F0E9] leading-[1.4] tracking-[0.1em]"
-            style={{ fontFamily: "'Schibsted Grotesk', sans-serif", textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}
-          >
-            Planificá tu casamiento
-          </span>
-          <h1
-            className="text-[clamp(26px,3.33vw,48px)] font-normal text-[#F5F0EA] text-center leading-[1.05] w-full"
-            style={{ fontFamily: "'Schibsted Grotesk', sans-serif", textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}
-          >
-            Armá tu lista de regalos e invitados de tu casamiento en un solo lugar.
-          </h1>
-
-          <div className="flex items-center gap-3">
-            <button
-              id="hero-create-list-btn"
-              onClick={() => onNavigate('register')}
-              className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] bg-[#F7F1E4] px-6 py-3 hover:bg-white transition-colors cursor-pointer"
-              style={{ fontFamily: "'Schibsted Grotesk', sans-serif" }}
-            >
-              Crear mi lista
-            </button>
-            <button
-              id="hero-view-example-btn"
-              onClick={onOpenExample}
-              className="text-[12px] font-normal leading-normal uppercase border border-white/70 text-[#F5F0EA] px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer"
-              style={{ fontFamily: "'Schibsted Grotesk', sans-serif" }}
-            >
-              Ver ejemplo
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Herramientas Integradas */}
-      <section className="pt-14 sm:pt-16 pb-20 sm:pb-24 bg-white px-4 sm:px-8">
-        <div className="max-w-[1280px] mx-auto">
-          <div className="text-center mb-14">
-            <span className="text-[11px] font-normal tracking-wide text-[#8A7A6E] uppercase">
-              Herramientas integradas
-            </span>
-            <h2 className="text-3xl sm:text-[40px] sm:leading-[1.15] font-normal text-[#2A1A10] mt-5 max-w-[760px] mx-auto text-balance">
-              Todo lo que necesitás para organizar tu evento
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
-            <div className="rounded-[12px] border border-[#DDD3C8] bg-[#F3EFEA] p-6 pb-10">
-              <Users className="w-6 h-6 text-[#8A6A55] mb-5" strokeWidth={1.5} />
-              <h3 className="font-semibold text-base text-[#2A1A10] mb-2">Invitados</h3>
-              <p className="text-sm text-[#6F625A] leading-relaxed">
-                Gestioná tu lista completa, confirmaciones y datos de cada invitado en un solo lugar.
-              </p>
+              <div className="flex items-center gap-5 sm:gap-7">
+                <button type="button" onClick={() => onNavigate('find-couple')} className={navLink} style={{ fontFamily: SANS }}>
+                  Encontrá a una pareja
+                </button>
+                <button
+                  id="landing-header-login-btn"
+                  onClick={() => onNavigate('login')}
+                  className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] hover:opacity-70 transition-opacity cursor-pointer"
+                  style={{ fontFamily: SANS }}
+                >
+                  Iniciar sesión
+                </button>
+                <button
+                  id="landing-header-create-btn"
+                  onClick={onCreate}
+                  className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] bg-white border border-[#2A2318]/40 px-5 py-2.5 hover:bg-[#F7F1E4] transition-colors cursor-pointer"
+                  style={{ fontFamily: SANS }}
+                >
+                  Crear mi lista
+                </button>
+              </div>
             </div>
-            <div className="rounded-[12px] border border-[#DDD3C8] bg-[#F3EFEA] p-6 pb-10">
-              <CalendarCheck className="w-6 h-6 text-[#8A6A55] mb-5" strokeWidth={1.5} />
-              <h3 className="font-semibold text-base text-[#2A1A10] mb-2">RSVP</h3>
-              <p className="text-sm text-[#6F625A] leading-relaxed">
-                Confirmaciones online en tiempo real, sin planillas ni seguimientos manuales.
-              </p>
-            </div>
-            <div className="rounded-[12px] border border-[#DDD3C8] bg-[#F3EFEA] p-6 pb-10">
-              <Gift className="w-6 h-6 text-[#8A6A55] mb-5" strokeWidth={1.5} />
-              <h3 className="font-semibold text-base text-[#2A1A10] mb-2">Regalos</h3>
-              <p className="text-sm text-[#6F625A] leading-relaxed">
-                Recibí aportes y regalos digitales con total transparencia y sin intermediarios.
-              </p>
-            </div>
-            <div className="rounded-[12px] border border-[#DDD3C8] bg-[#F3EFEA] p-6 pb-10">
-              <Globe className="w-6 h-6 text-[#8A6A55] mb-5" strokeWidth={1.5} />
-              <h3 className="font-semibold text-base text-[#2A1A10] mb-2">Sitio Web</h3>
-              <p className="text-sm text-[#6F625A] leading-relaxed">
-                Tu propia página de casamiento, diseñada con elegancia y lista en minutos.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+          </header>
 
-      {/* Planes y Precios */}
-      <section className="py-20 sm:py-24 bg-[#ECE6DF] px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <span className="text-xs font-semibold tracking-widest text-[#A9795A] uppercase">
-              Precios transparentes
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-normal text-[#2A2318] mt-3">
-              Elegí tu plan ideal.
-            </h2>
-            <p className="text-sm text-[#7A6F5F] mt-2">
-              Probalo gratis y publicalo cuando estés listo.
-            </p>
-          </div>
+          {/* 1. Hero — foto a sangre completa (video en loop), sin card ni márgenes laterales */}
+          <section className="relative w-full min-h-[640px] sm:min-h-0 sm:aspect-[1440/781] overflow-hidden">
+            <HeroVideo
+              src="/hero-video.mp4"
+              label="Pareja de novios celebrando su casamiento"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+            />
+            {/* Velo suave solo en la mitad inferior, para que el texto se lea sobre el video */}
+            <div className="absolute inset-x-0 bottom-0 h-[75%] bg-gradient-to-t from-black/60 via-black/30 to-transparent pointer-events-none"></div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
-            {pricingPlans.map((plan) => (
-              <div
-                key={plan.id}
-                className="rounded-[16px] overflow-hidden bg-white border border-[#E7DCC8] flex flex-col"
+            {/* Bloque de texto según Figma dev-mode (1440px: 1062x500, bottom 68, padding
+                40/56, gap 28, radius 2). Todo escala con el ancho del viewport (vw) y
+                se detiene en los valores de Figma. En mobile queda anclado abajo. */}
+            <div className="absolute z-10 left-1/2 -translate-x-1/2 bottom-6 sm:bottom-[min(68px,4.72vw)] w-[calc(100%-2rem)] sm:w-[min(1062px,73.75vw)] sm:h-[min(500px,34.72vw)] px-[clamp(16px,3.89vw,56px)] py-[clamp(16px,2.78vw,40px)] gap-[clamp(14px,1.67vw,24px)] flex flex-col items-center text-center rounded-[2px]">
+              <span
+                className="text-[clamp(10px,0.9vw,13px)] font-normal uppercase text-center text-[#F5F0E9] leading-[1.4] tracking-[0.1em]"
+                style={{ fontFamily: SANS, textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}
               >
-                <div className="relative aspect-4/3">
-                  <img
-                    src={plan.previewImage}
-                    alt={plan.previewAlt}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                    <span className="bg-white text-[#2A2318] text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full">
-                      {plan.name}
-                    </span>
-                    {plan.badge && (
-                      <span className="bg-[#2A2318] text-white text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full">
-                        {plan.badge}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="p-6 flex flex-col grow">
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#A9795A]">
-                    {plan.name}
-                  </span>
-                  <span className="block text-[11px] uppercase tracking-wide text-gray-400 mt-0.5">
-                    {plan.experienceType}
-                  </span>
-                  <div className="text-2xl font-semibold text-[#2A2318] mt-2">{plan.price}</div>
-                  <p className="text-sm text-[#7A6F5F] mt-1 min-h-[36px]">{plan.tagline}</p>
-
-                  <ul className="space-y-2.5 mt-4 mb-6">
-                    {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#5A5142]">
-                        <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <button
-                    id={`plan-choose-${plan.id}`}
-                    onClick={() => onNavigate('register')}
-                    className={`w-full py-3 px-4 text-xs uppercase font-normal transition-colors cursor-pointer mt-auto ${
-                      plan.recommended
-                        ? 'bg-[#2A2318] text-white hover:bg-black'
-                        : 'bg-white border border-[#2A2318]/30 text-[#2A2318] hover:bg-[#F7F1E4]'
-                    }`}
-                  >
-                    Elegir {plan.name}
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonios */}
-      <section className="py-20 sm:py-24 bg-[#F0E8D8] px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-14">
-            <span className="text-xs font-semibold tracking-widest text-[#A9795A] uppercase">
-              Parejas felices
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-normal text-[#2A2318] mt-3">
-              Testimonios con amor.
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#2A2318]/15 border-t border-[#2A2318]/15">
-            {/* Testimonial 1 */}
-            <div className="pt-8 md:pr-8 md:first:pr-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#2A2318] font-semibold text-xs shrink-0">
-                  M&S
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm text-[#2A2318]">Martina & Sebastián</h4>
-                  <p className="text-xs text-[#8A8072]">Febrero 2026 · San Antonio de Areco</p>
-                </div>
-              </div>
-              <p className="text-sm text-[#5A5142] leading-relaxed">
-                Excelente plataforma. El RSVP en tiempo real nos ahorró horas de responder mensajes por WhatsApp. Súper recomendada la lista de bodas simbólica.
+                Luna de miel · Hogar · Proyectos juntos
+              </span>
+              <h1
+                className="text-[clamp(26px,3.33vw,48px)] font-normal text-[#F5F0EA] text-center leading-[1.05] w-full"
+                style={{ fontFamily: SANS, textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}
+              >
+                La lista de regalos moderna para tu casamiento.
+              </h1>
+              <p
+                className="max-w-[560px] text-[clamp(13px,1.15vw,17px)] leading-snug text-[#F5F0EA]/90"
+                style={{ fontFamily: SANS, textShadow: '0 2px 8px rgba(0, 0, 0, 0.6)' }}
+              >
+                Armá tu lista de regalos, recibí el dinero directo en tu cuenta por Mercado Pago o transferencia, sin comisión, y sabé quién te regaló qué.
               </p>
+              <div className="flex items-center gap-3">
+                <button
+                  id="hero-create-list-btn"
+                  onClick={onCreate}
+                  className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] bg-[#F7F1E4] px-6 py-3 hover:bg-white transition-colors cursor-pointer"
+                  style={{ fontFamily: SANS }}
+                >
+                  Crear mi lista
+                </button>
+                <button
+                  id="hero-view-example-btn"
+                  onClick={() => onOpenExample('gifts')}
+                  className="text-[12px] font-normal leading-normal uppercase border border-white/70 text-[#F5F0EA] px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer"
+                  style={{ fontFamily: SANS }}
+                >
+                  Ver una lista de ejemplo
+                </button>
+              </div>
+            </div>
+          </section>
+
+          {/* 2. Cómo funciona */}
+          <HowItWorks onOpenExample={onOpenExample} />
+
+          {/* 3. Cómo reciben el dinero */}
+          <MoneyTrust />
+
+          {/* 5. Ejemplos de regalos */}
+          <GiftExamples onCreate={onCreate} />
+
+          {/* 6. Prueba social */}
+          <HappyCouples />
+
+          {/* 7. Preguntas frecuentes */}
+          <Faq openIndex={openFaq} onToggle={(i) => setOpenFaq(openFaq === i ? null : i)} />
+
+          {/* 9. CTA final — foto a sangre completa con capa #1A0E08 al 60% */}
+          <section className="relative w-full min-h-[600px] flex flex-col justify-center items-center px-4 py-10 sm:px-[clamp(24px,8.33vw,120px)] sm:py-[clamp(40px,8.33vw,120px)] overflow-hidden">
+            <img
+              src="/cta-manos.webp"
+              alt="Manos de los novios entrelazadas junto a un ramo de flores blancas"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+            />
+            <div className="absolute inset-0" style={{ backgroundColor: 'rgba(26, 14, 8, 0.6)' }}></div>
+
+            <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center gap-12 text-center px-6 py-10 sm:px-14">
+              <div className="flex flex-col items-center gap-5">
+                <span className="text-[11px] font-normal uppercase tracking-[0.1em] text-[#F5F0EA]/80">Empezá hoy</span>
+                <h2 className="text-[clamp(30px,4.4vw,64px)] leading-[1.05] font-normal text-[#F5F0EA] max-w-[16ch] sm:max-w-[20ch] text-balance">
+                  Tu lista de regalos, lista en minutos.
+                </h2>
+                <p className="text-sm sm:text-base text-[#F5F0EA]/80 max-w-xl">
+                  Elegí qué quieren construir juntos, compartí un solo link y recibí los regalos directo en tu cuenta.
+                </p>
+              </div>
+
+              <div className="flex flex-col items-center gap-4">
+                <button
+                  id="cta-create-list-bottom"
+                  onClick={onCreate}
+                  className="text-xs uppercase font-normal border border-white/70 text-white px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer"
+                >
+                  Crear mi lista
+                </button>
+              </div>
+            </div>
+          </section>
+
+          {/* Footer */}
+          <footer className="relative bg-[#1A0E08] text-[#F7F1E4] px-4 sm:px-8 pt-16 pb-8 overflow-hidden">
+            <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 relative z-10">
+              <div>
+                <span className="text-[28px] font-normal leading-normal uppercase block mb-3">Weda</span>
+                <p className="text-sm text-[#F7F1E4]/60 leading-relaxed max-w-sm">
+                  Una lista de regalos moderna y premium para casamientos. Hecho en Argentina.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="text-[11px] font-semibold uppercase tracking-wider text-[#A9795A] mb-3">Producto</h4>
+                <ul className="space-y-2.5 text-sm text-[#F7F1E4]/70">
+                  <li><button onClick={() => scrollTo('como-funciona')} className="hover:text-white transition-colors cursor-pointer">Cómo funciona</button></li>
+                  <li><button onClick={() => onOpenExample('gifts')} className="hover:text-white transition-colors cursor-pointer">Ver una lista de ejemplo</button></li>
+                  <li><button onClick={() => scrollTo('preguntas')} className="hover:text-white transition-colors cursor-pointer">Preguntas frecuentes</button></li>
+                  <li><button onClick={onCreate} className="hover:text-white transition-colors cursor-pointer">Crear mi lista</button></li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="text-[11px] font-semibold uppercase tracking-wider text-[#A9795A] mb-3">Soporte</h4>
+                <a href="mailto:hola@weda.com.ar" className="text-sm text-[#F7F1E4]/90 hover:text-white transition-colors block mb-2">
+                  hola@weda.com.ar
+                </a>
+                <p className="text-sm text-[#F7F1E4]/60 leading-relaxed">
+                  ¿Tenés dudas? Escribinos. Respondemos de lunes a viernes de 9 a 18 hs.
+                </p>
+              </div>
             </div>
 
-            {/* Testimonial 2 */}
-            <div className="pt-8 md:px-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#2A2318] font-semibold text-xs shrink-0">
-                  C&F
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm text-[#2A2318]">Camila & Francisco</h4>
-                  <p className="text-xs text-[#8A8072]">Noviembre 2025 · Mendoza</p>
-                </div>
-              </div>
-              <p className="text-sm text-[#5A5142] leading-relaxed">
-                El sistema de regalos digitales funcionó de maravilla. Pudimos centralizar todos los aportes de nuestros invitados del exterior sin ningún problema.
-              </p>
-            </div>
-
-            {/* Testimonial 3 */}
-            <div className="pt-8 md:pl-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#2A2318] font-semibold text-xs shrink-0">
-                  V&A
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm text-[#2A2318]">Victoria & Alejandro</h4>
-                  <p className="text-xs text-[#8A8072]">Enero 2026 · Buenos Aires</p>
-                </div>
-              </div>
-              <p className="text-sm text-[#5A5142] leading-relaxed">
-                La interfaz es muy intuitiva, el sitio web nos quedó hermoso y pudimos compartir todos los detalles del menú y la ubicación en un solo lugar.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Bottom Banner — Figma "final-cta-section": 1440x600, padding 120, columna
-          centrada, gap 48. La foto va a sangre y el texto va sobre una capa #1A0E08 al 60% que cubre
-          toda la foto. */}
-      <section className="relative w-full min-h-[600px] flex flex-col justify-center items-center px-4 py-10 sm:px-[clamp(24px,8.33vw,120px)] sm:py-[clamp(40px,8.33vw,120px)] overflow-hidden">
-        <img
-          src="/cta-manos.webp"
-          alt="Manos de los novios entrelazadas junto a un ramo de flores blancas"
-          className="absolute inset-0 w-full h-full object-cover object-center"
-        />
-
-        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(26, 14, 8, 0.6)' }}></div>
-
-        <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center gap-12 text-center px-6 py-10 sm:px-14">
-          <div className="flex flex-col items-center gap-5">
-            <span className="text-[11px] font-normal uppercase tracking-[0.1em] text-[#F5F0EA]/80">
-              Empezá hoy
-            </span>
-            <h2 className="text-[clamp(30px,4.4vw,64px)] leading-[1.05] font-normal text-[#F5F0EA] max-w-[16ch] sm:max-w-[20ch] text-balance">
-              Tu historia merece algo más que una invitación.
-            </h2>
-            <p className="text-sm sm:text-base text-[#F5F0EA]/80 max-w-xl">
-              Creá tu sitio, organizá tus invitados y recibí regalos en un solo lugar. Sin estrés, sin complicaciones.
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center gap-4">
-            <button
-              id="cta-create-list-bottom"
-              onClick={() => onNavigate('register')}
-              className="text-xs uppercase font-normal border border-white/70 text-white px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer"
+            <span
+              aria-hidden="true"
+              className="block relative z-0 text-center font-semibold uppercase leading-none text-[#F7F1E4]/[0.06] text-[22vw] mt-8 select-none pointer-events-none"
             >
-              Crear mi lista gratis
-            </button>
-            <p className="text-xs text-white/60">
-              No necesitás tarjeta de crédito para empezar.
-            </p>
-          </div>
+              WEDA
+            </span>
+
+            <div className="max-w-6xl mx-auto pt-6 border-t border-[#F7F1E4]/10 text-xs text-[#F7F1E4]/50 relative z-10">
+              <span>© {new Date().getFullYear()} Weda. Todos los derechos reservados.</span>
+            </div>
+          </footer>
         </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="relative bg-[#1A0E08] text-[#F7F1E4] px-4 sm:px-8 pt-16 pb-8 overflow-hidden">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 relative z-10">
-          <div className="md:col-span-1">
-            <span className="text-[28px] font-normal leading-normal uppercase block mb-3">Weda</span>
-            <p className="text-sm text-[#F7F1E4]/60 leading-relaxed">
-              La plataforma contemporánea para organizar tu casamiento de punta a punta. Creada con orgullo en Argentina para celebraciones con sentido y belleza.
-            </p>
-          </div>
-
-          <div>
-            <h4 className="text-[11px] font-semibold uppercase tracking-wider text-[#A9795A] mb-3">Herramientas</h4>
-            <ul className="space-y-2.5 text-sm text-[#F7F1E4]/70">
-              <li><button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Sitio Web</button></li>
-              <li><button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Lista de Invitados</button></li>
-              <li><button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Confirmación RSVP</button></li>
-              <li><button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Regalos Digitales</button></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-[11px] font-semibold uppercase tracking-wider text-[#A9795A] mb-3">Compañía</h4>
-            <ul className="space-y-2.5 text-sm text-[#F7F1E4]/70">
-              <li><button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Sobre Nosotros</button></li>
-              <li><button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Blog Editorial</button></li>
-              <li><button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Contacto</button></li>
-              <li><button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Preguntas Frecuentes</button></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-[11px] font-semibold uppercase tracking-wider text-[#A9795A] mb-3">Contacto & Soporte</h4>
-            <a href="mailto:hola@weda.com.ar" className="text-sm text-[#F7F1E4]/90 hover:text-white transition-colors block mb-2">
-              hola@weda.com.ar
-            </a>
-            <p className="text-sm text-[#F7F1E4]/60 leading-relaxed">
-              ¿Tenés dudas? Nuestro atelier de soporte está disponible de lunes a viernes de 9 a 18 hs.
-            </p>
-          </div>
-        </div>
-
-        <span
-          aria-hidden="true"
-          className="block relative z-0 text-center font-semibold uppercase leading-none text-[#F7F1E4]/[0.06] text-[22vw] mt-8 select-none pointer-events-none"
-        >
-          WEDA
-        </span>
-
-        <div className="max-w-6xl mx-auto pt-6 border-t border-[#F7F1E4]/10 flex flex-col sm:flex-row items-center justify-between text-xs text-[#F7F1E4]/50 gap-2 relative z-10">
-          <span>© {new Date().getFullYear()} Weda Casamientos. Todos los derechos reservados.</span>
-          <div className="flex items-center gap-4">
-            <button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Políticas de Privacidad</button>
-            <button onClick={() => onNavigate('landing')} className="hover:text-white transition-colors cursor-pointer">Términos del Servicio</button>
-          </div>
-        </div>
-      </footer>
-      </div>
       </div>
     </div>
   );

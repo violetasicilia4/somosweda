@@ -75,9 +75,9 @@ export const ExampleRsvp: React.FC<ExampleRsvpProps> = ({ onNavigate }) => {
           </span>
           <span
             className="uppercase text-[#5A4C43] border border-[#B9AFA6] flex items-center justify-center"
-            style={{ fontFamily: SANS, fontSize: u(6.5), letterSpacing: '0.06em', width: u(32), height: u(12), borderRadius: u(2), lineHeight: 1 }}
+            style={{ fontFamily: SANS, fontSize: u(6.5), letterSpacing: '0.06em', padding: `0 ${u(6)}`, height: u(12), borderRadius: u(2), lineHeight: 1 }}
           >
-            RSVP
+            Confirmar asistencia
           </span>
         </div>
         <div className="flex items-center" style={{ gap: u(28) }}>
@@ -86,7 +86,7 @@ export const ExampleRsvp: React.FC<ExampleRsvpProps> = ({ onNavigate }) => {
             className="text-[#564A41] cursor-pointer hover:opacity-70 transition-opacity"
             style={{ fontFamily: SANS, fontSize: u(11), lineHeight: 1 }}
           >
-            Volver al micrositio
+            Volver al sitio
           </button>
           <button
             className="uppercase text-[#2D1A0E] border border-[#2D1A0E] font-semibold cursor-pointer hover:bg-[#2D1A0E]/5 transition-colors"
@@ -268,21 +268,21 @@ export const ExampleRsvp: React.FC<ExampleRsvpProps> = ({ onNavigate }) => {
           <div>
             <span className="block" style={{ fontFamily: SANS, fontSize: u(17.1), lineHeight: 1, position: 'relative', top: u(1) }}>WEDA</span>
             <p className="text-[#F7F1E4]/55" style={{ fontFamily: SANS, fontSize: u(11), lineHeight: u(19), marginTop: u(28), maxWidth: u(330) }}>
-              La plataforma contemporánea para organizar tu casamiento de punta a punta. Creada con orgullo para celebraciones con sentido y belleza.
+              La forma más elegante de recibir regalos y gestionar invitados para tu casamiento. Hecho en Argentina.
             </p>
           </div>
           <div>
-            <h4 className="uppercase text-[#F7F1E4]/45" style={{ fontFamily: SANS, fontSize: u(8.6), lineHeight: 1 }}>Herramientas</h4>
+            <h4 className="uppercase text-[#F7F1E4]/45" style={{ fontFamily: SANS, fontSize: u(8.6), lineHeight: 1 }}>Producto</h4>
             <ul className="text-[#F7F1E4]/70" style={{ fontFamily: SANS, fontSize: u(11), marginTop: u(16) }}>
-              {['Sitio Web', 'Lista de Invitados', 'Confirmación RSVP', 'Regalos Digitales'].map((t) => (
+              {['Cómo funciona', 'Ver un ejemplo', 'Crear mi lista'].map((t) => (
                 <li key={t} style={{ height: u(27), lineHeight: 1 }}>{t}</li>
               ))}
             </ul>
           </div>
           <div>
-            <h4 className="uppercase text-[#F7F1E4]/45" style={{ fontFamily: SANS, fontSize: u(8.6), lineHeight: 1 }}>Compañía</h4>
+            <h4 className="uppercase text-[#F7F1E4]/45" style={{ fontFamily: SANS, fontSize: u(8.6), lineHeight: 1 }}>Ayuda</h4>
             <ul className="text-[#F7F1E4]/70" style={{ fontFamily: SANS, fontSize: u(11), marginTop: u(16) }}>
-              {['Sobre Nosotros', 'Blog Editorial', 'Contacto'].map((t) => (
+              {['Preguntas frecuentes', 'Contacto'].map((t) => (
                 <li key={t} style={{ height: u(27), lineHeight: 1 }}>{t}</li>
               ))}
             </ul>
@@ -291,7 +291,7 @@ export const ExampleRsvp: React.FC<ExampleRsvpProps> = ({ onNavigate }) => {
             <h4 className="uppercase text-[#F7F1E4]/45" style={{ fontFamily: SANS, fontSize: u(8.6), lineHeight: 1 }}>Contacto &amp; Soporte</h4>
             <p className="text-[#F7F1E4]" style={{ fontFamily: SANS, fontSize: u(11.7), fontWeight: 500, lineHeight: 1, marginTop: u(17) }}>hola@weda.com.ar</p>
             <p className="text-[#F7F1E4]/50" style={{ fontFamily: SANS, fontSize: u(11), lineHeight: u(18), marginTop: u(15), maxWidth: u(240) }}>
-              ¿Tenés dudas? Nuestro atelier de soporte está disponible de lunes a viernes de 9 a 18 hs.
+              ¿Tenés dudas? Escribinos. Respondemos de lunes a viernes de 9 a 18 hs.
             </p>
           </div>
         </div>
@@ -307,11 +307,7 @@ export const ExampleRsvp: React.FC<ExampleRsvpProps> = ({ onNavigate }) => {
         </span>
 
         <div className="absolute flex items-center justify-between text-[#F7F1E4]/40" style={{ left: u(68), right: u(68), bottom: u(46), fontFamily: SANS, fontSize: u(11) }}>
-          <span>© 2026 Weda Casamientos. Todos los derechos reservados.</span>
-          <span className="flex" style={{ gap: u(22) }}>
-            <span>Políticas de Privacidad</span>
-            <span>Términos del Servicio</span>
-          </span>
+          <span>© 2026 Weda. Todos los derechos reservados.</span>
         </div>
       </footer>
     </div>

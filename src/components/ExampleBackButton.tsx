@@ -4,6 +4,9 @@ import { ArrowLeft } from 'lucide-react';
 // Botón fijo para salir del ejemplo: el ejemplo se abre en una pestaña nueva y sus
 // pantallas no tienen otra forma de volver a la landing.
 export const ExampleBackButton: React.FC = () => {
+  // Dentro del marco de la landing ("Probalo como invitado") no hace falta volver
+  if (typeof window !== 'undefined' && window.self !== window.top) return null;
+
   const goToLanding = () => {
     window.location.href = window.location.pathname;
   };

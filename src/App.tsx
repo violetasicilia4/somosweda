@@ -12,6 +12,7 @@ import { CreateWeddingModal } from './components/CreateWeddingModal';
 import { DashboardView } from './components/DashboardView';
 import { MicrositeModal } from './components/MicrositeModal';
 import { ExampleView } from './components/ExampleView';
+import { FindCoupleView } from './components/FindCoupleView';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<AppView>('landing');
@@ -31,12 +32,13 @@ export default function App() {
   const [events, setEvents] = useState<WeddingEvent[]>(initialEvents);
   const [currentUser, setCurrentUser] = useState<{ name: string; email: string } | null>(null);
 
-  // "Ver mi web" siempre abre el micrositio real (misma vista que verán los invitados),
+  // "Ver tu lista" abre la página de ejemplo (la vista que ven los invitados),
   // nunca una simulación o preview dentro del dashboard.
-  const handleOpenExample = () => {
+  const handleOpenExample = (screen?: 'home' | 'gifts' | 'rsvp') => {
     if (typeof window === 'undefined') return;
     try {
-      window.open(`${window.location.origin}${window.location.pathname}?example=1`, '_blank');
+      const suffix = screen && screen !== 'home' ? `&screen=${screen}` : '';
+      window.open(`${window.location.origin}${window.location.pathname}?example=1${suffix}`, '_blank');
     } catch (err) {
       console.warn('Could not open example tab:', err);
     }
@@ -151,6 +153,13 @@ export default function App() {
       <div className="flex-1 flex flex-col">
         {currentView === 'landing' && (
           <LandingView
+            onNavigate={(view) => setCurrentView(view)}
+            onOpenExample={handleOpenExample}
+          />
+        )}
+
+        {currentView === 'find-couple' && (
+          <FindCoupleView
             onNavigate={(view) => setCurrentView(view)}
             onOpenExample={handleOpenExample}
           />

@@ -5,17 +5,23 @@ export type AppView =
   | 'forgot-password'
   | 'verify-pin'
   | 'reset-password'
+  | 'find-couple'
   | 'create-wedding'
   | 'dashboard';
 
 export type DashboardTab =
+  | 'inicio'
   | 'regalos'
-  | 'micrositio'
-  | 'recibidos'
   | 'invitados'
-  | 'plan'
-  | 'cuenta'
-  | 'ayuda';
+  | 'sitio'
+  | 'ayuda'
+  | 'cuenta';
+
+// Subsecciones de las pantallas con pestañas internas
+export type RegalosSection = 'lista' | 'recibidos';
+export type CuentaSection = 'datos' | 'cobro' | 'duracion';
+
+export type DurationMonths = 6 | 12 | 24;
 
 export interface WeddingData {
   coupleName: string;
@@ -40,7 +46,8 @@ export interface WeddingData {
   mercadoPagoCvu?: string;
   mercadoPagoLink?: string;
   isPaymentConfigured?: boolean;
-  selectedPlan?: 'essential' | 'premium' | 'signature';
+  durationMonths?: DurationMonths;
+  publishedAt?: string;
   designTheme?: 'editorial' | 'romantico' | 'minimal' | 'clasico';
   colorPalette?: 'lino' | 'champagne' | 'bosque' | 'salvia';
   typography?: 'serif' | 'sans' | 'editorial';
@@ -105,23 +112,4 @@ export interface WeddingEvent {
   address: string;
   description: string;
   iconType: 'church' | 'civil' | 'party' | 'ring';
-}
-
-export interface PricingPlan {
-  id: 'essential' | 'premium' | 'signature';
-  name: string;
-  badge?: string;
-  tagline: string;
-  headline?: string;
-  description?: string;
-  decisionCriteria?: string;
-  previewImage?: string;
-  previewAlt?: string;
-  signatureExperiences?: string[];
-  experienceType: string;
-  price: string;
-  features: string[];
-  micrositeFeatures: string[];
-  extraHighlights?: string[];
-  recommended?: boolean;
 }

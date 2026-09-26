@@ -15,7 +15,11 @@ const heroButton =
   'uppercase text-white border border-white/80 hover:bg-white/10 transition-colors cursor-pointer whitespace-nowrap';
 
 export const ExampleView: React.FC = () => {
-  const [screen, setScreen] = useState<'home' | 'gifts' | 'rsvp'>('home');
+  const [screen, setScreen] = useState<'home' | 'gifts' | 'rsvp'>(() => {
+    if (typeof window === 'undefined') return 'home';
+    const requested = new URLSearchParams(window.location.search).get('screen');
+    return requested === 'gifts' || requested === 'rsvp' ? requested : 'home';
+  });
 
   if (screen === 'gifts') {
     return (
@@ -71,7 +75,7 @@ export const ExampleView: React.FC = () => {
               className={heroButton}
               style={{ fontFamily: SANS, fontSize: u(10.5), height: u(30), padding: `0 ${u(16.5)}` }}
             >
-              Invitacion
+              Información
             </button>
             <button
               id="example-confirmar-btn"

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { GiftItem, WeddingData } from '../../types';
 import { suggestedGiftsByCategory } from '../../data/initialData';
+import { formatLongDate } from '../../utils/format';
 import {
   Plus,
   Trash2,
@@ -41,11 +42,11 @@ interface CategoryMeta {
 
 const REGISTRY_CATEGORIES: CategoryMeta[] = [
   { id: 'Luna de miel', name: 'Luna de miel', icon: Plane, examples: 'Pasajes, hotel, excursiones, cena romántica' },
+  { id: 'Proyectos futuros', name: 'Proyectos futuros', icon: PiggyBank, examples: 'Casa propia, remodelación, fondo para lo que viene' },
+  { id: 'Regalos simbólicos', name: 'Regalos simbólicos', icon: Gem, examples: 'Un brindis, un café, flores, desde un monto chico' },
   { id: 'Casa y hogar', name: 'Casa y hogar', icon: Home, examples: 'Cafetera, vajilla, mesa comedor, sofá, sábanas' },
-  { id: 'La boda', name: 'La boda', icon: Gem, examples: 'Fotógrafo, barra de tragos, flores, música y DJ' },
   { id: 'Salidas y experiencias', name: 'Salidas y experiencias', icon: Compass, examples: 'Degustación de vinos, spa, cocina, velero' },
-  { id: 'Aporte libre', name: 'Aporte libre', icon: PiggyBank, examples: 'Aporte libre para el futuro, casa propia, remodelación' },
-];
+]
 
 export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
   wedding,
@@ -56,7 +57,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
   onOpenMicrosite,
 }) => {
   // Sin gate de cobro acá: la lista se arma entera sin CBU, alias ni Mercado Pago.
-  // Eso se pide recién al publicar la boda (ver el modal de publicación).
+  // Eso se pide recién al publicar la lista (ver el modal de publicación).
 
   // Category filter for the gift catalog
   const [selectedCategory, setSelectedCategory] = useState<string>('Luna de miel');
@@ -88,29 +89,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
     return gifts.some(g => g.title.toLowerCase().trim() === title.toLowerCase().trim());
   };
 
-  // Helper: natural readable wedding date
-  const formatWeddingDateNatural = (dateStr: string): string => {
-    try {
-      const parts = dateStr.split('-');
-      if (parts.length === 3) {
-        const year = parseInt(parts[0], 10);
-        const monthIndex = parseInt(parts[1], 10) - 1;
-        const day = parseInt(parts[2], 10);
-        const months = [
-          'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-        ];
-        if (monthIndex >= 0 && monthIndex < 12) {
-          return `${day} de ${months[monthIndex]} de ${year}`;
-        }
-      }
-      return dateStr;
-    } catch {
-      return dateStr;
-    }
-  };
-
-  const formattedDate = formatWeddingDateNatural(wedding.weddingDate);
+  const formattedDate = formatLongDate(wedding.weddingDate);
 
   // Share the real, working link to the gift list (opens straight on the "Regalos" screen)
   const handleSharePreview = () => {
@@ -258,18 +237,18 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             {wedding.status === 'PUBLICADO' ? (
               <>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Sitio Público en Vivo</span>
+                <span>Publicado</span>
               </>
             ) : (
               <>
                 <Lock className="w-3.5 h-3.5 text-amber-300" />
-                <span>Borrador Privado</span>
+                <span>Borrador · solo vos la ves</span>
               </>
             )}
           </div>
         </div>
 
-        {/* Bottom Hero Information + CTA: el "Ver mi lista" vive acá, con protagonismo real */}
+        {/* Bottom Hero Information + CTA: el "Ver tu lista" vive acá, con protagonismo real */}
         <div className="relative z-10 space-y-3">
           <div className="space-y-1.5">
             <span className="text-[11px] font-semibold uppercase tracking-wider text-white/60">
@@ -302,7 +281,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
               className="uppercase px-5 py-3 bg-white hover:bg-gray-100 text-gray-900 rounded-xl text-xs font-normal inline-flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer active:scale-[0.98]"
             >
               <ExternalLink className="w-4 h-4" />
-              <span>Ver mi lista</span>
+              <span>Ver tu lista</span>
             </button>
             <button
               type="button"
@@ -323,7 +302,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             </button>
           </div>
           <p className="text-[10px] text-white/50">
-            Así la ven tus invitados: la web pública real, no una simulación.
+            Vista de ejemplo de cómo la ven tus invitados.
           </p>
         </div>
       </div>

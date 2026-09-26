@@ -6,37 +6,33 @@ import {
   Users,
   User,
   HelpCircle,
-  HandHeart,
-  ExternalLink,
-  Sparkles,
+  Home,
   LogOut
 } from 'lucide-react';
+import { formatLongDate } from '../../utils/format';
 
 interface DashboardSidebarProps {
   activeTab: DashboardTab;
   onSelectTab: (tab: DashboardTab) => void;
   wedding: WeddingData;
   pendingReceivedCount: number;
-  onOpenMicrosite: () => void;
   onLogout: () => void;
 }
 
 type MenuItem = { id: DashboardTab; label: string; icon: React.ComponentType<{ className?: string }> };
 
-// Ordenado por relevancia emocional: primero los datos de la boda, después
-// lo que la pareja arma y disfruta, y por último lo genuinamente administrativo
-// (separado solo por un divisor visual, no por una etiqueta).
+// Jerarquía: Regalos es el producto (destacado). Invitados es soporte. Tu sitio, Ayuda y
+// Cuenta van separados y atenuados.
 const PRIMARY_ITEMS: MenuItem[] = [
-  { id: 'cuenta', label: 'Mi Boda', icon: User },
-  { id: 'regalos', label: 'Lista de Regalos', icon: Gift },
-  { id: 'recibidos', label: 'Regalos recibidos', icon: HandHeart },
-  { id: 'micrositio', label: 'Micrositio', icon: Layout },
-  { id: 'invitados', label: 'Invitados & RSVP', icon: Users },
+  { id: 'inicio', label: 'Inicio', icon: Home },
+  { id: 'regalos', label: 'Regalos', icon: Gift },
+  { id: 'invitados', label: 'Invitados', icon: Users },
 ];
 
 const SECONDARY_ITEMS: MenuItem[] = [
-  { id: 'plan', label: 'Plan y Facturación', icon: Sparkles },
+  { id: 'sitio', label: 'Tu sitio', icon: Layout },
   { id: 'ayuda', label: 'Ayuda', icon: HelpCircle },
+  { id: 'cuenta', label: 'Cuenta', icon: User },
 ];
 
 export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
@@ -44,24 +40,28 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   onSelectTab,
   wedding,
   pendingReceivedCount,
-  onOpenMicrosite,
   onLogout,
 }) => {
-  const renderItem = (item: MenuItem) => {
+  const renderItem = (item: MenuItem, muted = false) => {
     const Icon = item.icon;
     const isActive = activeTab === item.id;
-    const showBadge = item.id === 'recibidos' && pendingReceivedCount > 0;
+    const isHero = item.id === 'regalos';
+    const showBadge = item.id === 'regalos' && pendingReceivedCount > 0;
+    const size = isHero ? 'py-3.5 text-sm font-semibold' : muted ? 'py-2 text-[11px] font-normal' : 'py-2.5 text-xs font-normal';
+    const tone = isActive
+      ? 'bg-gray-900 text-white shadow-2xs'
+      : isHero
+        ? 'bg-gray-100 text-gray-900 hover:bg-gray-200/70'
+        : muted
+          ? 'text-gray-400 hover:text-gray-700 hover:bg-gray-100/80'
+          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80';
     return (
       <button
         key={item.id}
         onClick={() => onSelectTab(item.id)}
-        className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-normal uppercase transition-all text-left cursor-pointer ${
-          isActive
-            ? 'bg-gray-900 text-white shadow-2xs'
-            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
-        }`}
+        className={`w-full flex items-center gap-3 px-3.5 rounded-xl uppercase transition-all text-left cursor-pointer ${size} ${tone}`}
       >
-        <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-gray-400'}`} />
+        <Icon className={`${isHero ? 'w-5 h-5' : 'w-4 h-4'} shrink-0 ${isActive ? 'text-white' : isHero ? 'text-gray-900' : 'text-gray-400'}`} />
         <span className="flex-1 truncate">{item.label}</span>
         {showBadge && (
           <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 ${
@@ -90,42 +90,31 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
             <span className="text-xs font-bold text-gray-900 truncate">
               {wedding.coupleName}
             </span>
-            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" title="Borrador activo" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" title={wedding.status === 'PUBLICADO' ? 'Publicado' : 'Borrador'} />
           </div>
           <p className="text-[11px] text-gray-500 truncate">
-            {wedding.weddingDate}
+            {formatLongDate(wedding.weddingDate)}
           </p>
         </div>
       </div>
 
       {/* NAVIGATION MENU */}
       <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
-        {PRIMARY_ITEMS.map(renderItem)}
+        {PRIMARY_ITEMS.map((i) => renderItem(i))}
 
         <div className="pt-3 mt-2 border-t border-gray-100 space-y-1">
-          {SECONDARY_ITEMS.map(renderItem)}
+          {SECONDARY_ITEMS.map((i) => renderItem(i, true))}
         </div>
       </nav>
 
       {/* FOOTER ACTIONS */}
-      <div className="p-4 border-t border-gray-100 space-y-2">
-        <button
-          onClick={onOpenMicrosite}
-          className="uppercase w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-normal text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors cursor-pointer"
-        >
-          <span className="flex items-center gap-2">
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span>Ver micrositio</span>
-          </span>
-          <ExternalLink className="w-3.5 h-3.5 text-gray-400" />
-        </button>
-
+      <div className="p-4 border-t border-gray-100">
         <button
           onClick={onLogout}
           className="uppercase w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-normal text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
         >
           <LogOut className="w-3.5 h-3.5" />
-          <span>Volver al inicio</span>
+          <span>Salir</span>
         </button>
       </div>
     </aside>

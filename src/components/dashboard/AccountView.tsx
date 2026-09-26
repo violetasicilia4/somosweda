@@ -1,20 +1,31 @@
 import React, { useState } from 'react';
-import { WeddingData, DashboardTab } from '../../types';
-import { pricingPlans } from '../../data/initialData';
-import { Check, ArrowRight, Sparkles } from 'lucide-react';
+import { WeddingData, CuentaSection } from '../../types';
+import { Check } from 'lucide-react';
+import { formatLongDate } from '../../utils/format';
+import { CobrosView } from './CobrosView';
+import { DurationView } from './DurationView';
 
 interface AccountViewProps {
   wedding: WeddingData;
   onUpdateWedding: (updated: Partial<WeddingData>) => void;
-  onNavigateTab: (tab: DashboardTab) => void;
+  section: CuentaSection;
+  onSectionChange: (section: CuentaSection) => void;
+  onPublish: () => void;
 }
+
+const SECTIONS: { id: CuentaSection; label: string }[] = [
+  { id: 'datos', label: 'Datos de la boda' },
+  { id: 'cobro', label: 'Cuenta de cobro' },
+  { id: 'duracion', label: 'Duración' },
+];
 
 export const AccountView: React.FC<AccountViewProps> = ({
   wedding,
   onUpdateWedding,
-  onNavigateTab,
+  section,
+  onSectionChange,
+  onPublish,
 }) => {
-  const currentPlan = pricingPlans.find(p => p.id === (wedding.selectedPlan || 'premium')) || pricingPlans[1];
   const [partner1, setPartner1] = useState(wedding.partner1);
   const [partner2, setPartner2] = useState(wedding.partner2);
   const [weddingDate, setWeddingDate] = useState(wedding.weddingDate);
@@ -37,15 +48,39 @@ export const AccountView: React.FC<AccountViewProps> = ({
   };
 
   return (
-    <div className="space-y-6 animate-fade-in max-w-2xl">
+    <div className="space-y-6 animate-fade-in max-w-3xl">
       <div>
         <h2 className="text-2xl sm:text-3xl font-normal text-gray-900">
-          Mi Boda
+          Cuenta
         </h2>
         <p className="text-sm text-gray-500 mt-1">
-          El perfil de su boda: quiénes son, cuándo y dónde, y qué plan tienen elegido.
+          Los datos de tu boda, dónde recibís el dinero y por cuánto tiempo está activa tu lista.
         </p>
       </div>
+
+      <div className="flex items-center gap-6 border-b border-gray-200 overflow-x-auto">
+        {SECTIONS.map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            onClick={() => onSectionChange(t.id)}
+            className={`pb-3.5 text-xs font-normal uppercase transition-all cursor-pointer whitespace-nowrap ${
+              section === t.id ? 'text-gray-900 border-b-2 border-gray-900' : 'text-gray-500 hover:text-gray-800'
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {section === 'cobro' && <CobrosView wedding={wedding} onUpdateWedding={onUpdateWedding} hideTitle />}
+
+      {section === 'duracion' && (
+        <DurationView wedding={wedding} onUpdateWedding={onUpdateWedding} onPublish={onPublish} />
+      )}
+
+      {section === 'datos' && (
+        <>
 
       {/* PROFILE HEADER */}
       <div className="bg-white rounded-2xl border border-gray-200 p-5 shadow-xs flex items-center gap-4">
@@ -58,7 +93,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
         <div className="min-w-0 flex-1">
           <h3 className="text-base font-bold text-gray-900 truncate">{wedding.coupleName}</h3>
           <p className="text-xs text-gray-500 truncate">
-            {wedding.weddingDate} · {wedding.venue}
+            {formatLongDate(wedding.weddingDate)}{wedding.venue ? ` · ${wedding.venue}` : ''}
           </p>
         </div>
         <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-full shrink-0 ${
@@ -82,7 +117,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1">
-                Novia / Novio 1
+                Nombre 1
               </label>
               <input
                 type="text"
@@ -95,7 +130,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
 
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1">
-                Novia / Novio 2
+                Nombre 2
               </label>
               <input
                 type="text"
@@ -113,7 +148,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
                 Fecha de la boda
               </label>
               <input
-                type="text"
+                type="date"
                 required
                 value={weddingDate}
                 onChange={(e) => setWeddingDate(e.target.value)}
@@ -159,33 +194,8 @@ export const AccountView: React.FC<AccountViewProps> = ({
         </form>
       </div>
 
-      {/* TU PLAN */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gray-100 text-gray-700 flex items-center justify-center shrink-0">
-              <Sparkles className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="text-[11px] uppercase font-bold tracking-wider text-gray-400 block">
-                Tu plan
-              </span>
-              <h3 className="text-base font-bold text-gray-900">
-                {currentPlan.name} — {currentPlan.price}
-              </h3>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => onNavigateTab('plan')}
-            className="uppercase px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-800 rounded-xl text-xs sm:text-xs font-normal cursor-pointer inline-flex items-center gap-1.5 transition-colors shrink-0"
-          >
-            <span>Ver comparativa de planes</span>
-            <ArrowRight className="w-3.5 h-3.5 text-gray-400" />
-          </button>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };

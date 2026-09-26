@@ -1,4 +1,4 @@
-import { WeddingData, Guest, GiftItem, WeddingEvent, PricingPlan, ReceivedGift, WeddingTable } from '../types';
+import { WeddingData, Guest, GiftItem, WeddingEvent, ReceivedGift, WeddingTable } from '../types';
 
 // Fotos de portada curadas, usadas en el paso "Foto principal" del onboarding
 // y en el editor de portada del Micrositio.
@@ -52,7 +52,7 @@ export const initialWedding: WeddingData = {
   mercadoPagoCvu: '0000003100088219401222',
   mercadoPagoLink: 'https://mpago.la/pos/boda-milagros-juan',
   isPaymentConfigured: true,
-  selectedPlan: 'premium',
+  durationMonths: 12,
 };
 
 export const initialGuests: Guest[] = [
@@ -221,103 +221,19 @@ export const initialEvents: WeddingEvent[] = [
   },
 ];
 
-export const pricingPlans: PricingPlan[] = [
-  {
-    id: 'essential',
-    name: 'Essential',
-    headline: 'La invitación digital para tu boda.',
-    description: 'Ideal para parejas que buscan una experiencia simple, elegante y fácil de compartir.',
-    decisionCriteria: 'Si solo necesitás una invitación digital elegante.',
-    tagline: 'Simple, elegante y fácil de compartir.',
-    experienceType: 'Experiencia base',
-    price: 'AR$ 95.000',
-    previewImage: 'https://images.unsplash.com/photo-1544078751-58fee2d8a03b?auto=format&fit=crop&w=600&q=80',
-    previewAlt: 'Boda íntima y elegante con papelería cuidada',
-    features: [
-      'Invitación digital elegante y fácil de enviar por WhatsApp',
-      'Recibí respuestas sin perseguir invitados (RSVP directo)',
-      'Cuenta regresiva e historia de su relación',
-      'Regalos directo a tu cuenta bancaria (0% comisión)',
-    ],
-    micrositeFeatures: [
-      'Invitación digital adaptable a cualquier celular',
-      'Recibí confirmaciones simples de tus invitados',
-      'Cuenta regresiva con foto de portada y su historia',
-      'Ubicación y mapa interactivo del evento principal',
-    ],
-    extraHighlights: [
-      'Probá todas las funciones antes de publicar',
-      'Sin vencimiento durante la organización',
-    ],
-  },
-  {
-    id: 'premium',
-    name: 'Premium',
-    badge: 'MÁS ELEGIDO',
-    headline: 'La forma más simple de organizar invitados.',
-    description: 'Todo lo que necesitás para gestionar confirmaciones, eventos y regalos desde un solo lugar.',
-    decisionCriteria: 'Si querés gestionar invitados y confirmaciones.',
-    tagline: 'La forma más simple de organizar invitados.',
-    experienceType: 'Experiencia extendida',
-    price: 'AR$ 180.000',
-    previewImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80',
-    previewAlt: 'Boda moderna con interacción de invitados y brindis',
-    recommended: true,
-    features: [
-      'Recibí respuestas sin perseguir invitados (menú y dietas)',
-      'Civil, ceremonia, fiesta y after party en un mismo lugar',
-      'Compartí recuerdos antes y después de la boda',
-      'Toda la información que tus invitados necesitan',
-      'Lista de regalos fraccionada para luna de miel',
-    ],
-    micrositeFeatures: [
-      'Civil, ceremonia, fiesta y after party en un mismo lugar',
-      'Recibí respuestas sin perseguir invitados (menú, dietas y WhatsApp)',
-      'Compartí recuerdos antes y después de la boda con fotos de invitados',
-      'Toda la información que tus invitados necesitan (dress code, horarios, clima)',
-    ],
-    extraHighlights: [
-      'Acompañantes y familias agrupadas con 1 click',
-      'Regalos fraccionados tipo "Luna de Miel" o proyectos',
-    ],
-  },
-  {
-    id: 'signature',
-    name: 'Signature',
-    badge: 'EXPERIENCIA A MEDIDA',
-    headline: 'Una experiencia completamente personalizada.',
-    description: 'Diseño, personalización y acompañamiento para bodas que buscan algo único.',
-    decisionCriteria: 'Si buscás una experiencia completamente personalizada.',
-    tagline: 'Diseño, personalización y acompañamiento único.',
-    experienceType: 'Experiencia a medida',
-    price: 'AR$ 320.000',
-    previewImage: 'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=600&q=80',
-    previewAlt: 'Celebración boutique de alta gama personalizada',
-    signatureExperiences: [
-      'Dominio personalizado (tu boda en milagrosyjuan.com)',
-      'Diseño a medida con tipografías y estética curada',
-      'Distribución interactiva de mesas para invitados',
-      'Muro interactivo con fotos y dedicatorias en vivo',
-      'Soporte y asesor personal dedicado 1 a 1',
-    ],
-    features: [
-      'Dominio personalizado propio (milagrosyjuan.com)',
-      'Diseño y tipografías a medida curadas por diseñador Weda',
-      'Distribución de mesas y asientos para invitados',
-      'Muro interactivo con recuerdos proyectados en la fiesta',
-      'Acompañamiento VIP dedicado de principio a fin',
-    ],
-    micrositeFeatures: [
-      'Dominio web propio exclusivo (milagrosyjuan.com)',
-      'Diseño a medida curado por diseñadores de Weda',
-      'Distribución de mesas para que cada invitado sepa dónde sentarse',
-      'Muro interactivo con fotos y dedicatorias en vivo en la fiesta',
-    ],
-    extraHighlights: [
-      'Soporte dedicado 1 a 1 para armar y cargar todo por vos',
-      'Acompañamiento prioritario en cada etapa de tu boda',
-    ],
-  },
+// Modelo comercial: un solo producto con todo incluido. Se paga una vez, al publicar,
+// según cuánto tiempo se quiere mantener activo el sitio. Precios iniciales a validar.
+export interface DurationOption {
+  months: 6 | 12 | 24;
+  price: number;
+  note: string;
+  recommended?: boolean;
+}
+
+export const durationOptions: DurationOption[] = [
+  { months: 6, price: 95000, note: 'Alcanza si publicás cerca de la fecha' },
+  { months: 12, price: 140000, note: 'Cubre antes, durante y después de la boda', recommended: true },
+  { months: 24, price: 220000, note: 'Para conservar tu lista y sus recuerdos' },
 ];
 
 export const suggestedGiftsByCategory: Record<string, Omit<GiftItem, 'id'>[]> = {
@@ -399,44 +315,44 @@ export const suggestedGiftsByCategory: Record<string, Omit<GiftItem, 'id'>[]> = 
       description: 'Juego de ollas y sartenes duraderas para cocinar de todo.',
       targetPrice: 120000,
       category: 'Casa y hogar',
-      imageUrl: 'https://images.unsplash.com/photo-1584990347449-3893c52a0a38?auto=format&fit=crop&w=600&q=80',
+      imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=600&q=80',
     },
   ],
-  'La boda': [
+  'Regalos simbólicos': [
     {
-      title: 'Fotógrafo de la boda',
-      description: 'Aporte para la cobertura fotográfica y los recuerdos de nuestro día.',
-      targetPrice: 150000,
-      category: 'La boda',
-      imageUrl: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=600&q=80',
+      title: 'Un brindis con espumante',
+      description: 'Una copa de espumante para brindar por nosotros.',
+      targetPrice: 20000,
+      category: 'Regalos simbólicos',
+      imageUrl: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=600&q=80',
     },
     {
-      title: 'Barra de tragos y coctelería',
-      description: 'Tragos de autor y coctelería libre para brindar toda la noche con ustedes.',
-      targetPrice: 120000,
-      category: 'La boda',
-      imageUrl: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80',
+      title: 'Un café de especialidad',
+      description: 'Para arrancar juntos cada mañana de casados.',
+      targetPrice: 15000,
+      category: 'Regalos simbólicos',
+      imageUrl: 'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?auto=format&fit=crop&w=600&q=80',
     },
     {
-      title: 'Flores y ambientación de la fiesta',
-      description: 'Ramos, centros de mesa e iluminación para vestir el salón.',
-      targetPrice: 90000,
-      category: 'La boda',
+      title: 'Flores para nuestro hogar',
+      description: 'Un ramo para estrenar la casa con algo lindo.',
+      targetPrice: 30000,
+      category: 'Regalos simbólicos',
       imageUrl: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=600&q=80',
     },
     {
-      title: 'Música y DJ de la fiesta',
-      description: 'La música para bailar hasta el amanecer y festejar sin parar.',
-      targetPrice: 110000,
-      category: 'La boda',
+      title: 'Una canción para bailar',
+      description: 'Para seguir bailando después de la fiesta.',
+      targetPrice: 25000,
+      category: 'Regalos simbólicos',
       imageUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=600&q=80',
     },
     {
-      title: 'Brindis con espumante',
-      description: 'Copas de espumante para el momento más emocionante de la noche.',
-      targetPrice: 60000,
-      category: 'La boda',
-      imageUrl: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=600&q=80',
+      title: 'Un recuerdo en fotos',
+      description: 'Para revelar y enmarcar los mejores momentos.',
+      targetPrice: 40000,
+      category: 'Regalos simbólicos',
+      imageUrl: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=600&q=80',
     },
   ],
   'Salidas y experiencias': [
@@ -476,33 +392,33 @@ export const suggestedGiftsByCategory: Record<string, Omit<GiftItem, 'id'>[]> = 
       imageUrl: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=600&q=80',
     },
   ],
-  'Aporte libre': [
+  'Proyectos futuros': [
     {
-      title: 'Aporte libre para nuestro futuro',
-      description: 'Aporte económico para acompañarnos en esta nueva etapa juntos.',
+      title: 'Un regalo para nuestro futuro',
+      description: 'Para acompañarnos en esta nueva etapa juntos.',
       targetPrice: 50000,
-      category: 'Aporte libre',
+      category: 'Proyectos futuros',
       imageUrl: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=600&q=80',
     },
     {
-      title: 'Fondo para la casa propia',
+      title: 'Para nuestra casa propia',
       description: 'Ayudanos a dar los primeros pasos hacia nuestro hogar definitivo.',
       targetPrice: 150000,
-      category: 'Aporte libre',
+      category: 'Proyectos futuros',
       imageUrl: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80',
     },
     {
-      title: 'Fondo para remodelar la cocina',
+      title: 'Para remodelar la cocina',
       description: 'Para poner a punto el corazón de nuestro hogar.',
       targetPrice: 100000,
-      category: 'Aporte libre',
+      category: 'Proyectos futuros',
       imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=600&q=80',
     },
     {
-      title: 'Fondo para nuestra luna de miel',
-      description: 'Aporte para sumar a los gastos y actividades durante el viaje.',
+      title: 'Para nuestra luna de miel',
+      description: 'Para sumar a los gastos y actividades durante el viaje.',
       targetPrice: 80000,
-      category: 'Aporte libre',
+      category: 'Proyectos futuros',
       imageUrl: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=600&q=80',
     },
   ],

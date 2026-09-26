@@ -10,14 +10,15 @@ interface AuthViewsProps {
 
 export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, onAuthSuccess }) => {
   // Shared state
-  const [email, setEmail] = useState('tu@email.com');
-  const [fullName, setFullName] = useState('Martina García');
-  const [password, setPassword] = useState('••••••••••••');
-  const [confirmPassword, setConfirmPassword] = useState('••••••••••••');
-  const [acceptedTerms, setAcceptedTerms] = useState(true);
-  const [pinDigits, setPinDigits] = useState(['4', '8', '2', '', '', '']);
+  const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [pinDigits, setPinDigits] = useState(['', '', '', '', '', '']);
   const [pinError, setPinError] = useState('');
   const [notice, setNotice] = useState('');
+  const [formError, setFormError] = useState('');
 
   // Refs for 6-digit pin input
   const pinRefs = [
@@ -58,10 +59,19 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
 
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!acceptedTerms) {
-      alert('Por favor aceptá los términos y condiciones para continuar.');
+    if (password.length < 8) {
+      setFormError('La contraseña tiene que tener al menos 8 caracteres.');
       return;
     }
+    if (password !== confirmPassword) {
+      setFormError('Las contraseñas no coinciden.');
+      return;
+    }
+    if (!acceptedTerms) {
+      setFormError('Aceptá los términos y condiciones para continuar.');
+      return;
+    }
+    setFormError('');
     onAuthSuccess({ name: fullName, email });
     onNavigate('create-wedding');
   };
@@ -98,6 +108,12 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
             Weda
           </button>
         </div>
+
+        {formError && (
+          <div className="mb-6 p-3 bg-rose-50 border border-rose-200 rounded-lg text-xs text-rose-700 text-center font-medium" role="alert">
+            {formError}
+          </div>
+        )}
 
         {notice && (
           <div className="mb-6 p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-xs text-emerald-800 text-center font-medium">
@@ -148,7 +164,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••••"
+                  placeholder="Tu contraseña"
                   className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
@@ -222,7 +238,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
           <div>
             <div className="text-center mb-6">
               <h1 className="text-xl font-normal text-gray-900 mb-1">Creá tu cuenta</h1>
-              <p className="text-xs sm:text-sm text-gray-500">Comenzá a organizar tu evento.</p>
+              <p className="text-xs sm:text-sm text-gray-500">Armá tu lista de regalos para tu casamiento.</p>
             </div>
 
             <form onSubmit={handleRegisterSubmit} className="space-y-3.5">
@@ -236,7 +252,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   required
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Ej. Martina García"
+                  placeholder="Nombre y apellido"
                   className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
@@ -321,7 +337,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
               <button
                 type="button"
                 onClick={() => {
-                  onAuthSuccess({ name: 'Martina García', email: 'martina.g@gmail.com' });
+                  onAuthSuccess({ name: 'Milagros', email: 'milagros@gmail.com' });
                   onNavigate('create-wedding');
                 }}
                 className="uppercase w-full py-2.5 px-4 border border-gray-300 rounded-lg text-xs sm:text-xs font-normal text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors cursor-pointer"
@@ -338,7 +354,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
               <button
                 type="button"
                 onClick={() => {
-                  onAuthSuccess({ name: 'Martina García', email: 'martina.g@icloud.com' });
+                  onAuthSuccess({ name: 'Milagros', email: 'milagros@icloud.com' });
                   onNavigate('create-wedding');
                 }}
                 className="uppercase w-full py-2.5 px-4 border border-gray-300 rounded-lg text-xs sm:text-xs font-normal text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors cursor-pointer"
@@ -491,7 +507,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   id="reset-new-password"
                   type="password"
                   required
-                  placeholder="••••••••••••"
+                  placeholder="Tu contraseña"
                   className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
@@ -504,7 +520,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   id="reset-confirm-password"
                   type="password"
                   required
-                  placeholder="••••••••••••"
+                  placeholder="Tu contraseña"
                   className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>

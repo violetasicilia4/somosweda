@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { formatLongDate } from '../../utils/format';
 import { Guest, WeddingData, WeddingTable } from '../../types';
 import { initialTables } from '../../data/initialData';
 import { 
@@ -123,7 +124,7 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
   const handleSendWhatsApp = (guest: Guest) => {
     const isPending = guest.status === 'pendiente';
     const text = isPending
-      ? `¡Hola ${guest.fullName}! Te recordamos confirmar tu asistencia para la boda de ${wedding.coupleName} el ${wedding.weddingDate} en: https://weda.app/boda/${wedding.slug}. ¡Nos encantaría contar con tu presencia!`
+      ? `¡Hola ${guest.fullName}! Te recordamos confirmar tu asistencia para la boda de ${wedding.coupleName} el ${formatLongDate(wedding.weddingDate)} en: https://weda.app/boda/${wedding.slug}. ¡Nos encantaría contar con tu presencia!`
       : `¡Hola ${guest.fullName}! Te compartimos los detalles de nuestra boda (${wedding.coupleName}) en: https://weda.app/boda/${wedding.slug}`;
     const url = guest.phone 
       ? `https://wa.me/${guest.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(text)}`
@@ -137,10 +138,10 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl sm:text-3xl font-normal text-gray-900">
-            Invitados & Mesas
+            Invitados
           </h2>
           <p className="text-sm text-gray-500 mt-1">
-            Gestioná la lista completa, el seguimiento de confirmaciones RSVP, distribución de mesas y dietas especiales.
+            Tus invitaciones, sus confirmaciones, dietas y mesas.
           </p>
         </div>
 
@@ -149,11 +150,11 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
           className="uppercase px-4 py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs sm:text-xs font-normal flex items-center gap-2 cursor-pointer shadow-xs transition-colors self-start sm:self-auto"
         >
           <UserPlus className="w-4 h-4" />
-          <span>+ Agregar invitado</span>
+          <span>Agregar invitado</span>
         </button>
       </div>
 
-      {/* INTERNAL TABS: 1. Invitados & RSVP | 2. Mesas */}
+      {/* INTERNAL TABS: 1. Lista | 2. Mesas */}
       <div className="flex border-b border-gray-200 gap-8 overflow-x-auto">
         <button
           onClick={() => setInternalTab('lista')}
@@ -163,7 +164,7 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
               : 'text-gray-500 hover:text-gray-800'
           }`}
         >
-          <span>Invitados & RSVP</span>
+          <span>Lista</span>
           <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-gray-100 text-gray-700">
             {guests.length}
           </span>
@@ -177,12 +178,9 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
               : 'text-gray-500 hover:text-gray-800'
           }`}
         >
-          <span>Distribución de Mesas</span>
+          <span>Mesas</span>
           <span className="px-2 py-0.5 rounded-full text-xs font-normal text-gray-400">
             ({tables.length})
-          </span>
-          <span className="text-[9px] font-bold uppercase tracking-wide text-violet-700 bg-violet-50 px-1.5 py-0.5 rounded">
-            Desde Signature
           </span>
         </button>
       </div>
@@ -194,12 +192,12 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-2xs">
               <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 block">
-                Total invitados
+                Invitados
               </span>
               <span className="text-xl sm:text-2xl font-bold text-gray-900 mt-1 block font-mono">
                 {totalGuestsAndCompanions}
               </span>
-              <span className="text-[11px] text-gray-500 mt-0.5 block">{guests.length} titulares</span>
+              <span className="text-[11px] text-gray-500 mt-0.5 block">{guests.length} invitaciones</span>
             </div>
 
             <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-2xs">
@@ -219,7 +217,7 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
               <span className="text-xl sm:text-2xl font-bold text-amber-700 mt-1 block font-mono">
                 {pendingCount}
               </span>
-              <span className="text-[11px] text-gray-500 mt-0.5 block">Por responder</span>
+              <span className="text-[11px] text-gray-500 mt-0.5 block">Invitaciones por responder</span>
             </div>
 
             <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-2xs">
@@ -229,7 +227,7 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
               <span className="text-xl sm:text-2xl font-bold text-gray-400 mt-1 block font-mono">
                 {declinedCount}
               </span>
-              <span className="text-[11px] text-gray-500 mt-0.5 block">Rechazados</span>
+              <span className="text-[11px] text-gray-500 mt-0.5 block">Invitaciones</span>
             </div>
           </div>
 
@@ -251,13 +249,13 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
                 onClick={() => setStatusFilter('all')}
                 className={`uppercase px-2.5 py-1 rounded-lg text-xs font-normal cursor-pointer ${ statusFilter === 'all' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }`}
               >
-                Todos ({guests.length})
+                Todas ({guests.length})
               </button>
               <button
                 onClick={() => setStatusFilter('confirmado')}
                 className={`uppercase px-2.5 py-1 rounded-lg text-xs font-normal cursor-pointer ${ statusFilter === 'confirmado' ? 'bg-emerald-700 text-white' : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100' }`}
               >
-                Confirmados ({confirmedCount})
+                Confirmadas ({confirmedCount})
               </button>
               <button
                 onClick={() => setStatusFilter('pendiente')}
@@ -390,7 +388,7 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
             <div>
               <h3 className="text-lg font-bold text-gray-900">Distribución de Mesas</h3>
               <p className="text-xs text-gray-500">
-                Organizá a los invitados confirmados por afinidad familiar y de amigos.
+                Asigná a los invitados confirmados a cada mesa.
               </p>
             </div>
 
@@ -466,7 +464,7 @@ export const GuestManagementView: React.FC<GuestManagementViewProps> = ({
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-gray-100 animate-fade-in space-y-4">
             <div className="flex justify-between items-center pb-2 border-b border-gray-100">
-              <h3 className="font-bold text-base text-gray-900">+ Agregar invitado</h3>
+              <h3 className="font-bold text-base text-gray-900">Agregar invitado</h3>
               <button 
                 onClick={() => setIsAddGuestModalOpen(false)}
                 className="text-gray-400 hover:text-gray-700 text-xs font-semibold p-1"

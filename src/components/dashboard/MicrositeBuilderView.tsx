@@ -45,7 +45,7 @@ export interface MicrositeFeaturesState {
   guestInfo: boolean;      // Info para invitados (Dress code, hospedaje, mapa, transporte)
   gallery: boolean;        // Galería de fotos
   giftRegistry: boolean;   // Lista de regalos
-  rsvp: boolean;           // Confirmación de asistencia (RSVP)
+  rsvp: boolean;           // Confirmar asistencia
   music: boolean;          // Sugerir música para la fiesta
 }
 
@@ -226,29 +226,21 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-gray-100">
         <div className="space-y-1">
           <h1 className="text-2xl sm:text-3xl font-normal tracking-tight text-gray-900">
-            Micrositio
+            Tu sitio
           </h1>
           <p className="text-sm sm:text-base text-gray-500 font-normal leading-relaxed">
-            Diseñá la experiencia que verán tus invitados.
+            Opcional: ajustá cómo se ve la página que abren tus invitados. Tu lista de regalos ya está incluida.
           </p>
         </div>
 
         <div className="flex items-center gap-2.5 self-start sm:self-auto shrink-0">
-          <button
-            type="button"
-            onClick={onOpenMicrosite}
-            className="uppercase px-4 py-2.5 bg-white hover:bg-gray-100 text-gray-700 rounded-xl text-xs sm:text-xs font-normal border border-gray-200/90 transition-all shadow-2xs cursor-pointer inline-flex items-center gap-2"
-          >
-            <Eye className="w-4 h-4 text-gray-400" />
-            <span>Vista previa</span>
-          </button>
 
           <button
             type="button"
             onClick={onOpenMicrosite}
-            className="uppercase px-4 py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs sm:text-xs font-normal transition-all shadow-xs cursor-pointer inline-flex items-center gap-2 active:scale-[0.98]"
+            className="uppercase px-4 py-2.5 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 rounded-xl text-xs sm:text-xs font-normal transition-all cursor-pointer inline-flex items-center gap-2 active:scale-[0.98]"
           >
-            <span>Abrir sitio</span>
+            <span>Ver tu lista</span>
             <ExternalLink className="w-4 h-4" />
           </button>
         </div>
@@ -259,7 +251,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="space-y-0.5">
             <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
-              Progreso del micrositio
+              Progreso de tu sitio
             </span>
             <div className="text-sm font-bold text-gray-900 flex items-center gap-2">
               <span>Tu boda ya está tomando forma</span>
@@ -326,7 +318,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
             ) : (
               <span className="w-2 h-2 rounded-full border-2 border-gray-300" />
             )}
-            <span>RSVP</span>
+            <span>Confirmar asistencia</span>
           </div>
         </div>
       </div>
@@ -386,9 +378,6 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <Square className="w-3.5 h-3.5 text-gray-400" />
             )}
             <span>Cronograma de eventos</span>
-            <span className="text-[9px] font-bold uppercase tracking-wide text-violet-700 bg-violet-50 px-1.5 py-0.5 rounded">
-              Desde Premium
-            </span>
           </button>
 
           {/* 4. Info invitados */}
@@ -417,9 +406,6 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <Square className="w-3.5 h-3.5 text-gray-400" />
             )}
             <span>Galería de fotos</span>
-            <span className="text-[9px] font-bold uppercase tracking-wide text-violet-700 bg-violet-50 px-1.5 py-0.5 rounded">
-              Desde Premium
-            </span>
           </button>
 
           {/* 6. Lista de regalos */}
@@ -447,7 +433,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
             ) : (
               <Square className="w-3.5 h-3.5 text-gray-400" />
             )}
-            <span>Confirmación RSVP</span>
+            <span>Confirmar asistencia</span>
           </button>
 
           {/* 8. Sugerir música */}
@@ -1027,7 +1013,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   </div>
                   <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
                     <UserCheck className="w-4 h-4 text-gray-600" />
-                    <span>Confirmación de asistencia (RSVP)</span>
+                    <span>Confirmar asistencia</span>
                   </h3>
                 </div>
               </div>
@@ -1162,7 +1148,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
             </div>
             <div className="p-5 space-y-3 text-center">
               <p className="text-xs text-gray-500">
-                Este es el sitio real que van a ver sus invitados.
+                Así lo ven tus invitados (vista de ejemplo).
               </p>
               <button
                 type="button"
@@ -1170,7 +1156,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 className="uppercase w-full py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal inline-flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer"
               >
                 <ExternalLink className="w-4 h-4" />
-                <span>Ver mi web</span>
+                <span>Ver tu sitio</span>
               </button>
             </div>
           </div>

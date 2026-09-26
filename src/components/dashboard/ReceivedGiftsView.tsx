@@ -69,7 +69,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
       <div>
         <h2 className="text-2xl sm:text-3xl font-normal text-gray-900">Regalos recibidos</h2>
         <p className="text-sm text-gray-500 mt-1">
-          Seguimiento de aportes, dedicatorias y agradecimientos.
+          Seguimiento de regalos, dedicatorias y agradecimientos.
         </p>
       </div>
 
