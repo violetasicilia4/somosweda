@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AppView } from '../types';
 import { HeroVideo } from './HeroVideo';
 import {
   ExampleScreen,
-  Faq,
   GiftExamples,
   HappyCouples,
   HowItWorks,
   MoneyTrust,
 } from './LandingSections';
+import { Wordmark } from './Wordmark';
 
 interface LandingViewProps {
   onNavigate: (view: AppView) => void;
@@ -18,8 +18,6 @@ interface LandingViewProps {
 const SANS = "'Schibsted Grotesk', sans-serif";
 
 export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExample }) => {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-
   const onCreate = () => onNavigate('register');
 
   const scrollTo = (id: string) => {
@@ -37,12 +35,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
           <header className="sticky top-0 z-50 bg-white/75 backdrop-blur-md px-4 sm:px-8">
             <div className="max-w-5xl mx-auto h-14 sm:h-16 flex items-center justify-between">
               <div onClick={() => onNavigate('landing')} className="cursor-pointer flex items-center gap-3">
-                <span
-                  className="text-[28px] font-normal leading-normal uppercase text-[#2C1A0E]"
-                  style={{ fontFamily: SANS }}
-                >
-                  Weda
-                </span>
+                <Wordmark />
               </div>
 
               <div className="flex items-center gap-5 sm:gap-7">
@@ -99,7 +92,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
                 className="max-w-[560px] text-[clamp(13px,1.15vw,17px)] leading-snug text-[#F5F0EA]/90"
                 style={{ fontFamily: SANS, textShadow: '0 2px 8px rgba(0, 0, 0, 0.6)' }}
               >
-                Armá tu lista de regalos, recibí el dinero directo en tu cuenta por Mercado Pago o transferencia, sin comisión, y sabé quién te regaló qué.
+                Creá regalos para su luna de miel, su futura casa o cualquier proyecto que quieran construir juntos. Tus invitados eligen y regalan directo a tu cuenta, y vos sabés quién te regaló qué.
               </p>
               <div className="flex items-center gap-3">
                 <button
@@ -134,11 +127,8 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
           {/* 6. Prueba social */}
           <HappyCouples />
 
-          {/* 7. Preguntas frecuentes */}
-          <Faq openIndex={openFaq} onToggle={(i) => setOpenFaq(openFaq === i ? null : i)} />
-
           {/* 9. CTA final — foto a sangre completa con capa #1A0E08 al 60% */}
-          <section className="relative w-full min-h-[600px] flex flex-col justify-center items-center px-4 py-10 sm:px-[clamp(24px,8.33vw,120px)] sm:py-[clamp(40px,8.33vw,120px)] overflow-hidden">
+          <section className="relative w-full min-h-[440px] flex flex-col justify-center items-center px-4 py-8 sm:px-[clamp(24px,8.33vw,120px)] sm:py-[clamp(32px,5vw,72px)] overflow-hidden">
             <img
               src="/cta-manos.webp"
               alt="Manos de los novios entrelazadas junto a un ramo de flores blancas"
@@ -146,14 +136,14 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             />
             <div className="absolute inset-0" style={{ backgroundColor: 'rgba(26, 14, 8, 0.6)' }}></div>
 
-            <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center gap-12 text-center px-6 py-10 sm:px-14">
+            <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center gap-8 text-center px-6 py-6 sm:px-14">
               <div className="flex flex-col items-center gap-5">
-                <span className="text-[11px] font-normal uppercase tracking-[0.1em] text-[#F5F0EA]/80">Empezá hoy</span>
-                <h2 className="text-[clamp(30px,4.4vw,64px)] leading-[1.05] font-normal text-[#F5F0EA] max-w-[16ch] sm:max-w-[20ch] text-balance">
-                  Tu lista de regalos, lista en minutos.
+                <span className="text-[11px] font-normal uppercase tracking-[0.1em] text-[#F5F0EA]/80">Lo que viene después</span>
+                <h2 className="text-[clamp(30px,4.4vw,64px)] leading-[1.05] font-normal text-[#F5F0EA] max-w-[20ch] sm:max-w-[24ch] text-balance">
+                  El casamiento es el principio. Que su lista sea el primer paso.
                 </h2>
                 <p className="text-sm sm:text-base text-[#F5F0EA]/80 max-w-xl">
-                  Elegí qué quieren construir juntos, compartí un solo link y recibí los regalos directo en tu cuenta.
+                  La luna de miel, la casa, los proyectos que sueñan. Armen una lista que hable de ustedes.
                 </p>
               </div>
 
@@ -170,10 +160,12 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
           </section>
 
           {/* Footer */}
-          <footer className="relative bg-[#1A0E08] text-[#F7F1E4] px-4 sm:px-8 pt-16 pb-8 overflow-hidden">
+          <footer className="relative bg-[#1A0E08] text-[#F7F1E4] px-4 sm:px-8 pt-10 pb-6 overflow-hidden">
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 relative z-10">
               <div>
-                <span className="text-[28px] font-normal leading-normal uppercase block mb-3">Weda</span>
+                <div className="mb-3">
+                  <Wordmark tone="light" />
+                </div>
                 <p className="text-sm text-[#F7F1E4]/60 leading-relaxed max-w-sm">
                   Una lista de regalos moderna y premium para casamientos. Hecho en Argentina.
                 </p>
@@ -184,7 +176,6 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
                 <ul className="space-y-2.5 text-sm text-[#F7F1E4]/70">
                   <li><button onClick={() => scrollTo('como-funciona')} className="hover:text-white transition-colors cursor-pointer">Cómo funciona</button></li>
                   <li><button onClick={() => onOpenExample('gifts')} className="hover:text-white transition-colors cursor-pointer">Ver una lista de ejemplo</button></li>
-                  <li><button onClick={() => scrollTo('preguntas')} className="hover:text-white transition-colors cursor-pointer">Preguntas frecuentes</button></li>
                   <li><button onClick={onCreate} className="hover:text-white transition-colors cursor-pointer">Crear mi lista</button></li>
                 </ul>
               </div>
@@ -202,7 +193,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
 
             <span
               aria-hidden="true"
-              className="block relative z-0 text-center font-semibold uppercase leading-none text-[#F7F1E4]/[0.06] text-[22vw] mt-8 select-none pointer-events-none"
+              className="block relative z-0 text-center font-semibold uppercase leading-none text-[#F7F1E4]/[0.06] text-[22vw] mt-4 select-none pointer-events-none"
             >
               WEDA
             </span>

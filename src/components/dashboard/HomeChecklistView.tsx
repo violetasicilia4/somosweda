@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Check, Copy, ExternalLink, Lock, MessageCircle } from 'lucide-react';
-import { CuentaSection, DashboardTab, Guest, GiftItem, ReceivedGift, WeddingData } from '../../types';
+import { CuentaSection, DashboardTab, GiftItem, ReceivedGift, WeddingData } from '../../types';
 import { addMonths, formatARS, formatLongDate } from '../../utils/format';
 
 interface HomeChecklistViewProps {
   wedding: WeddingData;
   gifts: GiftItem[];
-  guests: Guest[];
   receivedGifts: ReceivedGift[];
   isPaymentConfigured: boolean;
   siteViewed: boolean;
@@ -32,7 +31,6 @@ const MIN_GIFTS = 5;
 export const HomeChecklistView: React.FC<HomeChecklistViewProps> = ({
   wedding,
   gifts,
-  guests,
   receivedGifts,
   isPaymentConfigured,
   siteViewed,
@@ -91,18 +89,9 @@ export const HomeChecklistView: React.FC<HomeChecklistViewProps> = ({
   const hasEventInfo = Boolean(wedding.venue?.trim() || wedding.address?.trim());
   const extras = [
     {
-      id: 'invitados',
-      title: 'Cargá tus invitados',
-      description: 'Sumalos para ver quién confirmó y quién ya regaló.',
-      detail: guests.length > 0 ? `${guests.length} ${guests.length === 1 ? 'invitación' : 'invitaciones'}` : undefined,
-      done: guests.length > 0,
-      cta: guests.length > 0 ? 'Editar' : 'Agregar invitados',
-      action: () => onGoTo('invitados'),
-    },
-    {
       id: 'evento',
       title: 'Sumá la información del evento',
-      description: 'Lugar, horarios y datos importantes para tus invitados.',
+      description: 'Lugar, horarios y datos importantes para quienes te regalan.',
       detail: undefined,
       done: hasEventInfo,
       cta: hasEventInfo ? 'Editar' : 'Agregar información',
@@ -125,7 +114,6 @@ export const HomeChecklistView: React.FC<HomeChecklistViewProps> = ({
     `Esta es nuestra lista de regalos. Elegí lo que quieras regalarnos: https://${siteUrl}`
   )}`;
 
-  const confirmed = guests.filter((g) => g.status === 'confirmado').length;
   const pendingThanks = receivedGifts.filter((r) => !r.isThanked).length;
   const totalReceived = receivedGifts.reduce((sum, r) => sum + r.amount, 0);
   const activeUntil =
@@ -204,11 +192,9 @@ export const HomeChecklistView: React.FC<HomeChecklistViewProps> = ({
               <span className="text-xs text-gray-500">regalos</span>
             </div>
             <div className="bg-white border border-gray-200 rounded-2xl p-5">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 block">Confirmaron</span>
-              <span className="text-2xl font-bold text-gray-900 mt-2 block">
-                {confirmed} de {guests.length}
-              </span>
-              <span className="text-xs text-gray-500">invitaciones</span>
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 block">En tu lista</span>
+              <span className="text-2xl font-bold text-gray-900 mt-2 block">{gifts.length}</span>
+              <span className="text-xs text-gray-500">regalos</span>
             </div>
           </div>
 

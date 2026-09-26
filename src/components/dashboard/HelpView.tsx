@@ -28,7 +28,7 @@ export const HelpView: React.FC = () => {
           Ayuda
         </h2>
         <p className="text-sm text-gray-500 mt-1">
-          Respondemos tus dudas sobre tu lista de regalos y tus invitados.
+          Respondemos tus dudas sobre tu lista de regalos.
         </p>
       </div>
 

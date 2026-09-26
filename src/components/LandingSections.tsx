@@ -2,13 +2,13 @@ import React from 'react';
 import {
   ArrowRight,
   Check,
-  ChevronDown,
+  Eye,
   Gift,
   Landmark,
+  Percent,
   PiggyBank,
   Users,
 } from 'lucide-react';
-import { durationOptions } from '../data/initialData';
 import { formatARS } from '../utils/format';
 
 const SANS = "'Schibsted Grotesk', sans-serif";
@@ -55,11 +55,11 @@ const circleImages = [
   { src: '/deseo-joyeria.png', pos: '50% 38%' },
   { src: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=400&q=80', pos: '50% 50%' },
   { src: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=80', pos: '50% 50%' },
-  { src: 'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?auto=format&fit=crop&w=400&q=80', pos: '50% 50%' },
+  { src: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=80', pos: '50% 50%' },
 ];
 
 const VisualWishes: React.FC = () => (
-  <div className="rounded-[6px] bg-[#E9DFD3] p-4 h-[300px] grid grid-cols-3 gap-2 place-content-center justify-items-center [container-type:inline-size]">
+  <div className="rounded-[6px] bg-[#E9DFD3] p-4 h-[340px] grid grid-cols-3 gap-2 place-content-center justify-items-center [container-type:inline-size]">
     {circleImages.map((c, i) =>
       c ? (
         <img
@@ -68,11 +68,11 @@ const VisualWishes: React.FC = () => (
           alt=""
           referrerPolicy="no-referrer"
           loading="lazy"
-          className="w-[min(27cqw,84px)] aspect-square rounded-full object-cover"
+          className="w-[min(27cqw,92px)] aspect-square rounded-full object-cover"
           style={{ objectPosition: c.pos }}
         />
       ) : (
-        <span key={i} className="w-[min(27cqw,84px)] aspect-square rounded-full bg-[#2D1A0E] text-white flex items-center justify-center">
+        <span key={i} className="w-[min(27cqw,92px)] aspect-square rounded-full bg-[#2D1A0E] text-white flex items-center justify-center">
           <Gift className="w-6 h-6" strokeWidth={1.4} />
         </span>
       )
@@ -80,36 +80,35 @@ const VisualWishes: React.FC = () => (
   </div>
 );
 
-// Tarjeta 2: polaroids inclinadas con regalos de ejemplo
+// Tarjeta 2: fondos de ahorro, en una grilla ordenada de 2 x 3 con una leve inclinación
 const polaroids = [
   { src: houseImg, label: 'Casa propia', pos: '50% 50%' },
   { src: '/deseo-luna-de-miel.webp', label: 'Luna de miel', pos: '50% 50%' },
   { src: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=600&q=80', label: 'Auto nuevo', pos: '50% 55%' },
-];
-
-const polaroidPos = [
-  'left-[6%] top-[4%] rotate-[-7deg]',
-  'right-[6%] top-[22%] rotate-[6deg]',
-  'left-[8%] bottom-[3%] rotate-[-3deg]',
+  { src: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=600&q=80', label: 'Remodelar la cocina', pos: '50% 50%' },
+  { src: '/deseo-escapada.png', label: 'Escapada de otoño', pos: '50% 62%' },
+  { src: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=600&q=80', label: 'Taller de cerámica', pos: '50% 50%' },
 ];
 
 const VisualMoney: React.FC = () => (
-  <div className="rounded-[6px] bg-[#E5D3C4] h-[300px] overflow-hidden relative">
-    {polaroids.map((p, i) => (
-      <div key={p.label} className={`absolute w-[41%] bg-white p-1.5 pb-0 rounded-[3px] shadow-[0_6px_16px_rgba(45,26,14,0.15)] ${polaroidPos[i]}`}>
-        <div className="aspect-[4/3] overflow-hidden">
-          <img
-            src={p.src}
-            alt=""
-            referrerPolicy="no-referrer"
-            loading="lazy"
-            className="w-full h-full object-cover"
-            style={{ objectPosition: p.pos }}
-          />
+  <div className="rounded-[6px] bg-[#E5D3C4] h-[340px] overflow-hidden relative">
+    <div className="absolute -inset-[5%] grid grid-cols-2 grid-rows-3 gap-3 p-6 rotate-[-4deg]">
+      {polaroids.map((p) => (
+        <div key={p.label} className="bg-white p-1.5 rounded-[3px] flex flex-col min-h-0 shadow-[0_4px_12px_rgba(45,26,14,0.12)]">
+          <div className="flex-1 min-h-0 overflow-hidden">
+            <img
+              src={p.src}
+              alt=""
+              referrerPolicy="no-referrer"
+              loading="lazy"
+              className="w-full h-full object-cover"
+              style={{ objectPosition: p.pos }}
+            />
+          </div>
+          <p className="text-[10px] text-[#2A1A10] font-semibold pt-1.5 pb-0.5 truncate" style={{ fontFamily: SANS }}>{p.label}</p>
         </div>
-        <p className="text-[11px] text-[#2A1A10] font-semibold py-2" style={{ fontFamily: SANS }}>{p.label}</p>
-      </div>
-    ))}
+      ))}
+    </div>
   </div>
 );
 
@@ -124,7 +123,7 @@ const tabletGifts = [
 ];
 
 const VisualGuests: React.FC = () => (
-  <div className="rounded-[6px] bg-[#EAD9BE] h-[300px] flex items-center justify-center p-3">
+  <div className="rounded-[6px] bg-[#EAD9BE] h-[340px] flex items-center justify-center p-3">
     <div className="w-full h-full rounded-[14px] border-[6px] border-[#2D1A0E] bg-[#FBF9F5] px-3 pt-2.5 pb-2.5 flex flex-col overflow-hidden">
       <p className="text-center text-[17px] leading-none text-[#2A1A10]" style={{ fontFamily: SERIF }}>Milagros &amp; Juan</p>
       <p className="text-center text-[7px] uppercase tracking-[0.1em] text-[#8A7A6E] mt-1" style={{ fontFamily: SANS }}>Lista de regalos</p>
@@ -162,7 +161,7 @@ export const HowItWorks: React.FC<{ onOpenExample: (screen?: ExampleScreen) => v
     },
   ];
   return (
-    <section id="como-funciona" className="scroll-mt-20 bg-white px-4 sm:px-8 pt-16 sm:pt-24 pb-16 sm:pb-24">
+    <section id="como-funciona" className="scroll-mt-20 bg-white px-4 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
       <div className="max-w-[1100px] mx-auto">
         <Eyebrow>Cómo funciona</Eyebrow>
         <h2 className={h2Serif} style={{ fontFamily: SERIF }}>
@@ -172,19 +171,51 @@ export const HowItWorks: React.FC<{ onOpenExample: (screen?: ExampleScreen) => v
           Compartí un solo link con tus invitados y seguí todo desde tu panel.
         </p>
 
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
           {cards.map((c) => (
-            <div key={c.title} className="bg-[#F4F0EB] rounded-[8px] px-5 sm:px-6 pt-8 pb-9 flex flex-col">
-              <h3 className="text-center font-normal text-[#2A1A10] text-[26px] leading-[1.1] min-h-[58px] flex items-center justify-center text-balance" style={{ fontFamily: SERIF }}>
+            <div key={c.title} className="bg-[#F4F0EB] rounded-[8px] px-5 sm:px-6 pt-6 pb-7 flex flex-col">
+              <h3 className="text-center font-normal text-[#2A1A10] text-[26px] leading-[1.1] min-h-[56px] flex items-center justify-center text-balance" style={{ fontFamily: SERIF }}>
                 {c.title}
               </h3>
-              <div className="mt-6">{c.visual}</div>
-              <p className="mt-6 text-center text-[15px] text-[#5A4C43] leading-relaxed">{c.text}</p>
+              <div className="mt-5">{c.visual}</div>
+              <p className="mt-5 text-center text-[15px] text-[#5A4C43] leading-relaxed">{c.text}</p>
             </div>
           ))}
         </div>
 
-        <div className="mt-12 text-center">
+        {/* Cuarta idea, destacada: el seguimiento de quién regaló qué */}
+        <div className="mt-4 lg:mt-5 bg-[#2D1A0E] rounded-[8px] px-6 sm:px-12 py-8 sm:py-10 grid md:grid-cols-2 gap-8 md:gap-14 items-center">
+          <div className="text-[#F5F0EA]">
+            <span className="text-[11px] uppercase tracking-[0.1em] text-[#E7D3C0]" style={{ fontFamily: SANS }}>Y además</span>
+            <h3 className="mt-3 font-normal text-[clamp(28px,3vw,40px)] leading-[1.1]" style={{ fontFamily: SERIF }}>
+              Saber quién te regaló qué
+            </h3>
+            <p className="mt-4 text-[15px] text-[#F5F0EA]/80 leading-relaxed max-w-[440px]">
+              Cada regalo queda registrado con el nombre de quien lo hizo y su mensaje. Agradecés uno por uno y no perseguís a nadie por WhatsApp.
+            </p>
+          </div>
+          <div className="bg-[#FBF9F5] rounded-[6px] p-4 sm:p-5 divide-y divide-[#EFE9E1]" style={{ fontFamily: SANS }}>
+            {[
+              ['CR', 'Camila Rodríguez', 'Noche de hotel en Como', '“¡Disfruten mucho!”', 'ARS 180.000'],
+              ['LB', 'Lucas Benítez', 'Cena romántica para dos', '“Los queremos”', 'ARS 85.000'],
+              ['FP', 'Familia Paz', 'Un café de especialidad', '“Un brindis por ustedes”', 'ARS 15.000'],
+            ].map(([ini, who, what, msg, amount]) => (
+              <div key={who} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
+                <span className="w-9 h-9 rounded-full bg-[#F0E8D8] text-[#2A1A10] text-[11px] font-semibold flex items-center justify-center shrink-0">
+                  {ini}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[13px] font-semibold text-[#282018] truncate">{who}</p>
+                  <p className="text-[11px] text-[#6F625A] truncate">{what}</p>
+                  <p className="text-[11px] text-[#8A7A6E] italic truncate">{msg}</p>
+                </div>
+                <p className="text-[12px] font-bold text-[#3A3330] shrink-0">{amount}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-8 text-center">
           <TextLink onClick={() => onOpenExample('gifts')}>Ver una lista de ejemplo</TextLink>
         </div>
       </div>
@@ -197,18 +228,18 @@ export const HowItWorks: React.FC<{ onOpenExample: (screen?: ExampleScreen) => v
 /* ------------------------------------------------------------------ */
 
 export const MoneyTrust: React.FC = () => (
-  <section className="bg-[#ECE6DF] px-4 sm:px-8 py-16 sm:py-24">
+  <section className="bg-[#ECE6DF] px-4 sm:px-8 py-12 sm:py-16">
     <div className="max-w-[1100px] mx-auto">
       <Eyebrow>Dinero y confianza</Eyebrow>
       <h2 className={h2Serif} style={{ fontFamily: SERIF }}>
         El dinero va <em>directo a tu cuenta</em>
       </h2>
       <p className="mt-4 text-center text-[15px] text-[#6F625A] max-w-[560px] mx-auto leading-relaxed">
-        Weda no toca tu plata: tus invitados pagan y vos ves cada regalo reflejado en tu panel.
+        Un alias te deja el dinero. Weda, además, te cuenta quién te regaló qué. Tus invitados pagan directo a tu cuenta y el dinero nunca pasa por Weda.
       </p>
 
       {/* Flujo del dinero */}
-      <div className="mt-12 max-w-[820px] mx-auto">
+      <div className="mt-8 max-w-[820px] mx-auto">
         <div className="flex items-stretch gap-2 sm:gap-4">
           <div className="flex-1 bg-white border border-[#DDD3C8] rounded-[4px] p-4 sm:p-5 text-center">
             <Users className="w-6 h-6 mx-auto text-[#8A6A55]" strokeWidth={1.5} />
@@ -234,6 +265,25 @@ export const MoneyTrust: React.FC = () => (
             Weda solo registra el regalo en tu panel. No cobra comisión ni retiene el dinero.
           </p>
         </div>
+      </div>
+
+      {/* Tres garantías */}
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 max-w-[980px] mx-auto">
+        {[
+          { icon: Percent, title: 'Sin comisión por regalo', text: 'Weda no cobra nada por cada regalo que reciben.' },
+          { icon: Landmark, title: 'Dinero directo a tu cuenta', text: 'Por Mercado Pago o transferencia. Nunca pasa por Weda.' },
+          { icon: Eye, title: 'Seguimiento de cada regalo', text: 'Ves quién te regaló qué, cuánto y con qué mensaje.' },
+        ].map(({ icon: Icon, title, text }) => (
+          <div key={title} className="flex md:flex-col items-start md:items-center gap-4 md:text-center">
+            <span className="w-12 h-12 rounded-full bg-[#2D1A0E] text-white flex items-center justify-center shrink-0">
+              <Icon className="w-5 h-5" strokeWidth={1.5} />
+            </span>
+            <div>
+              <h3 className="text-[17px] font-semibold text-[#2A1A10] leading-snug">{title}</h3>
+              <p className="mt-1.5 text-[14px] text-[#6F625A] leading-relaxed">{text}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -261,14 +311,14 @@ interface WishTileData {
 // (1820 x 872): columnas 233/460/333/234/461 y filas 370/26/19/25/37/24/371; las filas finas
 // hacen de canal entre tiles.
 const wishTiles: WishTileData[] = [
-  { category: 'Noches de vino', name: 'Degustación en Mendoza', price: 85000, image: '/deseo-vino.webp', pos: '50% 60%', area: '1 / 1 / 2 / 2', ratio: 'aspect-[3/4]', small: true },
-  { category: 'Escapadas', name: 'Fin de semana en las sierras', price: 320000, image: '/deseo-escapada.png', pos: '50% 62%', area: '1 / 2 / 2 / 3', ratio: 'aspect-[4/3]' },
-  { category: 'Deco hogar', name: 'Mesa ratona de nogal', price: 140000, image: '/deseo-deco.webp', pos: '30% 50%', area: '1 / 3 / 4 / 4', ratio: 'aspect-[4/5]' },
-  { category: 'Joyería', name: 'Pulsera de plata', price: 180000, image: '/deseo-joyeria.png', pos: '50% 38%', area: '1 / 4 / 6 / 6', ratio: 'aspect-[4/3]' },
-  { category: 'Cenas de a dos', name: 'Cena romántica para dos', price: 120000, image: '/deseo-cena.webp', pos: '50% 78%', area: '3 / 1 / 8 / 3', ratio: 'aspect-[4/3]' },
-  { category: 'Nuestra casa', name: 'Para nuestra casa propia', price: 1500000, image: wish('photo-1560518883-ce09059eeffa'), pos: '50% 50%', area: '5 / 3 / 8 / 4', ratio: 'aspect-[3/4]' },
-  { category: 'Objetos de cocina', name: 'Batidora de pie', price: 450000, image: '/deseo-cocina.webp', pos: '60% 60%', area: '7 / 4 / 8 / 5', ratio: 'aspect-[1/1]', small: true },
-  { category: 'Luna de miel', name: 'Noches en el lago de Como', price: 900000, image: '/deseo-luna-de-miel.webp', pos: '50% 50%', area: '7 / 5 / 8 / 6', ratio: 'aspect-[4/3]' },
+  { category: 'Experiencias', name: 'Degustación en Mendoza', price: 85000, image: '/deseo-vino.webp', pos: '50% 60%', area: '1 / 1 / 2 / 2', ratio: 'aspect-[3/4]', small: true },
+  { category: 'Viajes', name: 'Escapada a las sierras', price: 320000, image: '/deseo-escapada.png', pos: '50% 62%', area: '1 / 2 / 2 / 3', ratio: 'aspect-[4/3]' },
+  { category: 'Fotografía', name: 'Un recuerdo en fotos', price: 40000, image: wish('photo-1537633552985-df8429e8048b'), pos: '50% 50%', area: '1 / 3 / 4 / 4', ratio: 'aspect-[4/5]' },
+  { category: 'Luna de miel', name: 'Noches en el lago de Como', price: 900000, image: '/deseo-luna-de-miel.webp', pos: '50% 45%', area: '1 / 4 / 6 / 6', ratio: 'aspect-[4/3]' },
+  { category: 'Experiencias', name: 'Cena romántica para dos', price: 120000, image: '/deseo-cena.webp', pos: '50% 78%', area: '3 / 1 / 8 / 3', ratio: 'aspect-[4/3]' },
+  { category: 'Casa propia', name: 'Para nuestra casa propia', price: 1500000, image: wish('photo-1560518883-ce09059eeffa'), pos: '50% 50%', area: '5 / 3 / 8 / 4', ratio: 'aspect-[3/4]' },
+  { category: 'Café', name: 'Un café de especialidad', price: 15000, image: wish('photo-1517668808822-9ebb02f2a0e6'), pos: '50% 50%', area: '7 / 4 / 8 / 5', ratio: 'aspect-[1/1]', small: true },
+  { category: 'Proyectos personales', name: 'Curso de cerámica', price: 95000, image: wish('photo-1565193566173-7a0ee3dbe261'), pos: '50% 50%', area: '7 / 5 / 8 / 6', ratio: 'aspect-[4/3]' },
 ];
 
 const WishTile: React.FC<{ tile: WishTileData; compact?: boolean; className?: string; style?: React.CSSProperties }> = ({
@@ -305,19 +355,19 @@ const WishTile: React.FC<{ tile: WishTileData; compact?: boolean; className?: st
 };
 
 export const GiftExamples: React.FC<{ onCreate: () => void }> = ({ onCreate }) => (
-  <section className="bg-[#F4F0EB] px-4 sm:px-8 pt-16 sm:pt-24 pb-16 sm:pb-24">
+  <section className="bg-[#F4F0EB] px-4 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
     <div className="max-w-[1100px] mx-auto">
-      <Eyebrow>Ejemplos de regalos</Eyebrow>
+      <Eyebrow>Regalos simbólicos</Eyebrow>
       <h2 className={h2Serif} style={{ fontFamily: SERIF }}>
         Una lista para la vida que <em>están armando</em>
       </h2>
       <p className="mt-4 text-center text-[15px] text-[#6F625A] max-w-[560px] mx-auto leading-relaxed">
-        Cada regalo tiene su nombre y su precio. Tus invitados eligen el que quieran y te lo regalan.
+        La luna de miel, la casa propia, un viaje, un recuerdo en fotos. Cada regalo cuenta algo de ustedes.
       </p>
 
       {/* Desde 480 px: la misma estructura de la referencia, sin huecos */}
       <div
-        className="mt-12 hidden min-[480px]:grid w-full"
+        className="mt-8 hidden min-[480px]:grid w-full"
         style={{
           aspectRatio: '1820 / 872',
           gridTemplateColumns: '233fr 460fr 333fr 234fr 461fr',
@@ -331,7 +381,7 @@ export const GiftExamples: React.FC<{ onCreate: () => void }> = ({ onCreate }) =
       </div>
 
       {/* Celular chico: dos columnas con alturas distintas */}
-      <div className="mt-10 min-[480px]:hidden columns-2 gap-3">
+      <div className="mt-8 min-[480px]:hidden columns-2 gap-3">
         {wishTiles.map((t) => (
           <WishTile key={t.name} tile={t} compact className={`mb-3 break-inside-avoid ${t.ratio}`} />
         ))}
@@ -359,7 +409,7 @@ const happyCouples = [
     name: 'Lucía & Tomás',
     meta: 'Casados en marzo de 2026',
     quote:
-      'Dividimos la luna de miel en regalos chicos y cada invitado eligió el que quería. Fue muchísimo más fácil que pedir plata de frente.',
+      'Armamos la luna de miel en regalos chicos y cada invitado eligió el suyo. Vimos quién había regalado qué sin perseguir a nadie por WhatsApp. Fue elegante y fue fácil.',
   },
   {
     initials: 'A&N',
@@ -373,116 +423,59 @@ const happyCouples = [
     name: 'Julieta & Matías',
     meta: 'Casados en enero de 2026',
     quote:
-      'Cada regalo aparecía con nombre y mensaje. Pudimos agradecer a cada persona sin llevar ninguna planilla.',
+      'Armamos la lista alrededor de la casa propia y de un curso de cerámica. Se sintió como nosotros, no como un catálogo. Y pudimos agradecerle a cada persona por su nombre.',
   },
 ];
 
-export const HappyCouples: React.FC = () => (
-  <section className="py-16 sm:py-24 bg-[#F0E8D8] px-4 sm:px-6">
-    <div className="max-w-6xl mx-auto">
-      <div className="mb-14">
-        <span className="text-xs font-semibold tracking-widest text-[#A9795A] uppercase">Parejas felices</span>
-        <h2 className="text-3xl sm:text-4xl font-normal text-[#2A2318] mt-3">Testimonios con amor.</h2>
-      </div>
+export const HappyCouples: React.FC = () => {
+  const [featured, ...others] = happyCouples;
+  return (
+    <section className="py-12 sm:py-16 bg-[#F0E8D8] px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-8 sm:mb-10">
+          <span className="text-xs font-semibold tracking-widest text-[#A9795A] uppercase">Parejas felices</span>
+          <h2 className="text-4xl sm:text-5xl font-normal text-[#2A2318] mt-3">Testimonios con amor.</h2>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#2A2318]/15 border-t border-[#2A2318]/15">
-        {happyCouples.map((c, i) => (
-          <div key={c.name} className={`pt-8 ${i === 0 ? 'md:pr-8' : i === 1 ? 'md:px-8' : 'md:pl-8'}`}>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#2A2318] font-semibold text-xs shrink-0">
-                {c.initials}
-              </div>
+        <div className="grid lg:grid-cols-[1.35fr_1fr] gap-5 lg:gap-6">
+          <figure className="bg-[#2D1A0E] text-[#F5F0EA] rounded-[8px] p-8 sm:p-10 flex flex-col justify-between">
+            <div>
+              <span className="block text-[#A9795A] text-[90px] leading-[0.6] h-[44px]" style={{ fontFamily: SERIF }}>“</span>
+              <blockquote className="mt-4 text-[clamp(24px,2.6vw,36px)] leading-[1.2]" style={{ fontFamily: SERIF }}>
+                {featured.quote}
+              </blockquote>
+            </div>
+            <figcaption className="mt-8 flex items-center gap-3">
+              <span className="w-10 h-10 rounded-full bg-[#F0E8D8] text-[#2A2318] font-semibold text-xs flex items-center justify-center shrink-0">
+                {featured.initials}
+              </span>
               <div>
-                <h4 className="font-semibold text-sm text-[#2A2318]">{c.name}</h4>
-                <p className="text-xs text-[#8A8072]">{c.meta}</p>
+                <p className="text-sm font-semibold">{featured.name}</p>
+                <p className="text-xs text-[#F5F0EA]/60">{featured.meta}</p>
               </div>
-            </div>
-            <p className="text-sm text-[#5A5142] leading-relaxed">{c.quote}</p>
+            </figcaption>
+          </figure>
+
+          <div className="grid gap-5 lg:gap-6">
+            {others.map((c) => (
+              <figure key={c.name} className="bg-white rounded-[8px] p-7 sm:p-8 flex flex-col justify-between">
+                <blockquote className="text-[20px] sm:text-[22px] leading-[1.25] text-[#2A2318]" style={{ fontFamily: SERIF }}>
+                  “{c.quote}”
+                </blockquote>
+                <figcaption className="mt-6 flex items-center gap-3">
+                  <span className="w-9 h-9 rounded-full bg-[#F0E8D8] text-[#2A2318] font-semibold text-xs flex items-center justify-center shrink-0">
+                    {c.initials}
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-[#2A2318]">{c.name}</p>
+                    <p className="text-xs text-[#8A8072]">{c.meta}</p>
+                  </div>
+                </figcaption>
+              </figure>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
-    </div>
-  </section>
-);
-
-/* ------------------------------------------------------------------ */
-/* 8. PREGUNTAS FRECUENTES                                             */
-/* ------------------------------------------------------------------ */
-
-const priceLine = durationOptions.map((o) => `${o.months} meses ${formatARS(o.price)}`).join(', ');
-
-export const faqItems = [
-  {
-    q: '¿Cómo recibimos el dinero?',
-    a: 'Tus invitados pagan con Mercado Pago o por transferencia bancaria, directo a tu cuenta. El dinero no pasa por Weda: Weda nunca lo toca ni lo retiene.',
-  },
-  {
-    q: '¿Tiene comisión?',
-    a: 'No. Weda no cobra comisión por regalo. El pago es único y todo lo que tus invitados te regalan es tuyo.',
-  },
-  {
-    q: '¿Mis invitados necesitan una cuenta?',
-    a: 'No. Entran con el enlace, eligen un regalo y lo pagan en menos de un minuto. Si querés, también pueden confirmar su asistencia desde ahí.',
-  },
-  {
-    q: '¿Cómo sé quién me regaló qué?',
-    a: 'Cada regalo queda registrado en tu panel, en Regalos, con el nombre del invitado, el regalo elegido, el monto y su mensaje. Desde ahí también podés agradecerle.',
-  },
-  {
-    q: '¿Qué pasa si alguien no sube comprobante?',
-    a: 'No pasa nada: el comprobante es opcional. El regalo queda como pendiente en tu panel hasta que confirmás en tu cuenta que el pago llegó, y ahí lo marcás como confirmado.',
-  },
-  {
-    q: '¿Qué puedo pedir como regalo?',
-    a: 'Lo que quieran construir juntos: la luna de miel, cosas para el hogar, proyectos futuros como la casa propia, experiencias o regalos simbólicos desde un monto chico. Vos armás la lista y ponés el monto de cada regalo.',
-  },
-  {
-    q: '¿Cuánto cuesta?',
-    a: `Es un pago único, según cuánto tiempo querés mantener tu lista activa: ${priceLine}. Sin suscripción y sin comisión por regalo.`,
-  },
-  {
-    q: '¿Qué pasa cuando vence mi lista?',
-    a: 'Elegís la duración al publicar y siempre ves la fecha exacta de vencimiento. Al llegar a esa fecha, tu lista deja de estar visible para tus invitados.',
-  },
-  {
-    q: '¿Es seguro?',
-    a: 'Tus invitados no dejan datos de pago en Weda: pagan directo a tu cuenta. Y tu lista es privada, en borrador, hasta que decidís publicarla.',
-  },
-  {
-    q: '¿Cómo contacto a soporte?',
-    a: 'Escribinos a hola@weda.com.ar. Respondemos de lunes a viernes de 9 a 18 hs.',
-  },
-];
-
-export const Faq: React.FC<{ openIndex: number | null; onToggle: (i: number) => void }> = ({ openIndex, onToggle }) => (
-  <section id="preguntas" className="scroll-mt-20 bg-white px-4 sm:px-8 py-16 sm:py-24">
-    <div className="max-w-[760px] mx-auto">
-      <Eyebrow>Preguntas frecuentes</Eyebrow>
-      <h2 className="text-center text-3xl sm:text-[40px] sm:leading-[1.15] font-normal text-[#2A1A10] text-balance">
-        Sin letra chica.
-      </h2>
-      <div className="mt-12 border-t border-[#E9E8E4]">
-        {faqItems.map((item, i) => {
-          const open = openIndex === i;
-          return (
-            <div key={item.q} className="border-b border-[#E9E8E4]">
-              <button
-                type="button"
-                onClick={() => onToggle(i)}
-                aria-expanded={open}
-                className="w-full flex items-center justify-between gap-6 py-5 text-left cursor-pointer"
-              >
-                <span className="text-[17px] text-[#2A1A10]">{item.q}</span>
-                <ChevronDown
-                  className={`w-5 h-5 text-[#8A6A55] shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
-                  strokeWidth={1.5}
-                />
-              </button>
-              {open && <p className="pb-6 -mt-1 text-[15px] text-[#6F625A] leading-relaxed max-w-[640px]">{item.a}</p>}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};

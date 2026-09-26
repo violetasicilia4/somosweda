@@ -3,13 +3,14 @@ import { DashboardTab, WeddingData } from '../../types';
 import {
   Gift,
   Layout,
-  Users,
+  Heart,
   User,
   HelpCircle,
   Home,
   LogOut
 } from 'lucide-react';
 import { formatLongDate } from '../../utils/format';
+import { Wordmark } from '../Wordmark';
 
 interface DashboardSidebarProps {
   activeTab: DashboardTab;
@@ -21,12 +22,12 @@ interface DashboardSidebarProps {
 
 type MenuItem = { id: DashboardTab; label: string; icon: React.ComponentType<{ className?: string }> };
 
-// Jerarquía: Regalos es el producto (destacado). Invitados es soporte. Tu sitio, Ayuda y
-// Cuenta van separados y atenuados.
+// Jerarquía: Regalos es el producto (destacado) y Regalos recibidos su seguimiento. Tu sitio,
+// Ayuda y Cuenta van separados y atenuados. Invitados queda fuera de esta primera versión.
 const PRIMARY_ITEMS: MenuItem[] = [
   { id: 'inicio', label: 'Inicio', icon: Home },
   { id: 'regalos', label: 'Regalos', icon: Gift },
-  { id: 'invitados', label: 'Invitados', icon: Users },
+  { id: 'recibidos', label: 'Regalos recibidos', icon: Heart },
 ];
 
 const SECONDARY_ITEMS: MenuItem[] = [
@@ -46,7 +47,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     const Icon = item.icon;
     const isActive = activeTab === item.id;
     const isHero = item.id === 'regalos';
-    const showBadge = item.id === 'regalos' && pendingReceivedCount > 0;
+    const showBadge = item.id === 'recibidos' && pendingReceivedCount > 0;
     const size = isHero ? 'py-3.5 text-sm font-semibold' : muted ? 'py-2 text-[11px] font-normal' : 'py-2.5 text-xs font-normal';
     const tone = isActive
       ? 'bg-gray-900 text-white shadow-2xs'
@@ -79,9 +80,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       {/* BRAND & WEDDING SUMMARY */}
       <div className="p-6 pb-4">
         <div className="flex items-center gap-2 mb-6">
-          <span className="text-[28px] font-normal uppercase leading-normal text-gray-900 cursor-pointer">
-            Weda
-          </span>
+          <Wordmark />
         </div>
 
         {/* Wedding Identity Card */}

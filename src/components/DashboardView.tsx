@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import {
   WeddingData,
-  Guest,
   GiftItem,
   WeddingEvent,
   DashboardTab,
   AppView,
   ReceivedGift,
-  RegalosSection,
   CuentaSection,
   DurationMonths,
 } from '../types';
@@ -15,8 +13,8 @@ import { durationOptions } from '../data/initialData';
 import { addMonths, formatARS, formatLongDate } from '../utils/format';
 import { DashboardSidebar } from './dashboard/DashboardSidebar';
 import { HomeChecklistView } from './dashboard/HomeChecklistView';
-import { RegalosView } from './dashboard/RegalosView';
-import { GuestManagementView } from './dashboard/GuestManagementView';
+import { GiftRegistryView } from './dashboard/GiftRegistryView';
+import { ReceivedGiftsView } from './dashboard/ReceivedGiftsView';
 import { MicrositeBuilderView } from './dashboard/MicrositeBuilderView';
 import { AccountView } from './dashboard/AccountView';
 import { HelpView } from './dashboard/HelpView';
@@ -32,14 +30,10 @@ import {
 
 interface DashboardViewProps {
   wedding: WeddingData;
-  guests: Guest[];
   gifts: GiftItem[];
   receivedGifts: ReceivedGift[];
   events: WeddingEvent[];
   onUpdateWedding: (updated: Partial<WeddingData>) => void;
-  onAddGuest: (guest: Omit<Guest, 'id'>) => void;
-  onUpdateGuestStatus: (guestId: string, status: Guest['status']) => void;
-  onDeleteGuest: (guestId: string) => void;
   onAddGift: (gift: Omit<GiftItem, 'id' | 'currentAmount'>) => void;
   onDeleteGift: (giftId: string) => void;
   onUpdateGift?: (giftId: string, updates: Partial<GiftItem>) => void;
@@ -50,14 +44,10 @@ interface DashboardViewProps {
 
 export const DashboardView: React.FC<DashboardViewProps> = ({
   wedding,
-  guests,
   gifts,
   receivedGifts = [],
   events,
   onUpdateWedding,
-  onAddGuest,
-  onUpdateGuestStatus,
-  onDeleteGuest,
   onAddGift,
   onDeleteGift,
   onUpdateGift,
@@ -66,7 +56,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onNavigate,
 }) => {
   const [activeTab, setActiveTab] = useState<DashboardTab>('inicio');
-  const [regalosSection, setRegalosSection] = useState<RegalosSection>('lista');
   const [cuentaSection, setCuentaSection] = useState<CuentaSection>('datos');
   // Paso 5 del checklist: se completa al abrir "Ver tu lista"
   const [siteViewed, setSiteViewed] = useState(false);
@@ -94,7 +83,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const goTo = (tab: DashboardTab, section?: CuentaSection) => {
     setActiveTab(tab);
     if (tab === 'cuenta' && section) setCuentaSection(section);
-    if (tab === 'regalos') setRegalosSection('lista');
   };
 
   const openSite = () => {
@@ -194,7 +182,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <HomeChecklistView
               wedding={wedding}
               gifts={gifts}
-              guests={guests}
               receivedGifts={receivedGifts}
               isPaymentConfigured={isPaymentConfigured}
               siteViewed={siteViewed}
@@ -205,29 +192,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           )}
 
           {activeTab === 'regalos' && (
-            <RegalosView
+            <GiftRegistryView
               wedding={wedding}
               gifts={gifts}
-              receivedGifts={receivedGifts}
-              section={regalosSection}
-              onSectionChange={setRegalosSection}
-              pendingReceivedCount={pendingReceivedCount}
               onAddGift={onAddGift}
               onDeleteGift={onDeleteGift}
               onUpdateGift={onUpdateGift}
-              onUpdateReceivedGift={onUpdateReceivedGift}
-              onOpenSite={openSite}
+              onOpenMicrosite={openSite}
             />
           )}
 
-          {activeTab === 'invitados' && (
-            <GuestManagementView
-              wedding={wedding}
-              guests={guests}
-              onAddGuest={onAddGuest}
-              onUpdateGuestStatus={onUpdateGuestStatus}
-              onDeleteGuest={onDeleteGuest}
-            />
+          {activeTab === 'recibidos' && (
+            <ReceivedGiftsView receivedGifts={receivedGifts} onUpdateReceivedGift={onUpdateReceivedGift} />
           )}
 
           {activeTab === 'sitio' && (
@@ -316,7 +292,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>Regalos sin límite, con confirmaciones de asistencia incluidas</span>
+                  <span>Regalos sin límite en tu lista</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-600 shrink-0" />

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { AppView } from '../types';
 import { Check, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { Wordmark } from './Wordmark';
 
 interface AuthViewsProps {
   currentView: AppView;
@@ -100,13 +101,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
       <div className="w-full max-w-md bg-white border border-gray-200 p-8 sm:p-10 transition-all">
         {/* Brand header */}
         <div className="text-center mb-6">
-          <button 
-            type="button" 
-            onClick={() => onNavigate('landing')} 
-            className="text-[28px] font-normal uppercase leading-normal text-gray-900 cursor-pointer inline-block hover:opacity-85 transition-opacity"
-          >
-            Weda
-          </button>
+          <Wordmark onClick={() => onNavigate('landing')} className="hover:opacity-85 transition-opacity" />
         </div>
 
         {formError && (

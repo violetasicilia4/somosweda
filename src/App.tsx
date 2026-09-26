@@ -188,14 +188,10 @@ export default function App() {
         {currentView === 'dashboard' && (
           <DashboardView
             wedding={wedding}
-            guests={guests}
             gifts={gifts}
             receivedGifts={receivedGifts}
             events={events}
             onUpdateWedding={handleUpdateWedding}
-            onAddGuest={handleAddGuest}
-            onUpdateGuestStatus={handleUpdateGuestStatus}
-            onDeleteGuest={handleDeleteGuest}
             onAddGift={handleAddGift}
             onDeleteGift={handleDeleteGift}
             onUpdateGift={handleUpdateGift}

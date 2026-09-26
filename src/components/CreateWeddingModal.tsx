@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { WeddingData, AppView } from '../types';
 import { coverPresets } from '../data/initialData';
 import { Heart, Calendar, Check, Upload } from 'lucide-react';
+import { Wordmark } from './Wordmark';
 
 interface CreateWeddingModalProps {
   wedding: WeddingData;
@@ -61,13 +62,7 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
       <div className="w-full max-w-xl bg-white border border-gray-200 p-6 sm:p-10">
         {/* Brand header */}
         <div className="text-center mb-6">
-          <button
-            type="button"
-            onClick={() => onNavigate('landing')}
-            className="text-[28px] font-normal uppercase leading-normal text-gray-900 cursor-pointer inline-block hover:opacity-85 transition-opacity"
-          >
-            Weda
-          </button>
+          <Wordmark onClick={() => onNavigate('landing')} className="hover:opacity-85 transition-opacity" />
         </div>
 
         <div className="mb-8">

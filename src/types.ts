@@ -12,13 +12,12 @@ export type AppView =
 export type DashboardTab =
   | 'inicio'
   | 'regalos'
-  | 'invitados'
+  | 'recibidos'
   | 'sitio'
   | 'ayuda'
   | 'cuenta';
 
 // Subsecciones de las pantallas con pestañas internas
-export type RegalosSection = 'lista' | 'recibidos';
 export type CuentaSection = 'datos' | 'cobro' | 'duracion';
 
 export type DurationMonths = 6 | 12 | 24;
