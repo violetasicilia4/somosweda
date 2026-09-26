@@ -326,7 +326,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
       {/* ================= FEATURE QUICK SELECTOR / TOGGLE BAR ================= */}
       <div className="bg-white rounded-2xl border border-gray-200/90 p-5 shadow-2xs space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 min-w-0">
             <SlidersHorizontal className="w-4 h-4 text-gray-700" />
             <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900">
               Módulos del sitio: tildá o destildá lo que querés mostrar
@@ -460,8 +460,8 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
 
           {/* CARD 1: PORTADA & ENCABEZADO */}
           <div className="bg-white rounded-2xl border border-gray-200/90 p-5 sm:p-6 shadow-2xs hover:border-gray-300 transition-all space-y-4 group">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+              <div className="flex flex-wrap items-center gap-2 min-w-0">
                 <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                   Portada principal
                 </span>
@@ -470,12 +470,12 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 </span>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2 min-w-0">
                 {/* Countdown sub-toggle */}
                 <button
                   type="button"
                   onClick={() => toggleFeature('countdown')}
-                  className={`uppercase px-2.5 py-1 text-[11px] font-normal rounded-lg border transition-all cursor-pointer inline-flex items-center gap-1.5 ${ features.countdown ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-gray-50 text-gray-400 border-gray-200 hover:text-gray-600' }`}
+                  className={`whitespace-nowrap uppercase px-2.5 py-1 text-[11px] font-normal rounded-lg border transition-all cursor-pointer inline-flex items-center gap-1.5 ${ features.countdown ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-gray-50 text-gray-400 border-gray-200 hover:text-gray-600' }`}
                   title="Tildar para mostrar u ocultar la cuenta regresiva"
                 >
                   {features.countdown ? (
@@ -494,7 +494,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveModal('portada')}
-                  className="uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
+                  className="whitespace-nowrap uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   <span>Editar portada</span>
@@ -533,8 +533,8 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <div className={`bg-white rounded-2xl border transition-all p-5 sm:p-6 shadow-2xs space-y-3 group ${
             features.story ? 'border-gray-200/90 hover:border-gray-300' : 'border-dashed border-gray-300 bg-gray-50/40 opacity-75'
           }`}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+              <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 min-w-0">
                 <button
                   type="button"
                   onClick={() => toggleFeature('story')}
@@ -545,7 +545,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 >
                   <Check className="w-3.5 h-3.5" />
                 </button>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2 min-w-0">
                   <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                     Nuestra historia
                   </span>
@@ -559,11 +559,11 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2 min-w-0">
                 <button
                   type="button"
                   onClick={() => toggleFeature('story')}
-                  className={`uppercase text-xs font-normal px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${ features.story ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
+                  className={`whitespace-nowrap uppercase text-xs font-normal px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${ features.story ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
                 >
                   {features.story ? 'Destildar' : 'Tildar y mostrar'}
                 </button>
@@ -571,7 +571,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveModal('historia')}
-                  className="uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
+                  className="whitespace-nowrap uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   <span>Editar historia</span>
@@ -586,7 +586,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 </p>
               </div>
             ) : (
-              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex items-center justify-between">
+              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
                 <span>Esta sección está oculta y no aparecerá en el sitio de tus invitados.</span>
                 <button 
                   type="button" 
@@ -603,8 +603,8 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <div className={`bg-white rounded-2xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
             features.events ? 'border-gray-200/90 hover:border-gray-300' : 'border-dashed border-gray-300 bg-gray-50/40 opacity-75'
           }`}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+              <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 min-w-0">
                 <button
                   type="button"
                   onClick={() => toggleFeature('events')}
@@ -616,7 +616,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   <Check className="w-3.5 h-3.5" />
                 </button>
                 <div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2 min-w-0">
                     <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                       Itinerario del día
                     </span>
@@ -634,11 +634,11 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2 min-w-0">
                 <button
                   type="button"
                   onClick={() => toggleFeature('events')}
-                  className={`uppercase text-xs font-normal px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${ features.events ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
+                  className={`whitespace-nowrap uppercase text-xs font-normal px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${ features.events ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
                 >
                   {features.events ? 'Destildar' : 'Tildar y mostrar'}
                 </button>
@@ -646,7 +646,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveModal('eventos')}
-                  className="uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
+                  className="whitespace-nowrap uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   <span>Editar eventos</span>
@@ -686,7 +686,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 ))}
               </div>
             ) : (
-              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex items-center justify-between">
+              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
                 <span>El itinerario no será visible en el sitio para los invitados.</span>
                 <button 
                   type="button" 
@@ -703,8 +703,8 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <div className={`bg-white rounded-2xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
             features.guestInfo ? 'border-gray-200/90 hover:border-gray-300' : 'border-dashed border-gray-300 bg-gray-50/40 opacity-75'
           }`}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+              <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 min-w-0">
                 <button
                   type="button"
                   onClick={() => toggleFeature('guestInfo')}
@@ -716,7 +716,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   <Check className="w-3.5 h-3.5" />
                 </button>
                 <div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2 min-w-0">
                     <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                       Guía para invitados
                     </span>
@@ -734,11 +734,11 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2 min-w-0">
                 <button
                   type="button"
                   onClick={() => toggleFeature('guestInfo')}
-                  className={`uppercase text-xs font-normal px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${ features.guestInfo ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
+                  className={`whitespace-nowrap uppercase text-xs font-normal px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${ features.guestInfo ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
                 >
                   {features.guestInfo ? 'Destildar' : 'Tildar y mostrar'}
                 </button>
@@ -746,7 +746,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveModal('info')}
-                  className="uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
+                  className="whitespace-nowrap uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   <span>Editar información</span>
@@ -817,7 +817,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 </div>
               </div>
             ) : (
-              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex items-center justify-between">
+              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
                 <span>La guía de dress code y ubicación estará oculta en el sitio.</span>
                 <button 
                   type="button" 
@@ -834,8 +834,8 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <div className={`bg-white rounded-2xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
             features.gallery ? 'border-gray-200/90 hover:border-gray-300' : 'border-dashed border-gray-300 bg-gray-50/40 opacity-75'
           }`}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+              <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 min-w-0">
                 <button
                   type="button"
                   onClick={() => toggleFeature('gallery')}
@@ -847,7 +847,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   <Check className="w-3.5 h-3.5" />
                 </button>
                 <div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2 min-w-0">
                     <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                       Recuerdos visuales
                     </span>
@@ -865,11 +865,11 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2 min-w-0">
                 <button
                   type="button"
                   onClick={() => toggleFeature('gallery')}
-                  className={`uppercase text-xs font-normal px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${ features.gallery ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
+                  className={`whitespace-nowrap uppercase text-xs font-normal px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${ features.gallery ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
                 >
                   {features.gallery ? 'Destildar' : 'Tildar y mostrar'}
                 </button>
@@ -877,7 +877,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveModal('galeria')}
-                  className="uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
+                  className="whitespace-nowrap uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
                 >
                   <ImageIcon className="w-3.5 h-3.5" />
                   <span>Administrar galería</span>
@@ -903,7 +903,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 ))}
               </div>
             ) : (
-              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex items-center justify-between">
+              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
                 <span>La galería de fotos no aparecerá en el sitio de tus invitados.</span>
                 <button 
                   type="button" 
@@ -920,8 +920,8 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <div className={`bg-white rounded-2xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
             features.giftRegistry ? 'border-gray-200/90 hover:border-gray-300' : 'border-dashed border-gray-300 bg-gray-50/40 opacity-75'
           }`}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+              <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 min-w-0">
                 <button
                   type="button"
                   onClick={() => toggleFeature('giftRegistry')}
@@ -933,7 +933,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   <Check className="w-3.5 h-3.5" />
                 </button>
                 <div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2 min-w-0">
                     <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                       Mesa de regalos
                     </span>
@@ -962,14 +962,14 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
             </div>
 
             {features.giftRegistry ? (
-              <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-150 flex items-center justify-between text-xs text-gray-600">
+              <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-150 flex flex-wrap items-center justify-between gap-2 text-xs text-gray-600">
                 <span>Tus invitados podrán elegir y transferir directo para sus regalos favoritos.</span>
                 <span className="font-semibold text-gray-900 bg-white px-2.5 py-1 rounded-lg border border-gray-200">
                   {wedding.bankAlias || 'boda.milagros.juan'}
                 </span>
               </div>
             ) : (
-              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex items-center justify-between">
+              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
                 <span>El bloque de regalos no se mostrará a los invitados en el sitio.</span>
                 <button 
                   type="button" 
@@ -986,8 +986,8 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <div className={`bg-white rounded-2xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
             features.rsvp ? 'border-gray-200/90 hover:border-gray-300' : 'border-dashed border-gray-300 bg-gray-50/40 opacity-75'
           }`}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+              <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 min-w-0">
                 <button
                   type="button"
                   onClick={() => toggleFeature('rsvp')}
@@ -999,7 +999,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   <Check className="w-3.5 h-3.5" />
                 </button>
                 <div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2 min-w-0">
                     <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                       Asistencia
                     </span>
@@ -1032,7 +1032,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 Los invitados podrán confirmar su presencia, indicar menú especial o restricciones alimentarias directamente desde el sitio.
               </div>
             ) : (
-              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex items-center justify-between">
+              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
                 <span>El botón y formulario de confirmación de asistencia estarán ocultos.</span>
                 <button 
                   type="button" 
@@ -1049,8 +1049,8 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <div className={`bg-white rounded-2xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
             features.music ? 'border-gray-200/90 hover:border-gray-300' : 'border-dashed border-gray-300 bg-gray-50/40 opacity-75'
           }`}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+              <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 min-w-0">
                 <button
                   type="button"
                   onClick={() => toggleFeature('music')}
@@ -1062,7 +1062,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   <Check className="w-3.5 h-3.5" />
                 </button>
                 <div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2 min-w-0">
                     <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                       Interactividad
                     </span>
@@ -1091,14 +1091,14 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
             </div>
 
             {features.music ? (
-              <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-150 text-xs text-gray-600 flex items-center justify-between">
+              <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-150 text-xs text-gray-600 flex flex-wrap items-center justify-between gap-2">
                 <span>Habilita un campo para que los invitados pidan temas que no pueden faltar en la fiesta.</span>
                 <span className="text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/50">
                   Visible en celular
                 </span>
               </div>
             ) : (
-              <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-150 text-xs text-gray-500 flex items-center justify-between">
+              <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-150 text-xs text-gray-500 flex flex-wrap items-center justify-between gap-2">
                 <span>¿Querés que los invitados te propongan canciones para la fiesta? Podés tildar esta sección.</span>
                 <button
                   type="button"
@@ -1170,7 +1170,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
       {activeModal === 'portada' && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+            <div className="flex items-center justify-between gap-3 pb-3 border-b border-gray-100">
               <h3 className="text-base font-bold text-gray-900">Editar portada</h3>
               <button 
                 onClick={() => setActiveModal(null)}
@@ -1273,7 +1273,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
       {activeModal === 'historia' && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+            <div className="flex items-center justify-between gap-3 pb-3 border-b border-gray-100">
               <h3 className="text-base font-bold text-gray-900">Editar nuestra historia</h3>
               <button 
                 onClick={() => setActiveModal(null)}
@@ -1323,7 +1323,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
       {activeModal === 'eventos' && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+            <div className="flex items-center justify-between gap-3 pb-3 border-b border-gray-100">
               <h3 className="text-base font-bold text-gray-900">Editar eventos</h3>
               <button 
                 onClick={() => setActiveModal(null)}
@@ -1411,7 +1411,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
       {activeModal === 'info' && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+            <div className="flex items-center justify-between gap-3 pb-3 border-b border-gray-100">
               <h3 className="text-base font-bold text-gray-900">Editar información para invitados</h3>
               <button 
                 onClick={() => setActiveModal(null)}
@@ -1498,7 +1498,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
       {activeModal === 'galeria' && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+            <div className="flex items-center justify-between gap-3 pb-3 border-b border-gray-100">
               <h3 className="text-base font-bold text-gray-900">Administrar galería de fotos</h3>
               <button 
                 onClick={() => setActiveModal(null)}

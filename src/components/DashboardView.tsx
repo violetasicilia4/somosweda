@@ -26,6 +26,7 @@ import {
   CreditCard,
   Globe,
   CheckCircle2,
+  Menu,
 } from 'lucide-react';
 
 interface DashboardViewProps {
@@ -56,6 +57,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onNavigate,
 }) => {
   const [activeTab, setActiveTab] = useState<DashboardTab>('inicio');
+  // Menú lateral: fijo en escritorio, cajón deslizable en pantallas chicas
+  const [menuOpen, setMenuOpen] = useState(false);
   const [cuentaSection, setCuentaSection] = useState<CuentaSection>('datos');
   // Paso 5 del checklist: se completa al abrir "Ver tu lista"
   const [siteViewed, setSiteViewed] = useState(false);
@@ -82,6 +85,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
   const goTo = (tab: DashboardTab, section?: CuentaSection) => {
     setActiveTab(tab);
+    setMenuOpen(false);
     if (tab === 'cuenta' && section) setCuentaSection(section);
   };
 
@@ -121,16 +125,33 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         wedding={wedding}
         pendingReceivedCount={pendingReceivedCount}
         onLogout={() => onNavigate('landing')}
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
       />
+      {menuOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          onClick={() => setMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
 
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
         {/* TOP CONTEXT BAR */}
-        <header className="bg-white/90 backdrop-blur-xs border-b border-gray-200 px-6 sm:px-8 py-3.5 sticky top-0 z-30 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 min-w-0">
-            <span className="text-xs font-bold text-gray-900 truncate">{wedding.coupleName}</span>
-            <span className="text-gray-300 hidden sm:inline">•</span>
-            <span className="text-xs text-gray-500 hidden sm:inline">{formatLongDate(wedding.weddingDate)}</span>
+        <header className="bg-white/90 backdrop-blur-xs border-b border-gray-200 px-4 sm:px-8 py-3 sticky top-0 z-30 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <button
+              type="button"
+              onClick={() => setMenuOpen(true)}
+              aria-label="Abrir menú"
+              className="lg:hidden p-1.5 -ml-1.5 rounded-lg text-gray-700 hover:bg-gray-100 cursor-pointer shrink-0"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            <span className="text-xs font-bold text-gray-900 truncate min-w-0">{wedding.coupleName}</span>
+            <span className="text-gray-300 hidden md:inline">•</span>
+            <span className="text-xs text-gray-500 hidden md:inline whitespace-nowrap">{formatLongDate(wedding.weddingDate)}</span>
 
             {/* Status badge */}
             <span
@@ -143,29 +164,31 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               {isPublished ? 'Publicado' : 'Borrador'}
             </span>
             {!isPublished && (
-              <span className="text-[11px] text-gray-500 hidden lg:inline">
+              <span className="text-[11px] text-gray-500 hidden 2xl:inline">
                 Tu lista no es pública hasta que la publiques.
               </span>
             )}
           </div>
 
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
             <button
               type="button"
               onClick={openSite}
-              className="uppercase px-3 py-1.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-normal inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+              aria-label="Ver tu lista"
+              className="whitespace-nowrap uppercase px-2.5 sm:px-3 py-1.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-normal inline-flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <ExternalLink className="w-3.5 h-3.5 text-gray-500" />
-              <span>Ver tu lista</span>
+              <span className="hidden sm:inline">Ver tu lista</span>
             </button>
 
             {!isPublished ? (
               <button
                 type="button"
                 onClick={handleOpenPublishModal}
-                className="uppercase px-4 py-1.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="whitespace-nowrap uppercase px-3 sm:px-4 py-1.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal inline-flex items-center gap-1.5 transition-colors cursor-pointer"
               >
-                <span>Publicar tu lista</span>
+                <span className="hidden sm:inline">Publicar tu lista</span>
+                <span className="sm:hidden">Publicar</span>
               </button>
             ) : (
               <div className="text-xs text-emerald-800 font-semibold px-2 py-1 bg-emerald-50 rounded-lg flex items-center gap-1">

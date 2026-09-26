@@ -59,7 +59,7 @@ const circleImages = [
 ];
 
 const VisualWishes: React.FC = () => (
-  <div className="rounded-[6px] bg-[#E9DFD3] p-4 h-[340px] grid grid-cols-3 gap-2 place-content-center justify-items-center [container-type:inline-size]">
+  <div className="rounded-[6px] bg-[#E9DFD3] p-3 aspect-square grid grid-cols-3 grid-rows-3 gap-2.5">
     {circleImages.map((c, i) =>
       c ? (
         <img
@@ -68,12 +68,12 @@ const VisualWishes: React.FC = () => (
           alt=""
           referrerPolicy="no-referrer"
           loading="lazy"
-          className="w-[min(27cqw,92px)] aspect-square rounded-full object-cover"
+          className="w-full h-full rounded-full object-cover"
           style={{ objectPosition: c.pos }}
         />
       ) : (
-        <span key={i} className="w-[min(27cqw,92px)] aspect-square rounded-full bg-[#2D1A0E] text-white flex items-center justify-center">
-          <Gift className="w-6 h-6" strokeWidth={1.4} />
+        <span key={i} className="w-full h-full rounded-full bg-[#2D1A0E] text-white flex items-center justify-center">
+          <Gift className="w-1/3 h-1/3" strokeWidth={1.4} />
         </span>
       )
     )}
@@ -84,14 +84,14 @@ const VisualWishes: React.FC = () => (
 const polaroids = [
   { src: houseImg, label: 'Casa propia', pos: '50% 50%' },
   { src: '/deseo-luna-de-miel.webp', label: 'Luna de miel', pos: '50% 50%' },
-  { src: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=600&q=80', label: 'Auto nuevo', pos: '50% 55%' },
+  { src: '/deseo-auto.webp', label: 'Auto nuevo', pos: '50% 60%' },
   { src: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=600&q=80', label: 'Remodelar la cocina', pos: '50% 50%' },
   { src: '/deseo-escapada.png', label: 'Escapada de otoño', pos: '50% 62%' },
   { src: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=600&q=80', label: 'Taller de cerámica', pos: '50% 50%' },
 ];
 
 const VisualMoney: React.FC = () => (
-  <div className="rounded-[6px] bg-[#E5D3C4] h-[340px] overflow-hidden relative">
+  <div className="rounded-[6px] bg-[#E5D3C4] aspect-square overflow-hidden relative">
     <div className="absolute -inset-[5%] grid grid-cols-2 grid-rows-3 gap-3 p-6 rotate-[-4deg]">
       {polaroids.map((p) => (
         <div key={p.label} className="bg-white p-1.5 rounded-[3px] flex flex-col min-h-0 shadow-[0_4px_12px_rgba(45,26,14,0.12)]">
@@ -123,7 +123,7 @@ const tabletGifts = [
 ];
 
 const VisualGuests: React.FC = () => (
-  <div className="rounded-[6px] bg-[#EAD9BE] h-[340px] flex items-center justify-center p-3">
+  <div className="rounded-[6px] bg-[#EAD9BE] aspect-square flex items-center justify-center p-3">
     <div className="w-full h-full rounded-[14px] border-[6px] border-[#2D1A0E] bg-[#FBF9F5] px-3 pt-2.5 pb-2.5 flex flex-col overflow-hidden">
       <p className="text-center text-[17px] leading-none text-[#2A1A10]" style={{ fontFamily: SERIF }}>Milagros &amp; Juan</p>
       <p className="text-center text-[7px] uppercase tracking-[0.1em] text-[#8A7A6E] mt-1" style={{ fontFamily: SANS }}>Lista de regalos</p>
@@ -297,8 +297,6 @@ const wish = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=
 
 interface WishTileData {
   category: string;
-  name: string;
-  price: number;
   image: string;
   pos: string;
   area: string;
@@ -306,19 +304,20 @@ interface WishTileData {
   small?: boolean;
 }
 
-// Fotos y montos de ejemplo. En escritorio se acomodan en una grilla de 5 columnas x 7 filas
-// donde cada tile ocupa celdas exactas, así no quedan huecos. Proporciones de la referencia
-// (1820 x 872): columnas 233/460/333/234/461 y filas 370/26/19/25/37/24/371; las filas finas
-// hacen de canal entre tiles.
+// Categorías de la lista (sin precios ni nombres de regalo): cada una tiene muchos regalos
+// adentro. En escritorio se acomodan en una grilla de 5 columnas x 7 filas donde cada tile
+// ocupa celdas exactas, así no quedan huecos. Proporciones de la referencia (1820 x 872):
+// columnas 233/460/333/234/461 y filas 370/26/19/25/37/24/371; las filas finas hacen de
+// canal entre tiles.
 const wishTiles: WishTileData[] = [
-  { category: 'Experiencias', name: 'Degustación en Mendoza', price: 85000, image: '/deseo-vino.webp', pos: '50% 60%', area: '1 / 1 / 2 / 2', ratio: 'aspect-[3/4]', small: true },
-  { category: 'Viajes', name: 'Escapada a las sierras', price: 320000, image: '/deseo-escapada.png', pos: '50% 62%', area: '1 / 2 / 2 / 3', ratio: 'aspect-[4/3]' },
-  { category: 'Fotografía', name: 'Un recuerdo en fotos', price: 40000, image: wish('photo-1537633552985-df8429e8048b'), pos: '50% 50%', area: '1 / 3 / 4 / 4', ratio: 'aspect-[4/5]' },
-  { category: 'Luna de miel', name: 'Noches en el lago de Como', price: 900000, image: '/deseo-luna-de-miel.webp', pos: '50% 45%', area: '1 / 4 / 6 / 6', ratio: 'aspect-[4/3]' },
-  { category: 'Experiencias', name: 'Cena romántica para dos', price: 120000, image: '/deseo-cena.webp', pos: '50% 78%', area: '3 / 1 / 8 / 3', ratio: 'aspect-[4/3]' },
-  { category: 'Casa propia', name: 'Para nuestra casa propia', price: 1500000, image: wish('photo-1560518883-ce09059eeffa'), pos: '50% 50%', area: '5 / 3 / 8 / 4', ratio: 'aspect-[3/4]' },
-  { category: 'Café', name: 'Un café de especialidad', price: 15000, image: wish('photo-1517668808822-9ebb02f2a0e6'), pos: '50% 50%', area: '7 / 4 / 8 / 5', ratio: 'aspect-[1/1]', small: true },
-  { category: 'Proyectos personales', name: 'Curso de cerámica', price: 95000, image: wish('photo-1565193566173-7a0ee3dbe261'), pos: '50% 50%', area: '7 / 5 / 8 / 6', ratio: 'aspect-[4/3]' },
+  { category: 'Experiencias', image: '/deseo-vino.webp', pos: '50% 60%', area: '1 / 1 / 2 / 2', ratio: 'aspect-[3/4]', small: true },
+  { category: 'Viajes', image: '/deseo-escapada.png', pos: '50% 62%', area: '1 / 2 / 2 / 3', ratio: 'aspect-[4/3]' },
+  { category: 'Casamiento', image: wish('photo-1537633552985-df8429e8048b'), pos: '50% 50%', area: '1 / 3 / 4 / 4', ratio: 'aspect-[4/5]' },
+  { category: 'Luna de miel', image: '/deseo-luna-de-miel.webp', pos: '50% 45%', area: '1 / 4 / 6 / 6', ratio: 'aspect-[4/3]' },
+  { category: 'Cenas', image: '/deseo-cena.webp', pos: '50% 78%', area: '3 / 1 / 8 / 3', ratio: 'aspect-[4/3]' },
+  { category: 'Casa propia', image: wish('photo-1560518883-ce09059eeffa'), pos: '50% 50%', area: '5 / 3 / 8 / 4', ratio: 'aspect-[3/4]' },
+  { category: 'Objetos del hogar', image: '/deseo-cocina.webp', pos: '60% 60%', area: '7 / 4 / 8 / 5', ratio: 'aspect-[1/1]', small: true },
+  { category: 'Proyectos personales', image: wish('photo-1565193566173-7a0ee3dbe261'), pos: '50% 50%', area: '7 / 5 / 8 / 6', ratio: 'aspect-[4/3]' },
 ];
 
 const WishTile: React.FC<{ tile: WishTileData; compact?: boolean; className?: string; style?: React.CSSProperties }> = ({
@@ -332,24 +331,21 @@ const WishTile: React.FC<{ tile: WishTileData; compact?: boolean; className?: st
     <div className={`relative overflow-hidden rounded-[6px] ${className}`} style={style}>
       <img
         src={tile.image}
-        alt={tile.name}
+        alt={tile.category}
         referrerPolicy="no-referrer"
         loading="lazy"
         className="absolute inset-0 w-full h-full object-cover"
         style={{ objectPosition: tile.pos }}
       />
-      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
-
-      <div className="absolute inset-x-0 bottom-0 px-2 pb-2 md:px-3 md:pb-3 text-white" style={{ fontFamily: SANS }}>
-        {!small && <p className="hidden md:block uppercase text-[9px] tracking-[0.1em] text-white/75">{tile.category}</p>}
-        <p
-          className={`leading-tight mt-0.5 ${small ? 'text-[11px] min-[480px]:max-md:text-[10px] md:text-[13px]' : 'text-[11px] md:text-[19px]'}`}
-          style={{ fontFamily: SERIF }}
-        >
-          {tile.name}
-        </p>
-        <p className={`mt-1 whitespace-nowrap text-white/90 ${small ? 'text-[10px] min-[480px]:max-md:text-[8px] md:text-[11px]' : 'text-[9px] md:text-[11px]'}`}>{formatARS(tile.price)}</p>
-      </div>
+      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/65 via-black/25 to-transparent"></div>
+      <p
+        className={`absolute left-2 bottom-2 md:left-3 md:bottom-3 right-2 text-white leading-tight ${
+          small ? 'text-[13px] min-[480px]:max-md:text-[11px]' : 'text-[13px] md:text-[22px]'
+        }`}
+        style={{ fontFamily: SERIF }}
+      >
+        {tile.category}
+      </p>
     </div>
   );
 };
@@ -362,7 +358,7 @@ export const GiftExamples: React.FC<{ onCreate: () => void }> = ({ onCreate }) =
         Una lista para la vida que <em>están armando</em>
       </h2>
       <p className="mt-4 text-center text-[15px] text-[#6F625A] max-w-[560px] mx-auto leading-relaxed">
-        La luna de miel, la casa propia, un viaje, un recuerdo en fotos. Cada regalo cuenta algo de ustedes.
+        Luna de miel, viajes, cenas, cosas para el hogar y más. Cada categoría tiene muchos regalos para elegir.
       </p>
 
       {/* Desde 480 px: la misma estructura de la referencia, sin huecos */}
@@ -376,21 +372,18 @@ export const GiftExamples: React.FC<{ onCreate: () => void }> = ({ onCreate }) =
         }}
       >
         {wishTiles.map((t) => (
-          <WishTile key={t.name} tile={t} style={{ gridArea: t.area }} />
+          <WishTile key={t.category} tile={t} style={{ gridArea: t.area }} />
         ))}
       </div>
 
       {/* Celular chico: dos columnas con alturas distintas */}
       <div className="mt-8 min-[480px]:hidden columns-2 gap-3">
         {wishTiles.map((t) => (
-          <WishTile key={t.name} tile={t} compact className={`mb-3 break-inside-avoid ${t.ratio}`} />
+          <WishTile key={t.category} tile={t} compact className={`mb-3 break-inside-avoid ${t.ratio}`} />
         ))}
       </div>
 
-      <p className="mt-6 text-center text-[11px] text-[#8A7A6E]" style={{ fontFamily: SANS }}>
-        Regalos y precios de ejemplo.
-      </p>
-      <div className="mt-6 text-center">
+      <div className="mt-8 text-center">
         <button type="button" onClick={onCreate} className={btnDark} style={{ fontFamily: SANS }}>
           Crear mi lista
         </button>
