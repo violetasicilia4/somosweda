@@ -3,10 +3,13 @@ import { AppView } from '../types';
 import { HeroVideo } from './HeroVideo';
 import {
   ExampleScreen,
-  GiftExamples,
+  GiftListSection,
   HappyCouples,
-  HowItWorks,
-  MoneyTrust,
+  HowItWorksTimeline,
+  MicrositeSection,
+  Pricing,
+  RsvpSection,
+  WhatIncludes,
 } from './LandingSections';
 import { Wordmark } from './Wordmark';
 
@@ -56,7 +59,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
                   className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] bg-white border border-[#2A2318]/40 px-5 py-2.5 hover:bg-[#F7F1E4] transition-colors cursor-pointer"
                   style={{ fontFamily: SANS }}
                 >
-                  Crear mi lista
+                  Crear mi evento
                 </button>
               </div>
             </div>
@@ -75,24 +78,18 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
             {/* Bloque de texto según Figma dev-mode (1440px: 1062x500, bottom 68, padding
                 40/56, gap 28, radius 2). Todo escala con el ancho del viewport (vw) y
                 se detiene en los valores de Figma. En mobile queda anclado abajo. */}
-            <div className="absolute z-10 left-1/2 -translate-x-1/2 bottom-6 sm:bottom-[min(68px,4.72vw)] w-[calc(100%-2rem)] sm:w-[min(1062px,73.75vw)] sm:h-[min(500px,34.72vw)] px-[clamp(16px,3.89vw,56px)] py-[clamp(16px,2.78vw,40px)] gap-[clamp(14px,1.67vw,24px)] flex flex-col items-center text-center rounded-[2px]">
-              <span
-                className="text-[clamp(10px,0.9vw,13px)] font-normal uppercase text-center text-[#F5F0E9] leading-[1.4] tracking-[0.1em]"
-                style={{ fontFamily: SANS, textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}
-              >
-                Luna de miel · Hogar · Proyectos juntos
-              </span>
+            <div className="absolute z-10 left-1/2 -translate-x-1/2 bottom-0 sm:bottom-[min(28px,2vw)] w-[calc(100%-2rem)] sm:w-[min(1062px,73.75vw)] sm:h-[min(500px,34.72vw)] px-[clamp(16px,3.89vw,56px)] py-[clamp(16px,2.78vw,40px)] gap-[clamp(14px,1.67vw,24px)] flex flex-col items-center text-center rounded-[2px]">
               <h1
                 className="text-[clamp(26px,3.33vw,48px)] font-normal text-[#F5F0EA] text-center leading-[1.05] w-full"
                 style={{ fontFamily: SANS, textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}
               >
-                La lista de regalos moderna para tu casamiento.
+                Organizá tu casamiento en un solo lugar.
               </h1>
               <p
                 className="max-w-[560px] text-[clamp(13px,1.15vw,17px)] leading-snug text-[#F5F0EA]/90"
                 style={{ fontFamily: SANS, textShadow: '0 2px 8px rgba(0, 0, 0, 0.6)' }}
               >
-                Creá regalos para su luna de miel, su futura casa o cualquier proyecto que quieran construir juntos. Tus invitados eligen y regalan directo a tu cuenta, y vos sabés quién te regaló qué.
+                Sumate a la plataforma para organizar casamientos que ayudó a miles de parejas.
               </p>
               <div className="flex items-center gap-3">
                 <button
@@ -101,7 +98,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
                   className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] bg-[#F7F1E4] px-6 py-3 hover:bg-white transition-colors cursor-pointer"
                   style={{ fontFamily: SANS }}
                 >
-                  Crear mi lista
+                  Crear mi evento
                 </button>
                 <button
                   id="hero-view-example-btn"
@@ -109,25 +106,31 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
                   className="text-[12px] font-normal leading-normal uppercase border border-white/70 text-[#F5F0EA] px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer"
                   style={{ fontFamily: SANS }}
                 >
-                  Ver una lista de ejemplo
+                  Ver ejemplo
                 </button>
               </div>
             </div>
           </section>
 
-          {/* 2. Cómo funciona */}
-          <HowItWorks onOpenExample={onOpenExample} />
+          {/* 2. Qué incluye Weda — los 4 pilares con el mismo peso visual */}
+          <WhatIncludes onCreate={onCreate} onOpenExample={onOpenExample} />
 
-          {/* 3. Cómo reciben el dinero */}
-          <MoneyTrust />
+          {/* 3. La lista de regalos moderna — pitch + collage + confianza, todo en una sola sección */}
+          <GiftListSection onOpenExample={onOpenExample} />
 
-          {/* 5. Ejemplos de regalos */}
-          <GiftExamples onCreate={onCreate} />
+          {/* 4. Micrositio */}
+          <MicrositeSection onCreate={onCreate} />
 
-          {/* 6. Prueba social */}
+          {/* 5. RSVP y gestión de invitados */}
+          <RsvpSection onCreate={onCreate} />
+
+          {/* 6. Testimonios */}
           <HappyCouples />
 
-          {/* 9. CTA final — foto a sangre completa con capa #1A0E08 al 60% */}
+          {/* 7. Planes */}
+          <Pricing onCreate={onCreate} />
+
+          {/* 8. CTA final — foto a sangre completa con capa #1A0E08 al 60% */}
           <section className="relative w-full min-h-[440px] flex flex-col justify-center items-center px-4 py-8 sm:px-[clamp(24px,8.33vw,120px)] sm:py-[clamp(32px,5vw,72px)] overflow-hidden">
             <img
               src="/cta-manos.webp"
@@ -140,10 +143,10 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
               <div className="flex flex-col items-center gap-5">
                 <span className="text-[11px] font-normal uppercase tracking-[0.1em] text-[#F5F0EA]/80">Lo que viene después</span>
                 <h2 className="text-[clamp(30px,4.4vw,64px)] leading-[1.05] font-normal text-[#F5F0EA] max-w-[20ch] sm:max-w-[24ch] text-balance">
-                  El casamiento es el principio. Que su lista sea el primer paso.
+                  El casamiento es el principio. Que organizarlo sea fácil.
                 </h2>
                 <p className="text-sm sm:text-base text-[#F5F0EA]/80 max-w-xl">
-                  La luna de miel, la casa, los proyectos que sueñan. Armen una lista que hable de ustedes.
+                  Invitados, RSVP, micrositio y lista de regalos, desde AR$ 99.000, pago único.
                 </p>
               </div>
 
@@ -153,11 +156,14 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
                   onClick={onCreate}
                   className="text-xs uppercase font-normal border border-white/70 text-white px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer"
                 >
-                  Crear mi lista
+                  Crear mi evento
                 </button>
               </div>
             </div>
           </section>
+
+          {/* Cómo funciona — franja compacta, no sección propia, justo antes del footer */}
+          <HowItWorksTimeline />
 
           {/* Footer */}
           <footer className="relative bg-[#1A0E08] text-[#F7F1E4] px-4 sm:px-8 pt-10 pb-6 overflow-hidden">
@@ -167,7 +173,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
                   <Wordmark tone="light" />
                 </div>
                 <p className="text-sm text-[#F7F1E4]/60 leading-relaxed max-w-sm">
-                  Una lista de regalos moderna y premium para casamientos. Hecho en Argentina.
+                  Invitados, RSVP, micrositio y lista de regalos para organizar tu casamiento en un solo lugar. Hecho en Argentina.
                 </p>
               </div>
 
@@ -175,8 +181,9 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
                 <h4 className="text-[11px] font-semibold uppercase tracking-wider text-[#A9795A] mb-3">Producto</h4>
                 <ul className="space-y-2.5 text-sm text-[#F7F1E4]/70">
                   <li><button onClick={() => scrollTo('como-funciona')} className="hover:text-white transition-colors cursor-pointer">Cómo funciona</button></li>
-                  <li><button onClick={() => onOpenExample('gifts')} className="hover:text-white transition-colors cursor-pointer">Ver una lista de ejemplo</button></li>
-                  <li><button onClick={onCreate} className="hover:text-white transition-colors cursor-pointer">Crear mi lista</button></li>
+                  <li><button onClick={() => scrollTo('planes')} className="hover:text-white transition-colors cursor-pointer">Planes</button></li>
+                  <li><button onClick={() => onOpenExample('gifts')} className="hover:text-white transition-colors cursor-pointer">Ver ejemplo</button></li>
+                  <li><button onClick={onCreate} className="hover:text-white transition-colors cursor-pointer">Crear mi evento</button></li>
                 </ul>
               </div>
 
