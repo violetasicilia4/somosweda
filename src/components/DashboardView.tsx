@@ -7,26 +7,26 @@ import {
   AppView,
   ReceivedGift,
   CuentaSection,
-  DurationMonths,
+  ManualGuest,
+  ManualGuestStatus,
 } from '../types';
-import { durationOptions } from '../data/initialData';
-import { addMonths, formatARS, formatLongDate } from '../utils/format';
+import { formatLongDate } from '../utils/format';
+import { getPlanDetails, isTabLocked } from '../utils/plan';
 import { DashboardSidebar } from './dashboard/DashboardSidebar';
 import { HomeChecklistView } from './dashboard/HomeChecklistView';
 import { GiftRegistryView } from './dashboard/GiftRegistryView';
 import { ReceivedGiftsView } from './dashboard/ReceivedGiftsView';
+import { RsvpView } from './dashboard/RsvpView';
 import { MicrositeBuilderView } from './dashboard/MicrositeBuilderView';
 import { AccountView } from './dashboard/AccountView';
 import { HelpView } from './dashboard/HelpView';
-import { CobrosView } from './dashboard/CobrosView';
-import { DurationPicker } from './dashboard/DurationPicker';
 import {
   ExternalLink,
   Check,
   CreditCard,
   Globe,
-  CheckCircle2,
   Menu,
+  Lock,
 } from 'lucide-react';
 
 interface DashboardViewProps {
@@ -34,11 +34,16 @@ interface DashboardViewProps {
   gifts: GiftItem[];
   receivedGifts: ReceivedGift[];
   events: WeddingEvent[];
+  manualGuests: ManualGuest[];
   onUpdateWedding: (updated: Partial<WeddingData>) => void;
   onAddGift: (gift: Omit<GiftItem, 'id' | 'currentAmount'>) => void;
   onDeleteGift: (giftId: string) => void;
   onUpdateGift?: (giftId: string, updates: Partial<GiftItem>) => void;
   onUpdateReceivedGift: (giftId: string, updates: Partial<ReceivedGift>) => void;
+  onAddManualGuest: (guest: Omit<ManualGuest, 'id'>) => void;
+  onUpdateManualGuestStatus: (id: string, status: ManualGuestStatus) => void;
+  onDeleteManualGuest: (id: string) => void;
+  onImportManualGuests: (guests: Omit<ManualGuest, 'id'>[]) => void;
   onOpenMicrosite: () => void;
   onNavigate: (view: AppView) => void;
 }
@@ -48,17 +53,24 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   gifts,
   receivedGifts = [],
   events,
+  manualGuests,
   onUpdateWedding,
   onAddGift,
   onDeleteGift,
   onUpdateGift,
   onUpdateReceivedGift,
+  onAddManualGuest,
+  onUpdateManualGuestStatus,
+  onDeleteManualGuest,
+  onImportManualGuests,
   onOpenMicrosite,
   onNavigate,
 }) => {
   const [activeTab, setActiveTab] = useState<DashboardTab>('inicio');
   // Menú lateral: fijo en escritorio, cajón deslizable en pantallas chicas
   const [menuOpen, setMenuOpen] = useState(false);
+  // Se abre cuando tocan una pestaña que su plan no incluye (por ahora, solo "Tu sitio")
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
   const [cuentaSection, setCuentaSection] = useState<CuentaSection>('datos');
   // Paso 5 del checklist: se completa al abrir "Ver tu lista"
   const [siteViewed, setSiteViewed] = useState(false);
@@ -66,9 +78,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   // Publish modal state
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isPublishingInProgress, setIsPublishingInProgress] = useState(false);
-  const [selectedMonths, setSelectedMonths] = useState<DurationMonths>(wedding.durationMonths ?? 12);
-  // La cuenta de cobro se completa en el paso 3 del checklist; acá solo se puede revisar.
-  const [isEditingCobro, setIsEditingCobro] = useState(false);
+  // La cuenta de cobro (dónde reciben el dinero de los regalos) se carga en el paso 2
+  // del checklist — no tiene que ver con el pago del plan, así que no se muestra acá.
   const isPaymentConfigured = Boolean(
     wedding.bankAlias?.trim() || wedding.bankCbu?.trim() || wedding.mercadoPagoAlias?.trim()
   );
@@ -77,13 +88,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const giftsReady = gifts.length >= 5;
   const canPublish = isPaymentConfigured && giftsReady;
 
-  const selectedOption = durationOptions.find((o) => o.months === selectedMonths) ?? durationOptions[1];
   const isPublished = wedding.status === 'PUBLICADO';
 
   // Regalos recibidos que todavía esperan un agradecimiento — badge de Regalos
   const pendingReceivedCount = receivedGifts.filter((r) => !r.isThanked).length;
 
+  // El pago es por plan, ya no por plazo: un solo precio, un solo pago.
+  const plan = getPlanDetails(wedding.plan);
+
   const goTo = (tab: DashboardTab, section?: CuentaSection) => {
+    if (isTabLocked(tab, wedding)) {
+      setIsUpgradeModalOpen(true);
+      setMenuOpen(false);
+      return;
+    }
     setActiveTab(tab);
     setMenuOpen(false);
     if (tab === 'cuenta' && section) setCuentaSection(section);
@@ -95,17 +113,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   };
 
   const handleOpenPublishModal = () => {
-    setSelectedMonths(wedding.durationMonths ?? 12);
-    setIsEditingCobro(false);
     setIsPaymentModalOpen(true);
   };
 
-  // Publicación de la lista (prototipo: el pago está simulado)
+  // Publicación de la lista (prototipo: el pago está simulado). El pago es por plan,
+  // pago único, sin plazo ni fecha de vencimiento.
   const handleExecutePayment = () => {
     setIsPublishingInProgress(true);
     setTimeout(() => {
       onUpdateWedding({
-        durationMonths: selectedMonths,
         status: 'PUBLICADO',
         setupProgress: 100,
         publishedAt: new Date().toISOString(),
@@ -125,6 +141,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         wedding={wedding}
         pendingReceivedCount={pendingReceivedCount}
         onLogout={() => onNavigate('landing')}
+        onLockedTab={() => setIsUpgradeModalOpen(true)}
         open={menuOpen}
         onClose={() => setMenuOpen(false)}
       />
@@ -229,6 +246,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <ReceivedGiftsView receivedGifts={receivedGifts} onUpdateReceivedGift={onUpdateReceivedGift} />
           )}
 
+          {activeTab === 'rsvp' && (
+            <RsvpView
+              manualGuests={manualGuests}
+              onAddManualGuest={onAddManualGuest}
+              onUpdateManualGuestStatus={onUpdateManualGuestStatus}
+              onDeleteManualGuest={onDeleteManualGuest}
+              onImportManualGuests={onImportManualGuests}
+            />
+          )}
+
           {activeTab === 'sitio' && (
             <MicrositeBuilderView
               wedding={wedding}
@@ -247,7 +274,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               onUpdateWedding={onUpdateWedding}
               section={cuentaSection}
               onSectionChange={setCuentaSection}
-              onPublish={handleOpenPublishModal}
             />
           )}
         </main>
@@ -272,51 +298,38 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </button>
             </div>
 
-            {/* Cuenta de cobro: se revisa acá, se completa en el paso 3 del checklist */}
-            <div className="space-y-2">
-              <span className="block text-xs font-semibold text-gray-700">Dónde recibís el dinero</span>
-              {isPaymentConfigured && !isEditingCobro ? (
-                <div className="flex items-center justify-between gap-3 bg-emerald-50 border border-emerald-200 rounded-xl p-3">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-emerald-800">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Cuenta de cobro cargada</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsEditingCobro(true)}
-                    className="text-xs font-semibold text-emerald-800 underline shrink-0 cursor-pointer"
-                  >
-                    Editar
-                  </button>
-                </div>
-              ) : (
-                <CobrosView wedding={wedding} onUpdateWedding={onUpdateWedding} compact />
-              )}
-            </div>
-
             <div className="space-y-3">
-              <span className="block text-xs font-semibold text-gray-700">Elegí por cuánto tiempo</span>
-              <DurationPicker value={selectedMonths} onChange={setSelectedMonths} />
+              <div className="flex items-center justify-between">
+                <span className="block text-xs font-semibold text-gray-700">Tu plan</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsPaymentModalOpen(false);
+                    goTo('cuenta', 'plan');
+                  }}
+                  className="text-xs font-semibold text-gray-500 hover:text-gray-800 underline cursor-pointer"
+                >
+                  Cambiar plan
+                </button>
+              </div>
 
               <div className="bg-gray-50 border border-gray-200/80 p-4 rounded-xl space-y-1">
                 <div className="flex justify-between items-center text-sm font-bold text-gray-900">
-                  <span>{selectedMonths} meses</span>
-                  <span className="text-base">{formatARS(selectedOption.price)}</span>
+                  <span>{plan.name}</span>
+                  <span className="text-base">{plan.price}</span>
                 </div>
                 <p className="text-xs text-gray-500">
-                  Activo hasta el {formatLongDate(addMonths(new Date(), selectedMonths))}. Un solo pago, sin renovaciones automáticas.
+                  Pago único, sin plazos ni renovaciones. Tu lista queda activa desde que la publiques.
                 </p>
               </div>
 
               <div className="space-y-2 text-xs text-gray-600">
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>Tu lista de regalos en vivo en weda.app/boda/{wedding.slug}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>Regalos sin límite en tu lista</span>
-                </div>
+                {plan.features.map((f) => (
+                  <div key={f} className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>{f}</span>
+                  </div>
+                ))}
                 <div className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>Sin comisión por regalo: el dinero va directo a tu cuenta</span>
@@ -336,7 +349,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 ) : (
                   <>
                     <CreditCard className="w-4 h-4" />
-                    <span>Pagar {formatARS(selectedOption.price)} y publicar tu lista</span>
+                    <span>Pagar {plan.price} y publicar tu lista</span>
                   </>
                 )}
               </button>
@@ -354,6 +367,44 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 className="uppercase w-full py-2 text-xs font-normal text-gray-500 hover:text-gray-800 cursor-pointer"
               >
                 Seguir en borrador
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= MODAL: MEJORÁ TU PLAN (pestaña bloqueada) ================= */}
+      {isUpgradeModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-sm w-full p-6 border border-gray-100 animate-fade-in text-center space-y-4">
+            <span className="w-11 h-11 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center mx-auto">
+              <Lock className="w-5 h-5" />
+            </span>
+            <div>
+              <h3 className="font-bold text-lg text-gray-900">Tu sitio no está en tu plan</h3>
+              <p className="text-sm text-gray-500 mt-1.5">
+                Tu plan actual es <strong className="text-gray-700">{plan.name}</strong>. El micrositio completo
+                (galería, ubicación, cronograma) es parte de Evento Completo.
+              </p>
+            </div>
+            <div className="pt-1 flex flex-col gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  onUpdateWedding({ plan: 'completo' });
+                  setIsUpgradeModalOpen(false);
+                  setActiveTab('sitio');
+                }}
+                className="uppercase w-full py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal cursor-pointer transition-colors"
+              >
+                Cambiar a Evento Completo
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsUpgradeModalOpen(false)}
+                className="uppercase w-full py-2 text-xs font-normal text-gray-500 hover:text-gray-800 cursor-pointer"
+              >
+                Seguir con mi plan
               </button>
             </div>
           </div>

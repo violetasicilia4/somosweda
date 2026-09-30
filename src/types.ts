@@ -6,23 +6,28 @@ export type AppView =
   | 'verify-pin'
   | 'reset-password'
   | 'find-couple'
+  | 'choose-plan'
   | 'create-wedding'
   | 'dashboard';
+
+// Los 3 planes de la landing (ver Pricing en LandingSections.tsx). Cada uno incluye
+// todo lo del anterior: regalos ⊂ invitados-rsvp ⊂ completo.
+export type WeddingPlan = 'regalos' | 'invitados-rsvp' | 'completo';
 
 export type DashboardTab =
   | 'inicio'
   | 'regalos'
   | 'recibidos'
+  | 'rsvp'
   | 'sitio'
   | 'ayuda'
   | 'cuenta';
 
 // Subsecciones de las pantallas con pestañas internas
-export type CuentaSection = 'datos' | 'cobro' | 'duracion';
-
-export type DurationMonths = 6 | 12 | 24;
+export type CuentaSection = 'datos' | 'plan' | 'cobro';
 
 export interface WeddingData {
+  plan?: WeddingPlan;
   coupleName: string;
   partner1: string;
   partner2: string;
@@ -45,25 +50,36 @@ export interface WeddingData {
   mercadoPagoCvu?: string;
   mercadoPagoLink?: string;
   isPaymentConfigured?: boolean;
-  durationMonths?: DurationMonths;
   publishedAt?: string;
   designTheme?: 'editorial' | 'romantico' | 'minimal' | 'clasico';
   colorPalette?: 'lino' | 'champagne' | 'bosque' | 'salvia';
   typography?: 'serif' | 'sans' | 'editorial';
 }
 
-export interface Guest {
+// RSVP simple: 1 persona = 1 respuesta. Sin acompañantes, sin cantidad de invitados,
+// sin links únicos ni matching contra ninguna lista — cada envío del formulario
+// público es un registro independiente.
+export type RsvpAttendance = 'attending' | 'declined';
+
+export interface RsvpEntry {
   id: string;
-  fullName: string;
-  email?: string;
-  phone?: string;
-  companionsCount: number;
-  status: 'confirmado' | 'pendiente' | 'rechazado';
-  dietaryRequirement?: string;
-  tableAssigned?: string;
-  invitationSent: boolean;
-  reminderSent?: boolean;
-  openedInvitation?: boolean;
+  firstName: string;
+  lastName: string;
+  attendanceStatus: RsvpAttendance;
+  dietaryRestrictions?: string;
+  message?: string;
+  createdAt: string;
+}
+
+// Lista propia del organizador, cargada a mano o importada — es solo para
+// organización interna y NUNCA se cruza automáticamente con RsvpEntry.
+export type ManualGuestStatus = 'pendiente' | 'confirmado' | 'no-asiste';
+
+export interface ManualGuest {
+  id: string;
+  firstName: string;
+  lastName: string;
+  status: ManualGuestStatus;
 }
 
 export interface WeddingTable {

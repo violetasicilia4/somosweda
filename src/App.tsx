@@ -4,10 +4,11 @@
  */
 
 import React, { useState } from 'react';
-import { AppView, WeddingData, Guest, GiftItem, WeddingEvent, ReceivedGift } from './types';
-import { initialWedding, initialGuests, initialGifts, initialEvents, initialReceivedGifts } from './data/initialData';
+import { AppView, WeddingData, ManualGuest, ManualGuestStatus, GiftItem, WeddingEvent, ReceivedGift } from './types';
+import { initialWedding, initialManualGuests, initialGifts, initialEvents, initialReceivedGifts } from './data/initialData';
 import { LandingView } from './components/LandingView';
 import { AuthViews } from './components/AuthViews';
+import { ChoosePlanView } from './components/ChoosePlanView';
 import { CreateWeddingModal } from './components/CreateWeddingModal';
 import { DashboardView } from './components/DashboardView';
 import { MicrositeModal } from './components/MicrositeModal';
@@ -26,7 +27,7 @@ export default function App() {
     return new URLSearchParams(window.location.search).get('example') === '1';
   });
   const [wedding, setWedding] = useState<WeddingData>(initialWedding);
-  const [guests, setGuests] = useState<Guest[]>(initialGuests);
+  const [manualGuests, setManualGuests] = useState<ManualGuest[]>(initialManualGuests);
   const [gifts, setGifts] = useState<GiftItem[]>(initialGifts);
   const [receivedGifts, setReceivedGifts] = useState<ReceivedGift[]>(initialReceivedGifts);
   const [events, setEvents] = useState<WeddingEvent[]>(initialEvents);
@@ -57,20 +58,29 @@ export default function App() {
     setWedding(prev => ({ ...prev, ...updated }));
   };
 
-  const handleAddGuest = (newGuest: Omit<Guest, 'id'>) => {
-    const guest: Guest = {
+  const handleAddManualGuest = (newGuest: Omit<ManualGuest, 'id'>) => {
+    const guest: ManualGuest = {
       ...newGuest,
-      id: `g_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      id: `mg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
     };
-    setGuests(prev => [guest, ...prev]);
+    setManualGuests(prev => [guest, ...prev]);
   };
 
-  const handleUpdateGuestStatus = (guestId: string, status: Guest['status']) => {
-    setGuests(prev => prev.map(g => g.id === guestId ? { ...g, status } : g));
+  const handleUpdateManualGuestStatus = (guestId: string, status: ManualGuestStatus) => {
+    setManualGuests(prev => prev.map(g => g.id === guestId ? { ...g, status } : g));
   };
 
-  const handleDeleteGuest = (guestId: string) => {
-    setGuests(prev => prev.filter(g => g.id !== guestId));
+  const handleDeleteManualGuest = (guestId: string) => {
+    setManualGuests(prev => prev.filter(g => g.id !== guestId));
+  };
+
+  // Importación CSV: mismos 3 campos que la carga manual, sin matching contra nada.
+  const handleImportManualGuests = (newGuests: Omit<ManualGuest, 'id'>[]) => {
+    const withIds: ManualGuest[] = newGuests.map((g, i) => ({
+      ...g,
+      id: `mg_${Date.now()}_${i}_${Math.random().toString(36).slice(2, 8)}`,
+    }));
+    setManualGuests(prev => [...withIds, ...prev]);
   };
 
   const handleAddGift = (newGift: Omit<GiftItem, 'id' | 'currentAmount'>) => {
@@ -177,6 +187,13 @@ export default function App() {
           />
         )}
 
+        {currentView === 'choose-plan' && (
+          <ChoosePlanView
+            onNavigate={(view) => setCurrentView(view)}
+            onSelectPlan={(plan) => handleUpdateWedding({ plan })}
+          />
+        )}
+
         {currentView === 'create-wedding' && (
           <CreateWeddingModal
             wedding={wedding}
@@ -191,11 +208,16 @@ export default function App() {
             gifts={gifts}
             receivedGifts={receivedGifts}
             events={events}
+            manualGuests={manualGuests}
             onUpdateWedding={handleUpdateWedding}
             onAddGift={handleAddGift}
             onDeleteGift={handleDeleteGift}
             onUpdateGift={handleUpdateGift}
             onUpdateReceivedGift={handleUpdateReceivedGift}
+            onAddManualGuest={handleAddManualGuest}
+            onUpdateManualGuestStatus={handleUpdateManualGuestStatus}
+            onDeleteManualGuest={handleDeleteManualGuest}
+            onImportManualGuests={handleImportManualGuests}
             onOpenMicrosite={handleOpenMicrosite}
             onNavigate={(view) => setCurrentView(view)}
           />

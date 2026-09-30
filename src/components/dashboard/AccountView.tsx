@@ -3,20 +3,19 @@ import { WeddingData, CuentaSection } from '../../types';
 import { Check } from 'lucide-react';
 import { formatLongDate } from '../../utils/format';
 import { CobrosView } from './CobrosView';
-import { DurationView } from './DurationView';
+import { PlanView } from './PlanView';
 
 interface AccountViewProps {
   wedding: WeddingData;
   onUpdateWedding: (updated: Partial<WeddingData>) => void;
   section: CuentaSection;
   onSectionChange: (section: CuentaSection) => void;
-  onPublish: () => void;
 }
 
 const SECTIONS: { id: CuentaSection; label: string }[] = [
   { id: 'datos', label: 'Datos de la boda' },
+  { id: 'plan', label: 'Tu plan' },
   { id: 'cobro', label: 'Cuenta de cobro' },
-  { id: 'duracion', label: 'Duración' },
 ];
 
 export const AccountView: React.FC<AccountViewProps> = ({
@@ -24,7 +23,6 @@ export const AccountView: React.FC<AccountViewProps> = ({
   onUpdateWedding,
   section,
   onSectionChange,
-  onPublish,
 }) => {
   const [partner1, setPartner1] = useState(wedding.partner1);
   const [partner2, setPartner2] = useState(wedding.partner2);
@@ -54,7 +52,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
           Cuenta
         </h2>
         <p className="text-sm text-gray-500 mt-1">
-          Los datos de tu boda, dónde recibís el dinero y por cuánto tiempo está activa tu lista.
+          Los datos de tu boda, tu plan y dónde recibís el dinero.
         </p>
       </div>
 
@@ -73,11 +71,9 @@ export const AccountView: React.FC<AccountViewProps> = ({
         ))}
       </div>
 
-      {section === 'cobro' && <CobrosView wedding={wedding} onUpdateWedding={onUpdateWedding} hideTitle />}
+      {section === 'plan' && <PlanView wedding={wedding} onUpdateWedding={onUpdateWedding} />}
 
-      {section === 'duracion' && (
-        <DurationView wedding={wedding} onUpdateWedding={onUpdateWedding} onPublish={onPublish} />
-      )}
+      {section === 'cobro' && <CobrosView wedding={wedding} onUpdateWedding={onUpdateWedding} hideTitle />}
 
       {section === 'datos' && (
         <>

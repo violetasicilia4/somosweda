@@ -1,4 +1,4 @@
-import { WeddingData, Guest, GiftItem, WeddingEvent, ReceivedGift, WeddingTable } from '../types';
+import { WeddingData, ManualGuest, GiftItem, WeddingEvent, ReceivedGift, WeddingTable } from '../types';
 
 // Fotos de portada curadas, usadas en el paso "Foto principal" del onboarding
 // y en el editor de portada del Micrositio.
@@ -30,6 +30,7 @@ export const coverPresets = [
 ];
 
 export const initialWedding: WeddingData = {
+  plan: 'completo',
   coupleName: 'Milagros & Juan',
   partner1: 'Milagros',
   partner2: 'Juan',
@@ -52,65 +53,16 @@ export const initialWedding: WeddingData = {
   mercadoPagoCvu: '0000003100088219401222',
   mercadoPagoLink: 'https://mpago.la/pos/boda-milagros-juan',
   isPaymentConfigured: true,
-  durationMonths: 12,
 };
 
-export const initialGuests: Guest[] = [
-  {
-    id: 'g1',
-    fullName: 'Camila Rodriguez',
-    email: 'camila.r@gmail.com',
-    phone: '+54 9 11 4829-1920',
-    companionsCount: 1,
-    status: 'confirmado',
-    dietaryRequirement: 'Vegetariana',
-    tableAssigned: 'Mesa 4',
-    invitationSent: true,
-  },
-  {
-    id: 'g2',
-    fullName: 'Lucas Benítez',
-    email: 'lucas.b@hotmail.com',
-    phone: '+54 9 11 3912-4019',
-    companionsCount: 0,
-    status: 'confirmado',
-    dietaryRequirement: 'Sin gluten (Celíaco)',
-    tableAssigned: 'Mesa 2',
-    invitationSent: true,
-  },
-  {
-    id: 'g3',
-    fullName: 'Valentina Morales',
-    email: 'valen.morales@gmail.com',
-    phone: '+54 9 11 5901-2299',
-    companionsCount: 2,
-    status: 'pendiente',
-    dietaryRequirement: 'Ninguna',
-    tableAssigned: 'Sin asignar',
-    invitationSent: true,
-  },
-  {
-    id: 'g4',
-    fullName: 'Ignacio Ferrando',
-    email: 'ignacio.f@empresa.com',
-    phone: '+54 9 11 6721-0021',
-    companionsCount: 1,
-    status: 'pendiente',
-    dietaryRequirement: 'Ninguna',
-    tableAssigned: 'Sin asignar',
-    invitationSent: false,
-  },
-  {
-    id: 'g5',
-    fullName: 'Florencia & Gonzalo Paz',
-    email: 'gonza.paz@gmail.com',
-    phone: '+54 9 11 2819-3310',
-    companionsCount: 1,
-    status: 'rechazado',
-    dietaryRequirement: 'Ninguna',
-    tableAssigned: '—',
-    invitationSent: true,
-  },
+// Lista manual del organizador (Gestión manual en RSVP): solo Nombre, Apellido y
+// Estado. Es organizativa — nunca se cruza con las respuestas del formulario público.
+export const initialManualGuests: ManualGuest[] = [
+  { id: 'mg1', firstName: 'Camila', lastName: 'Rodríguez', status: 'confirmado' },
+  { id: 'mg2', firstName: 'Lucas', lastName: 'Benítez', status: 'confirmado' },
+  { id: 'mg3', firstName: 'Valentina', lastName: 'Morales', status: 'pendiente' },
+  { id: 'mg4', firstName: 'Ignacio', lastName: 'Ferrando', status: 'pendiente' },
+  { id: 'mg5', firstName: 'Florencia', lastName: 'Paz', status: 'no-asiste' },
 ];
 
 export const initialGifts: GiftItem[] = [
@@ -219,21 +171,6 @@ export const initialEvents: WeddingEvent[] = [
     description: 'Cocktail de bienvenida, cena de 3 pasos, barra libre y fiesta hasta el amanecer.',
     iconType: 'party',
   },
-];
-
-// Modelo comercial: un solo producto con todo incluido. Se paga una vez, al publicar,
-// según cuánto tiempo se quiere mantener activo el sitio. Precios iniciales a validar.
-export interface DurationOption {
-  months: 6 | 12 | 24;
-  price: number;
-  note: string;
-  recommended?: boolean;
-}
-
-export const durationOptions: DurationOption[] = [
-  { months: 6, price: 95000, note: 'Alcanza si publicás cerca de la fecha' },
-  { months: 12, price: 140000, note: 'Cubre antes, durante y después de la boda', recommended: true },
-  { months: 24, price: 220000, note: 'Para conservar tu lista y sus recuerdos' },
 ];
 
 export const suggestedGiftsByCategory: Record<string, Omit<GiftItem, 'id'>[]> = {

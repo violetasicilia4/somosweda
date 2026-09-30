@@ -6,11 +6,14 @@ import {
   Heart,
   X,
   User,
+  UserCheck,
   HelpCircle,
   Home,
-  LogOut
+  LogOut,
+  Lock,
 } from 'lucide-react';
 import { formatLongDate } from '../../utils/format';
+import { isTabLocked } from '../../utils/plan';
 import { Wordmark } from '../Wordmark';
 
 interface DashboardSidebarProps {
@@ -19,6 +22,7 @@ interface DashboardSidebarProps {
   wedding: WeddingData;
   pendingReceivedCount: number;
   onLogout: () => void;
+  onLockedTab?: (tab: DashboardTab) => void;
   open: boolean;
   onClose: () => void;
 }
@@ -26,11 +30,11 @@ interface DashboardSidebarProps {
 type MenuItem = { id: DashboardTab; label: string; icon: React.ComponentType<{ className?: string }> };
 
 // Todas las secciones tienen la misma jerarquía: mismo tamaño, tipografía y alineación.
-// Invitados queda fuera de esta primera versión.
 const MENU_ITEMS: MenuItem[] = [
   { id: 'inicio', label: 'Inicio', icon: Home },
   { id: 'regalos', label: 'Regalos', icon: Gift },
   { id: 'recibidos', label: 'Regalos recibidos', icon: Heart },
+  { id: 'rsvp', label: 'RSVP', icon: UserCheck },
   { id: 'sitio', label: 'Tu sitio', icon: Layout },
   { id: 'ayuda', label: 'Ayuda', icon: HelpCircle },
   { id: 'cuenta', label: 'Cuenta', icon: User },
@@ -42,6 +46,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   wedding,
   pendingReceivedCount,
   onLogout,
+  onLockedTab,
   open,
   onClose,
 }) => {
@@ -49,19 +54,23 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     const Icon = item.icon;
     const isActive = activeTab === item.id;
     const showBadge = item.id === 'recibidos' && pendingReceivedCount > 0;
+    const locked = isTabLocked(item.id, wedding);
     return (
       <button
         key={item.id}
-        onClick={() => onSelectTab(item.id)}
+        onClick={() => (locked ? onLockedTab?.(item.id) : onSelectTab(item.id))}
         className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-normal uppercase transition-all text-left cursor-pointer ${
           isActive
             ? 'bg-gray-900 text-white shadow-2xs'
-            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
+            : locked
+              ? 'text-gray-400 hover:bg-gray-100/80'
+              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
         }`}
       >
-        <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-gray-400'}`} />
+        <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : locked ? 'text-gray-300' : 'text-gray-400'}`} />
         <span className="flex-1 truncate">{item.label}</span>
-        {showBadge && (
+        {locked && <Lock className="w-3.5 h-3.5 text-gray-300 shrink-0" />}
+        {showBadge && !locked && (
           <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 ${
             isActive ? 'bg-white/20 text-white' : 'bg-rose-500 text-white'
           }`}>

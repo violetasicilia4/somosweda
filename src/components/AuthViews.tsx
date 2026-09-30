@@ -74,7 +74,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
     }
     setFormError('');
     onAuthSuccess({ name: fullName, email });
-    onNavigate('create-wedding');
+    onNavigate('choose-plan');
   };
 
   const handleForgotPasswordSubmit = (e: React.FormEvent) => {
@@ -333,7 +333,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                 type="button"
                 onClick={() => {
                   onAuthSuccess({ name: 'Milagros', email: 'milagros@gmail.com' });
-                  onNavigate('create-wedding');
+                  onNavigate('choose-plan');
                 }}
                 className="uppercase w-full py-2.5 px-4 border border-gray-300 rounded-lg text-xs sm:text-xs font-normal text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
@@ -350,7 +350,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                 type="button"
                 onClick={() => {
                   onAuthSuccess({ name: 'Milagros', email: 'milagros@icloud.com' });
-                  onNavigate('create-wedding');
+                  onNavigate('choose-plan');
                 }}
                 className="uppercase w-full py-2.5 px-4 border border-gray-300 rounded-lg text-xs sm:text-xs font-normal text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >

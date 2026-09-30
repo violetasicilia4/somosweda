@@ -417,44 +417,33 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
           {/* Regalos de la categoría activa: mismas tarjetas que ve el invitado en el ejemplo
               (foto cuadrada, categoría, nombre en serif, monto), con el botón para
               sumarlo o sacarlo de la lista, sin modal ni pasos extra */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-5 gap-y-9">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-5 gap-y-8">
             {(suggestedGiftsByCategory[selectedCategory] || []).map((item, idx) => {
               const checked = isGiftInList(item.title);
               return (
                 <article key={idx} className="flex flex-col">
-                  <img
-                    src={item.imageUrl}
-                    alt={item.title}
-                    className="w-full aspect-square object-cover rounded-[10px] bg-gray-100"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="px-2 pt-3 flex flex-col flex-1">
-                    <p className="uppercase text-[9px] tracking-[0.08em] leading-none text-gray-500">
-                      {item.category}
-                    </p>
-                    <h3
-                      className="font-normal text-[16px] leading-[1.1] text-[#2A1A10] mt-1.5 line-clamp-2"
-                      style={{ fontFamily: "'Instrument Serif', serif" }}
-                    >
-                      {item.title}
-                    </h3>
-                    <p className="font-bold text-[13px] leading-none text-[#3A3330] mt-1.5">
-                      ARS {item.targetPrice.toLocaleString('es-AR')}
-                    </p>
+                  <div className="relative">
+                    <img
+                      src={item.imageUrl}
+                      alt={item.title}
+                      className="w-full aspect-square object-cover rounded-[10px] bg-gray-100"
+                      referrerPolicy="no-referrer"
+                    />
                     <button
                       type="button"
                       onClick={() => handleToggleSuggestion(item)}
-                      title={checked ? 'Quitar de la lista' : undefined}
-                      className={`mt-auto pt-0 uppercase text-[9px] tracking-[0.03em] h-[26px] rounded-[2px] cursor-pointer transition-colors inline-flex items-center justify-center gap-1 ${
-                        checked
-                          ? 'bg-white text-[#081034] border border-[#081034]'
-                          : 'bg-[#081034] text-white border border-[#081034] hover:opacity-90'
+                      title={checked ? 'Quitar de la lista' : 'Agregar a la lista'}
+                      className={`absolute -bottom-2.5 -right-2.5 w-9 h-9 rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.25)] transition-colors cursor-pointer ${
+                        checked ? 'bg-[#081034] text-white' : 'bg-[#1E3A8A] text-white hover:bg-[#173073]'
                       }`}
-                      style={{ marginTop: 14 }}
                     >
-                      {checked && <Check className="w-3 h-3" />}
-                      <span>{checked ? 'Agregado' : 'Agregar al regalo'}</span>
+                      {checked ? <Check className="w-4 h-4" strokeWidth={2.5} /> : <Plus className="w-4 h-4" strokeWidth={2.25} />}
                     </button>
+                  </div>
+                  <div className="px-1 pt-3.5">
+                    <p className="text-[10px] text-gray-500 truncate">{item.category}</p>
+                    <h3 className="text-[13px] font-semibold text-[#282018] leading-snug truncate">{item.title}</h3>
+                    <p className="text-[11px] text-gray-400 mt-0.5">ARS {item.targetPrice.toLocaleString('es-AR')}</p>
                   </div>
                 </article>
               );
@@ -463,43 +452,36 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
             {/* Regalos personalizados que la pareja cargó dentro de esta categoría */}
             {gifts.filter(g => g.isCustom && g.category === selectedCategory).map((gift) => (
               <article key={gift.id} className="flex flex-col">
-                <img
-                  src={gift.imageUrl}
-                  alt={gift.title}
-                  className="w-full aspect-square object-cover rounded-[10px] bg-gray-100"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="px-2 pt-3 flex flex-col flex-1">
-                  <p className="uppercase text-[9px] tracking-[0.08em] leading-none text-gray-500">
-                    Personalizado
-                  </p>
-                  <h3
-                    className="font-normal text-[16px] leading-[1.1] text-[#2A1A10] mt-1.5 line-clamp-2"
-                    style={{ fontFamily: "'Instrument Serif', serif" }}
-                  >
-                    {gift.title}
-                  </h3>
-                  <p className="font-bold text-[13px] leading-none text-[#3A3330] mt-1.5">
-                    ARS {gift.targetPrice.toLocaleString('es-AR')}
-                  </p>
-                  <div className="mt-auto flex items-center gap-2" style={{ marginTop: 14 }}>
+                <div className="relative">
+                  <img
+                    src={gift.imageUrl}
+                    alt={gift.title}
+                    className="w-full aspect-square object-cover rounded-[10px] bg-gray-100"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute -bottom-2.5 -right-2.5 flex items-center gap-1.5">
                     <button
                       type="button"
                       onClick={() => handleOpenEdit(gift)}
-                      className="uppercase flex-1 text-[9px] tracking-[0.03em] h-[26px] rounded-[2px] border border-[#081034] text-[#081034] hover:bg-[#081034]/5 transition-colors cursor-pointer inline-flex items-center justify-center gap-1"
+                      aria-label="Editar regalo"
+                      className="w-9 h-9 rounded-full bg-white text-gray-600 flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:text-gray-900 transition-colors cursor-pointer"
                     >
-                      <Edit3 className="w-3 h-3" />
-                      <span>Editar</span>
+                      <Edit3 className="w-4 h-4" strokeWidth={2} />
                     </button>
                     <button
                       type="button"
                       onClick={() => onDeleteGift(gift.id)}
                       aria-label="Eliminar regalo"
-                      className="w-[26px] h-[26px] rounded-[2px] border border-gray-200 text-gray-500 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 transition-colors cursor-pointer inline-flex items-center justify-center shrink-0"
+                      className="w-9 h-9 rounded-full bg-white text-rose-500 flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:text-rose-700 transition-colors cursor-pointer"
                     >
-                      <Trash2 className="w-3 h-3" />
+                      <Trash2 className="w-4 h-4" strokeWidth={2} />
                     </button>
                   </div>
+                </div>
+                <div className="px-1 pt-3.5">
+                  <p className="text-[10px] text-gray-500 truncate">Personalizado</p>
+                  <h3 className="text-[13px] font-semibold text-[#282018] leading-snug truncate">{gift.title}</h3>
+                  <p className="text-[11px] text-gray-400 mt-0.5">ARS {gift.targetPrice.toLocaleString('es-AR')}</p>
                 </div>
               </article>
             ))}

@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { ChevronDown, Search } from 'lucide-react';
+import { ExampleHero } from './ExampleHero';
 
 // Pantalla "Regalos" del ejemplo. Copia del diseño de referencia (frame de 710px de
 // ancho): todas las medidas están en "u", 1u = 1px a 710px de ancho del frame, que a
@@ -51,9 +52,6 @@ const priceRanges = [
 
 const formatPrice = (n: number) => `ARS ${n.toLocaleString('es-AR')}`;
 
-const heroButton =
-  'uppercase border transition-colors cursor-pointer whitespace-nowrap flex items-center justify-center';
-
 interface ExampleGiftsProps {
   onNavigate: (screen: 'home' | 'gifts' | 'rsvp') => void;
 }
@@ -92,83 +90,15 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
 
   return (
     <div className="min-h-screen bg-white" style={{ ['--u' as string]: 'min(2.028px, 0.14085vw)' }}>
-      {/* Barra superior */}
-      <header
-        className="flex items-center justify-between bg-[#FBF9F5]"
-        style={{ height: u(32), padding: `0 ${u(37)}` }}
-      >
-        <div className="flex items-center" style={{ gap: u(6) }}>
-          <span className="font-semibold text-[#2A1A0D]" style={{ fontFamily: SANS, fontSize: u(8.2), lineHeight: 1 }}>
-            WEDA
-          </span>
-          <span
-            className="uppercase text-[#5A4A40] border border-[#D8D2C8]"
-            style={{ fontFamily: SANS, fontSize: u(3.6), letterSpacing: '0.06em', padding: `${u(1.6)} ${u(3.5)}`, borderRadius: u(1.5), lineHeight: 1 }}
-          >
-            Lista de regalos
-          </span>
-        </div>
-        <div className="flex items-center text-[#2A1A0D]" style={{ gap: u(6) }}>
-          <span className="italic" style={{ fontFamily: SERIF, fontSize: u(9.3), lineHeight: 1 }}>
-            Milagros &amp; Juan
-          </span>
-          <span className="text-[#8A7A6E]" style={{ fontSize: u(6), lineHeight: 1 }}>·</span>
-          <span className="text-[#5A4A40]" style={{ fontFamily: SANS, fontSize: u(5.3), letterSpacing: '0.04em', lineHeight: 1 }}>
-            24 · 10 · 2026
-          </span>
-        </div>
-      </header>
+      <ExampleHero active="gifts" onNavigate={onNavigate} />
 
-      {/* Hero: misma foto, oscurecida 30% */}
-      <section className="relative w-full overflow-hidden" style={{ height: u(346) }}>
-        <img
-          src="/ejemplo-hero.webp"
-          alt="Milagros y Juan riendo, abrazados"
-          className="absolute inset-0 w-full h-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-black/30"></div>
-
-        <div className="absolute inset-x-0 z-10 flex flex-col items-center text-center text-white" style={{ top: u(173) }}>
-          <h1 className="font-normal" style={{ fontFamily: SERIF, fontSize: u(42.8), lineHeight: 1 }}>
-            Milagros &amp; Juan
-          </h1>
-          <p className="text-white/90" style={{ fontFamily: SANS, fontSize: u(7.5), letterSpacing: '0.05em', lineHeight: 1, marginTop: u(10) }}>
-            24 · 10 · 2026
-          </p>
-          <div className="bg-white/50" style={{ width: u(25), height: 1, marginTop: u(11) }}></div>
-
-          <div className="flex items-center" style={{ gap: u(7), marginTop: u(19) }}>
-            <button
-              id="gifts-info-btn"
-              onClick={() => onNavigate('home')}
-              className={`${heroButton} text-white border-white/70 hover:bg-white/10`}
-              style={{ fontFamily: SANS, fontSize: u(5.6), height: u(18), padding: `0 ${u(12.5)}`, letterSpacing: '0.04em' }}
-            >
-              Información
-            </button>
-            <button
-              id="gifts-confirm-btn"
-              onClick={() => onNavigate('rsvp')}
-              className={`${heroButton} text-white border-white/70 hover:bg-white/10`}
-              style={{ fontFamily: SANS, fontSize: u(5.6), height: u(18), padding: `0 ${u(12.5)}`, letterSpacing: '0.04em' }}
-            >
-              Confirmar asistencia
-            </button>
-            <button
-              id="gifts-gifts-btn"
-              className={`${heroButton} bg-white text-[#2A1A0D] border-white`}
-              style={{ fontFamily: SANS, fontSize: u(5.6), height: u(18), padding: `0 ${u(12.5)}`, letterSpacing: '0.04em' }}
-            >
-              Regalos
-            </button>
-          </div>
-
-          <span className="uppercase text-white/80" style={{ fontFamily: SANS, fontSize: u(3.8), letterSpacing: '0.12em', lineHeight: 1, marginTop: u(14) }}>
-            Explorar regalos
-          </span>
-          <ChevronDown className="text-white/80" style={{ width: u(7), height: u(7), marginTop: u(4) }} strokeWidth={1.5} />
-        </div>
-      </section>
+      {/* Pista de scroll hacia la grilla de regalos */}
+      <div className="flex flex-col items-center" style={{ paddingTop: u(14) }}>
+        <span className="uppercase text-[#8A7A6E]" style={{ fontFamily: SANS, fontSize: u(3.8), letterSpacing: '0.12em', lineHeight: 1 }}>
+          Explorar regalos
+        </span>
+        <ChevronDown className="text-[#8A7A6E]" style={{ width: u(7), height: u(7), marginTop: u(4) }} strokeWidth={1.5} />
+      </div>
 
       {/* Filtros */}
       <div className="bg-[#FBF9F5]" style={{ height: u(37), paddingTop: u(11) }}>
@@ -252,54 +182,6 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
         ))}
       </div>
 
-      {/* Footer */}
-      <footer className="relative overflow-hidden text-[#F7F1E4]" style={{ backgroundColor: '#29180E', height: u(291), padding: `${u(46)} ${u(37)} 0` }}>
-        <div className="grid" style={{ gridTemplateColumns: `${u(230)} ${u(141)} ${u(138)} 1fr` }}>
-          <div>
-            <span style={{ fontFamily: SANS, fontSize: u(8.5), lineHeight: 1 }} className="block">WEDA</span>
-            <p className="text-[#F7F1E4]/60" style={{ fontFamily: SANS, fontSize: u(5.3), lineHeight: u(10), marginTop: u(16), maxWidth: u(175) }}>
-              La forma más elegante de recibir regalos y gestionar invitados para tu casamiento. Hecho en Argentina.
-            </p>
-          </div>
-          <div>
-            <h4 className="uppercase text-[#F7F1E4]/45" style={{ fontFamily: SANS, fontSize: u(4), letterSpacing: '0.08em', lineHeight: 1 }}>Producto</h4>
-            <ul className="text-[#F7F1E4]/80" style={{ fontFamily: SANS, fontSize: u(5.1), marginTop: u(9) }}>
-              {['Cómo funciona', 'Ver un ejemplo', 'Crear mi lista'].map((t) => (
-                <li key={t} style={{ height: u(14.5), lineHeight: 1 }}>{t}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4 className="uppercase text-[#F7F1E4]/45" style={{ fontFamily: SANS, fontSize: u(4), letterSpacing: '0.08em', lineHeight: 1 }}>Ayuda</h4>
-            <ul className="text-[#F7F1E4]/80" style={{ fontFamily: SANS, fontSize: u(5.1), marginTop: u(9) }}>
-              {['Preguntas frecuentes', 'Contacto'].map((t) => (
-                <li key={t} style={{ height: u(14.5), lineHeight: 1 }}>{t}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4 className="uppercase text-[#F7F1E4]/45" style={{ fontFamily: SANS, fontSize: u(4), letterSpacing: '0.08em', lineHeight: 1 }}>Contacto &amp; Soporte</h4>
-            <p className="text-[#F7F1E4]" style={{ fontFamily: SANS, fontSize: u(5.35), fontWeight: 600, lineHeight: 1, marginTop: u(8) }}>hola@weda.com.ar</p>
-            <p className="text-[#F7F1E4]/55" style={{ fontFamily: SANS, fontSize: u(5.85), lineHeight: u(9.2), marginTop: u(8), maxWidth: u(128) }}>
-              ¿Tenés dudas? Escribinos. Respondemos de lunes a viernes de 9 a 18 hs.
-            </p>
-          </div>
-        </div>
-
-        <div className="absolute bg-[#F7F1E4]/10" style={{ left: u(37), right: u(37), top: u(145), height: 1 }}></div>
-
-        <span
-          aria-hidden="true"
-          className="absolute select-none pointer-events-none text-[#F7F1E4]/[0.035]"
-          style={{ fontFamily: SANS, fontSize: u(82.2), lineHeight: 1, left: u(37), top: u(173.5), fontWeight: 400 }}
-        >
-          WEDA
-        </span>
-
-        <div className="absolute flex items-center justify-between text-[#F7F1E4]/45" style={{ left: u(37), right: u(37), bottom: u(24), fontFamily: SANS, fontSize: u(5.26) }}>
-          <span>© 2026 Weda. Todos los derechos reservados.</span>
-        </div>
-      </footer>
     </div>
   );
 };

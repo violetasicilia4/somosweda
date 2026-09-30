@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Check, Copy, ExternalLink, Lock, MessageCircle } from 'lucide-react';
+import { ArrowRight, Check, Copy, CreditCard, ExternalLink, Lock, MessageCircle } from 'lucide-react';
 import { CuentaSection, DashboardTab, GiftItem, ReceivedGift, WeddingData } from '../../types';
-import { addMonths, formatARS, formatLongDate } from '../../utils/format';
+import { formatARS } from '../../utils/format';
+import { PLAN_LABELS, PLAN_PRICES } from '../../utils/plan';
 
 interface HomeChecklistViewProps {
   wedding: WeddingData;
@@ -77,7 +78,7 @@ export const HomeChecklistView: React.FC<HomeChecklistViewProps> = ({
       title: 'Publicá y compartí',
       description: isPublished
         ? 'Tu lista está en vivo.'
-        : 'Elegí por cuánto tiempo querés tenerla activa y compartila con tus invitados.',
+        : 'Pagá tu plan y compartila con tus invitados.',
       detail: publishBlocked && !isPublished ? 'Primero completá los pasos 1 y 2.' : undefined,
       status: isPublished ? 'done' : publishBlocked ? 'blocked' : 'pending',
       cta: 'Publicar tu lista',
@@ -114,12 +115,12 @@ export const HomeChecklistView: React.FC<HomeChecklistViewProps> = ({
     `Esta es nuestra lista de regalos. Elegí lo que quieras regalarnos: https://${siteUrl}`
   )}`;
 
+  const currentPlan = wedding.plan ?? 'regalos';
+  const planLabel = PLAN_LABELS[currentPlan];
+  const planPrice = PLAN_PRICES[currentPlan];
+
   const pendingThanks = receivedGifts.filter((r) => !r.isThanked).length;
   const totalReceived = receivedGifts.reduce((sum, r) => sum + r.amount, 0);
-  const activeUntil =
-    wedding.publishedAt && wedding.durationMonths
-      ? addMonths(new Date(wedding.publishedAt), wedding.durationMonths)
-      : null;
 
   const statusIcon = (status: StepStatus, id: number) => {
     if (status === 'done') {
@@ -162,11 +163,7 @@ export const HomeChecklistView: React.FC<HomeChecklistViewProps> = ({
           {isPublished ? 'Tu lista está publicada.' : `Hola, ${wedding.partner1}.`}
         </h2>
         {isPublished ? (
-          <p className="text-sm text-gray-600 mt-1">
-            {activeUntil
-              ? `Tu lista está activa hasta el ${formatLongDate(activeUntil)}.`
-              : 'Tu lista está activa y lista para recibir regalos.'}
-          </p>
+          <p className="text-sm text-gray-600 mt-1">Tu lista está activa y lista para recibir regalos.</p>
         ) : (
           <>
             <p className="text-sm text-gray-600 mt-1">
@@ -176,6 +173,37 @@ export const HomeChecklistView: React.FC<HomeChecklistViewProps> = ({
           </>
         )}
       </div>
+
+      {/* TU PLAN */}
+      <section className="bg-white border border-gray-200 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="min-w-0">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 block">Tu plan</span>
+          <div className="flex items-baseline gap-2 mt-1">
+            <span className="text-base font-bold text-gray-900">{planLabel}</span>
+            <span className="text-xs text-gray-500">{planPrice} · pago único</span>
+          </div>
+        </div>
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={() => onGoTo('cuenta', 'plan')}
+            className="uppercase px-3.5 py-2 border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-normal rounded-xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+          >
+            <span>Cambiar plan</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+          {!isPublished && (
+            <button
+              type="button"
+              onClick={onPublish}
+              className="uppercase px-3.5 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+            >
+              <CreditCard className="w-3.5 h-3.5" />
+              <span>Pagar y publicar</span>
+            </button>
+          )}
+        </div>
+      </section>
 
       {/* SEGUIMIENTO (solo publicado) */}
       {isPublished && (
