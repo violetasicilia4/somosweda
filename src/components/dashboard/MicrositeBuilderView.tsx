@@ -471,6 +471,20 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
             <span>Galería de fotos</span>
           </button>
 
+          {/* 5b. Hashtag del casamiento */}
+          <button
+            type="button"
+            onClick={() => toggleFeature('hashtag')}
+            className={`uppercase px-3 py-1.5 rounded-2xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.hashtag ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
+          >
+            {features.hashtag ? (
+              <CheckSquare className="w-3.5 h-3.5 text-white" />
+            ) : (
+              <Square className="w-3.5 h-3.5 text-gray-400" />
+            )}
+            <span>Hashtag del casamiento</span>
+          </button>
+
           {/* 6. Lista de regalos */}
           <button
             type="button"

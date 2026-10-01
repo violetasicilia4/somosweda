@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArrowDown } from 'lucide-react';
 
 const SERIF = "'Instrument Serif', serif";
 const SANS = "'Schibsted Grotesk', sans-serif";
@@ -6,9 +7,9 @@ const SANS = "'Schibsted Grotesk', sans-serif";
 export type ExampleScreen = 'home' | 'gifts' | 'rsvp';
 
 const NAV_ITEMS: { id: ExampleScreen; label: string }[] = [
-  { id: 'home', label: 'Información' },
+  { id: 'home', label: 'Invitación' },
   { id: 'rsvp', label: 'RSVP' },
-  { id: 'gifts', label: 'Regalos' },
+  { id: 'gifts', label: 'Regalá' },
 ];
 
 interface ExampleHeroProps {
@@ -17,14 +18,14 @@ interface ExampleHeroProps {
 }
 
 // Foto de portada compartida por las 3 pantallas del ejemplo (Información, Confirmar
-// asistencia, Regalos). En mobile ocupa casi toda la altura de la pantalla (dvh, pensado
-// para los tamaños promedio de iPhone); desde sm en adelante vuelve a la proporción por
-// ancho (clamp en vw) que tenía antes, para que en desktop no quede desmedida. Las letras
-// y los espacios también tienen su propio tamaño fijo para mobile (más grandes y legibles
-// que el piso del clamp anterior) y mantienen el clamp por vw desde sm.
+// asistencia, Regalos). Ocupa la pantalla completa (100dvh) tanto en mobile como en
+// desktop — antes en desktop volvía a una proporción por ancho más baja, pero la idea es
+// que la primera impresión sea la foto a pantalla completa, como una invitación real.
+// El título+fecha+nav van siempre abajo (nunca centrados verticalmente) sobre la foto, y
+// debajo de todo eso el indicador fijo de "Deslizá" invita a seguir bajando.
 export const ExampleHero: React.FC<ExampleHeroProps> = ({ active, onNavigate }) => {
   return (
-    <section className="sticky top-0 relative w-full overflow-hidden h-[88dvh] min-h-[560px] max-h-[820px] sm:h-[45vw] sm:min-h-[300px] sm:max-h-[620px]">
+    <section className="sticky top-0 relative w-full overflow-hidden h-[100dvh]">
         <img
           src="/mili-juan-hero.jpg"
           alt="Milagros y Juan riendo, abrazados"
@@ -32,19 +33,13 @@ export const ExampleHero: React.FC<ExampleHeroProps> = ({ active, onNavigate }) 
         />
         <div className="absolute inset-0 bg-black/30"></div>
 
-        <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col items-center text-center text-white px-4 pb-10 sm:pb-[clamp(28px,5vw,56px)]">
+        <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col items-center text-center text-white px-4 pb-24 sm:pb-28">
           <h1
-            className="font-normal text-[34px] sm:text-[clamp(26px,4.6vw,56px)]"
+            className="font-normal text-[24px] sm:text-[clamp(18px,3.2vw,40px)]"
             style={{ fontFamily: SERIF, lineHeight: 1 }}
           >
             Milagros &amp; Juan
           </h1>
-          <p
-            className="text-white/90 text-[11.5px] sm:text-[clamp(9px,0.95vw,13px)] mt-2.5 sm:mt-[clamp(6px,1vw,14px)]"
-            style={{ fontFamily: SANS, letterSpacing: '0.05em', lineHeight: 1 }}
-          >
-            24 · 10 · 2026
-          </p>
           <div className="bg-white/50 w-8 h-px mt-4 sm:w-[clamp(24px,3.2vw,44px)] sm:mt-[clamp(10px,1.6vw,22px)]"></div>
 
           <div className="flex items-center flex-nowrap justify-center w-full px-3 gap-2 mt-6 sm:gap-[clamp(4px,1vw,14px)] sm:mt-[clamp(14px,2.4vw,32px)]">
@@ -67,6 +62,16 @@ export const ExampleHero: React.FC<ExampleHeroProps> = ({ active, onNavigate }) 
               );
             })}
           </div>
+        </div>
+
+        <div className="absolute inset-x-0 bottom-8 sm:bottom-10 z-10 flex flex-col items-center text-white/85 pointer-events-none">
+          <span
+            className="uppercase text-[10px] sm:text-[11px]"
+            style={{ fontFamily: SANS, letterSpacing: '0.15em' }}
+          >
+            Deslizá
+          </span>
+          <ArrowDown className="w-4 h-4 mt-2 animate-bounce" strokeWidth={1.5} />
         </div>
       </section>
   );

@@ -2,16 +2,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import { WeddingData, WeddingEvent } from '../types';
 import { ExampleGifts } from './ExampleGifts';
 import { ExampleRsvp } from './ExampleRsvp';
-import { ExampleBackButton } from './ExampleBackButton';
 import { ExampleHero } from './ExampleHero';
+import { RsvpFormCard } from './RsvpFormCard';
 import {
   getMicrositeFeatures,
   MICROSITE_SECTION_ORDER,
   DEFAULT_LODGING_INFO,
   DEFAULT_TRANSPORT_INFO,
   DEFAULT_GALLERY_IMAGES,
+  buildDefaultHashtag,
 } from '../utils/microsite';
 import { getStoredWedding, getStoredWeddingEvents } from '../utils/weddingStore';
+import { formatLongDate } from '../utils/format';
 import { Church, Gem, Landmark, Music, Shirt, Hotel, Bus, Navigation } from 'lucide-react';
 
 // Lucide no tiene un ícono de "copas brindando" — se arma a mano, mismo trazo fino que
@@ -80,12 +82,13 @@ const bodyStyle: React.CSSProperties = {
 };
 
 // Hace aparecer con un fade cada bloque de la página la primera vez que entra en pantalla
-// al scrollear. Cada bloque de adentro es "position: sticky" (ver más abajo, el efecto de
-// ir apilando una sección por encima de la anterior) — un sticky solo puede "pegarse" si su
-// contenedor directo es más alto que él mismo, así que esto NO puede envolver la sección en
-// un <div> propio (quedaría del mismo alto exacto que la sección, sin margen para pegarse, y
-// rompería el apilado). Por eso clona la sección que recibe como hijo y le mete el ref/estilo
-// directo, en vez de agregar un wrapper.
+// al scrollear. El único bloque que sigue siendo "position: sticky" es "¡Nos casamos!"
+// (se apila por encima de la foto de portada apenas arrancás a scrollear) — un sticky solo
+// puede "pegarse" si su contenedor directo es más alto que él mismo, así que esto NO puede
+// envolver la sección en un <div> propio (quedaría del mismo alto exacto que la sección, sin
+// margen para pegarse, y rompería ese único apilado). Por eso clona la sección que recibe
+// como hijo y le mete el ref/estilo directo, en vez de agregar un wrapper. El resto de los
+// bloques de acá para abajo ya no son sticky: scrollean continuo, uno atrás del otro.
 const Reveal: React.FC<{ children: React.ReactElement<{ style?: React.CSSProperties }> }> = ({ children }) => {
   const ref = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
@@ -132,23 +135,16 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
     const requested = new URLSearchParams(window.location.search).get('screen');
     return requested === 'gifts' || requested === 'rsvp' ? requested : 'home';
   });
+  // El CTA "Confirmar asistencia" de acá abajo abre el formulario ahí mismo, en vez de
+  // navegar a la pantalla de RSVP (esa sigue existiendo, vía el botón de arriba del todo).
+  const [rsvpInline, setRsvpInline] = useState(false);
 
   if (screen === 'gifts') {
-    return (
-      <>
-        <ExampleGifts onNavigate={setScreen} />
-        <ExampleBackButton />
-      </>
-    );
+    return <ExampleGifts onNavigate={setScreen} />;
   }
 
   if (screen === 'rsvp') {
-    return (
-      <>
-        <ExampleRsvp onNavigate={setScreen} />
-        <ExampleBackButton />
-      </>
-    );
+    return <ExampleRsvp onNavigate={setScreen} />;
   }
 
   // Lo que está tildado en "Tu sitio" (módulo a módulo), con el orden fijo en el que
@@ -165,11 +161,17 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
       <Reveal key="giftRegistry">
         <section
           className="sticky top-0 flex flex-col items-center justify-center text-center"
-          style={{ minHeight: '79vh', padding: `${u(58)} ${u(24)}`, backgroundColor: '#FBF9F5' }}
+          style={{ minHeight: '65vh', padding: `${u(48)} ${u(24)}`, backgroundColor: '#FBF9F5' }}
         >
-          <h2 className="font-normal" style={{ ...headingStyle, marginTop: 0 }}>¡Nos casamos!</h2>
-          <p style={bodyStyle}>
-            Queremos compartir este camino con ustedes.
+          <h2 className="font-normal" style={{ ...headingStyle, fontSize: u(58), marginTop: 0 }}>¡Nos casamos!</h2>
+          <p style={{ ...bodyStyle, fontSize: u(26), lineHeight: u(34), maxWidth: u(460), marginTop: u(26) }}>
+            Queremos compartir este momento con ustedes.
+          </p>
+          <p
+            className="uppercase"
+            style={{ fontFamily: SANS, fontSize: u(12.5), letterSpacing: '0.1em', color: '#786C63', marginTop: u(28) }}
+          >
+            {formatLongDate(wedding.weddingDate)}
           </p>
         </section>
       </Reveal>
@@ -178,8 +180,8 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
     giftCta: (
       <Reveal key="giftCta">
         <section
-          className="sticky top-0 relative w-full flex items-center justify-center"
-          style={{ minHeight: '85vh', backgroundColor: '#2D1A0E' }}
+          className="relative w-full flex items-center justify-center"
+          style={{ minHeight: '65vh', backgroundColor: '#2D1A0E' }}
         >
           <div className="relative flex flex-col items-center text-center" style={{ padding: `${u(24)} ${u(24)}` }}>
             <h2 className="font-normal" style={{ ...headingStyle, color: '#F5F0EA' }}>¿Nos querés sorprender?</h2>
@@ -211,7 +213,7 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
     events: (
       <React.Fragment key="events">
       <Reveal>
-      <section className="sticky top-0 w-full grid grid-cols-1 sm:grid-cols-2 items-stretch sm:min-h-[85vh]">
+      <section className="w-full grid grid-cols-1 sm:grid-cols-2 items-stretch sm:min-h-[85vh]">
         {/* Izquierda: panel liso color papel, sin foto, con "Cronograma" en cursiva al centro.
             Padding simétrico arriba/abajo para que quede centrado dentro de este bloque.
             En mobile (columnas apiladas), el bloque de al lado arranca con padding-top 0
@@ -284,8 +286,8 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
           adentro de "Guía para invitados", lo sacamos de ahí (ver más abajo). */}
       <Reveal>
       <section
-        className="sticky top-0 flex flex-col items-center justify-center text-center"
-        style={{ minHeight: '55vh', padding: `${u(56)} ${u(24)}`, backgroundColor: '#FBF9F5' }}
+        className="flex flex-col items-center justify-center text-center"
+        style={{ minHeight: '42vh', padding: `${u(40)} ${u(24)}`, backgroundColor: '#FBF9F5' }}
       >
         <span
           className="inline-flex items-center justify-center"
@@ -305,29 +307,33 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
       {features.rsvp && (
         <Reveal>
         <section
-          className="sticky top-0 flex flex-col items-center justify-center text-center"
-          style={{ minHeight: '63vh', padding: `${u(56)} ${u(24)} ${u(72)}`, backgroundColor: '#FFFFFF' }}
+          className="flex flex-col items-center justify-center text-center"
+          style={{ minHeight: '50vh', padding: `${u(40)} ${u(24)} ${u(56)}`, backgroundColor: '#FFFFFF' }}
         >
           <h2 className="font-normal" style={{ ...headingStyle, marginTop: 0 }}>
             Este día no sería lo mismo sin vos
           </h2>
-          <button
-            type="button"
-            onClick={() => setScreen('rsvp')}
-            className="uppercase cursor-pointer"
-            style={{
-              fontFamily: SANS,
-              fontSize: u(11),
-              letterSpacing: '0.04em',
-              color: '#FFFFFF',
-              backgroundColor: '#2D1A0E',
-              padding: `${u(13)} ${u(28)}`,
-              borderRadius: u(2),
-              marginTop: u(24),
-            }}
-          >
-            Confirmar asistencia
-          </button>
+          {rsvpInline ? (
+            <RsvpFormCard u={u} />
+          ) : (
+            <button
+              type="button"
+              onClick={() => setRsvpInline(true)}
+              className="uppercase cursor-pointer"
+              style={{
+                fontFamily: SANS,
+                fontSize: u(11),
+                letterSpacing: '0.04em',
+                color: '#FFFFFF',
+                backgroundColor: '#2D1A0E',
+                padding: `${u(13)} ${u(28)}`,
+                borderRadius: u(2),
+                marginTop: u(24),
+              }}
+            >
+              Confirmar asistencia
+            </button>
+          )}
         </section>
         </Reveal>
       )}
@@ -336,7 +342,7 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
 
     gallery: (
       <Reveal key="gallery">
-        <section className="sticky top-0 w-full bg-[#FBF9F5]">
+        <section className="w-full bg-[#FBF9F5]">
           {/* Galería a pantalla completa: sin texto, sin padding ni límite de ancho, las
               fotos van de borde a borde. */}
           <div className="grid grid-cols-2 sm:grid-cols-4">
@@ -350,42 +356,74 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
       </Reveal>
     ),
 
+    hashtag: (
+      <Reveal key="hashtag">
+        <section
+          className="flex flex-col items-center justify-center text-center"
+          style={{ minHeight: '40vh', padding: `${u(24)} ${u(24)}`, backgroundColor: '#FFFFFF' }}
+        >
+          <h2
+            className="font-normal"
+            style={{ fontFamily: SERIF, fontSize: u(52), lineHeight: 1, color: '#1C1005' }}
+          >
+            {wedding.hashtag || buildDefaultHashtag(wedding.partner1, wedding.partner2)}
+          </h2>
+          <p
+            className="uppercase"
+            style={{ fontFamily: SANS, fontSize: u(11), letterSpacing: '0.04em', color: '#786C63', marginTop: u(14) }}
+          >
+            Copate con las fotitos
+          </p>
+        </section>
+      </Reveal>
+    ),
+
     guestInfo: (
-      <React.Fragment key="guestInfo">
-        {[
-          { icon: Hotel, label: 'Hospedaje', value: wedding.lodgingInfo || DEFAULT_LODGING_INFO, bg: '#FFFFFF', h: '65vh' },
-          { icon: Navigation, label: 'Ubicación', value: wedding.mapLocation || `${wedding.venue || 'Estancia La Linda'}, ${wedding.city || 'Pilar, Buenos Aires'}`, bg: '#FBF9F5', h: '65vh' },
-          { icon: Bus, label: 'Transporte', value: wedding.transportInfo || DEFAULT_TRANSPORT_INFO, bg: '#FFFFFF', h: '92vh' },
-        ].map(({ icon: Icon, label, value, bg, h }) => (
-          <Reveal key={label}>
-            <section
-              className="sticky top-0 flex flex-col items-center justify-center text-center"
-              style={{ minHeight: h, padding: `${u(56)} ${u(24)}`, backgroundColor: bg }}
-            >
-              <span
-                className="inline-flex items-center justify-center"
-                style={{ width: u(44), height: u(44), borderRadius: '50%', backgroundColor: '#F3ECE1', color: '#463936' }}
-              >
-                <Icon style={{ width: u(19), height: u(19) }} />
-              </span>
-              <span className="uppercase" style={{ ...eyebrowStyle, marginTop: u(16) }}>{label}</span>
-              <h2
-                className="font-normal"
-                style={{ fontFamily: SERIF, fontSize: u(24), lineHeight: 1.35, color: '#1C1005', marginTop: u(10), maxWidth: u(480) }}
-              >
-                {value}
-              </h2>
-            </section>
-          </Reveal>
-        ))}
-      </React.Fragment>
+      // Antes eran 3 secciones propias apiladas (Hospedaje, Ubicación, Transporte), cada
+      // una ocupando casi una pantalla completa — sumaban ~2.5 pantallas de scroll por 3
+      // datos chicos. Las juntamos en un solo bloque de 3 columnas (1 sola en mobile, una
+      // abajo de la otra pero sin forzar cada una a su propia pantalla) para que el
+      // recorrido se sienta más fluido.
+      <Reveal key="guestInfo">
+        <section
+          className="w-full flex flex-col items-center justify-center text-center"
+          style={{ minHeight: '55vh', padding: `${u(48)} ${u(24)}`, backgroundColor: '#FFFFFF' }}
+        >
+          <div
+            className="grid grid-cols-1 sm:grid-cols-3 w-full"
+            style={{ maxWidth: u(860), rowGap: u(36), columnGap: u(32) }}
+          >
+            {[
+              { icon: Hotel, label: 'Hospedaje', value: wedding.lodgingInfo || DEFAULT_LODGING_INFO },
+              { icon: Navigation, label: 'Ubicación', value: wedding.mapLocation || `${wedding.venue || 'Estancia La Linda'}, ${wedding.city || 'Pilar, Buenos Aires'}` },
+              { icon: Bus, label: 'Transporte', value: wedding.transportInfo || DEFAULT_TRANSPORT_INFO },
+            ].map(({ icon: Icon, label, value }) => (
+              <div key={label} className="flex flex-col items-center text-center">
+                <span
+                  className="inline-flex items-center justify-center"
+                  style={{ width: u(40), height: u(40), borderRadius: '50%', backgroundColor: '#F3ECE1', color: '#463936' }}
+                >
+                  <Icon style={{ width: u(17), height: u(17) }} />
+                </span>
+                <span className="uppercase" style={{ ...eyebrowStyle, marginTop: u(14) }}>{label}</span>
+                <h2
+                  className="font-normal"
+                  style={{ fontFamily: SERIF, fontSize: u(19), lineHeight: 1.35, color: '#1C1005', marginTop: u(8) }}
+                >
+                  {value}
+                </h2>
+              </div>
+            ))}
+          </div>
+        </section>
+      </Reveal>
     ),
 
     music: (
       <Reveal key="music">
         <section
-          className="sticky top-0 flex flex-col items-center justify-center text-center"
-          style={{ minHeight: '65vh', padding: `${u(24)} ${u(24)} ${u(90)}`, backgroundColor: '#FBF9F5' }}
+          className="flex flex-col items-center justify-center text-center"
+          style={{ minHeight: '48vh', padding: `${u(24)} ${u(24)} ${u(56)}`, backgroundColor: '#FBF9F5' }}
         >
           <span
             className="inline-flex items-center justify-center"
@@ -408,12 +446,19 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
   // fotos se siguen achicando, pero el texto no baja de un tamaño legible.
   return (
     <div className="min-h-screen bg-[#FBF9F5]" style={{ ['--u' as string]: 'clamp(0.66px, 0.09506vw, 1px)' }}>
-      <ExampleBackButton />
       <ExampleHero active="home" onNavigate={setScreen} />
 
       {features.giftRegistry && sections.giftRegistry}
-      {MICROSITE_SECTION_ORDER.filter((key) => key !== 'story' && key !== 'giftRegistry' && features[key]).map((key) => sections[key])}
-      {features.giftRegistry && sections.giftCta}
+      {/* "relative" acá es necesario, no solo prolijo: "¡Nos casamos!" de arriba sigue
+          siendo "sticky" (position != static), y en CSS cualquier elemento posicionado
+          pinta siempre por encima de los elementos estáticos sin importar el orden en el
+          DOM. Sin este wrapper posicionado, el contenido continuo de acá abajo (que ya no
+          es sticky, así que es "static") quedaría pintado por detrás de "¡Nos casamos!"
+          durante la transición entre los dos en vez de taparlo. */}
+      <div className="relative">
+        {MICROSITE_SECTION_ORDER.filter((key) => key !== 'story' && key !== 'giftRegistry' && features[key]).map((key) => sections[key])}
+        {features.giftRegistry && sections.giftCta}
+      </div>
     </div>
   );
 };

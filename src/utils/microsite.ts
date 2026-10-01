@@ -11,6 +11,7 @@ export const DEFAULT_MICROSITE_FEATURES: MicrositeFeatures = {
   giftRegistry: true,
   rsvp: true,
   music: false,
+  hashtag: true,
 };
 
 export const getMicrositeFeatures = (wedding: WeddingData): MicrositeFeatures => ({
@@ -28,6 +29,16 @@ export const DEFAULT_LODGING_INFO = 'Hoteles recomendados: Sheraton Pilar, Ibis 
 
 export const DEFAULT_TRANSPORT_INFO = 'Combis de traslado ida y vuelta desde CABA (Plaza Italia) y estacionamiento con seguridad.';
 
+// Hashtag por defecto armado con los nombres de la pareja (ej: "Milagros" + "Juan" →
+// "#MilagrosyJuan"), para cuando todavía no cargaron uno propio en Tu sitio.
+export const buildDefaultHashtag = (partner1: string, partner2: string): string => {
+  const clean = (name: string) => name.trim().split(/\s+/)[0] || '';
+  const p1 = clean(partner1);
+  const p2 = clean(partner2);
+  if (!p1 && !p2) return '#NuestraBoda';
+  return `#${p1}y${p2}`;
+};
+
 export const DEFAULT_GALLERY_IMAGES: string[] = [
   'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
   'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
@@ -44,6 +55,7 @@ export const MICROSITE_SECTION_ORDER: (keyof MicrositeFeatures)[] = [
   'story',
   'events',
   'gallery',
+  'hashtag',
   'guestInfo',
   'music',
 ];

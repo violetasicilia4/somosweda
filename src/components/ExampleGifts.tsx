@@ -62,7 +62,6 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [query, setQuery] = useState('');
   const [rangeId, setRangeId] = useState('all');
-  const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [paymentGift, setPaymentGift] = useState<ExampleGift | null>(null);
 
   const visible = useMemo(() => {
@@ -76,9 +75,6 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
         g.price <= range.max
     );
   }, [activeFilter, query, rangeId]);
-
-  const setQty = (id: string, delta: number) =>
-    setQuantities((prev) => ({ ...prev, [id]: Math.max(1, (prev[id] ?? 1) + delta) }));
 
   const pill = (active: boolean): React.CSSProperties => ({
     height: u(16),
@@ -205,10 +201,10 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
       </div>
 
       {/* Grilla de regalos — mobile: una tarjeta por fila, tamaños fijos en px para que se lean bien */}
-      <div className="sm:hidden flex flex-col gap-6 px-4 pt-5 pb-12">
+      <div className="sm:hidden flex flex-col gap-8 px-4 pt-5 pb-12">
         {visible.map((g) => (
-          <article key={g.id} className="w-full">
-            <img src={g.image} alt={g.title} referrerPolicy="no-referrer" className="w-full h-52 object-cover rounded-md" />
+          <article key={g.id} className="w-full flex flex-col items-center text-center">
+            <img src={g.image} alt={g.title} referrerPolicy="no-referrer" className="w-40 h-40 object-cover rounded-full" />
             <div className="pt-3">
               <p className="uppercase text-[#8A7A6E] text-[11px] tracking-[0.08em]" style={{ fontFamily: SANS }}>
                 {g.category}
@@ -220,33 +216,30 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
                 {formatPrice(g.price)}
               </p>
             </div>
-            <div className="flex items-center gap-2 mt-3">
-              <div className="flex items-center bg-[#F6F3EC] rounded h-10 w-28 shrink-0">
-                <button onClick={() => setQty(g.id, -1)} aria-label="Quitar uno" className="text-[#8A7A6E] cursor-pointer flex-1 text-base">−</button>
-                <span className="bg-white text-center text-[#2A1A10] h-full flex items-center justify-center w-10 text-[13px]" style={{ fontFamily: SANS }}>
-                  {quantities[g.id] ?? 1}
-                </span>
-                <button onClick={() => setQty(g.id, 1)} aria-label="Agregar uno" className="text-[#8A7A6E] cursor-pointer flex-1 text-base">+</button>
-              </div>
-              <button
-                onClick={() => setPaymentGift(g)}
-                className="uppercase text-white flex-1 cursor-pointer whitespace-nowrap h-10 rounded text-[12px]"
-                style={{ backgroundColor: '#2D1A0E', fontFamily: SANS, letterSpacing: '0.03em' }}
-              >
-                Agregar al regalo
-              </button>
-            </div>
+            <button
+              onClick={() => setPaymentGift(g)}
+              className="uppercase text-white w-full cursor-pointer whitespace-nowrap h-10 rounded text-[12px] mt-3"
+              style={{ backgroundColor: '#2D1A0E', fontFamily: SANS, letterSpacing: '0.03em' }}
+            >
+              Regalá
+            </button>
           </article>
         ))}
       </div>
 
       {/* Grilla de regalos — tablet/desktop (como antes) */}
-      <div className="hidden sm:grid sm:grid-cols-4 mx-auto" style={{ width: u(576), columnGap: u(21.33), rowGap: u(32), paddingTop: u(17), paddingBottom: u(69) }}>
+      <div className="hidden sm:grid sm:grid-cols-4 mx-auto" style={{ width: u(576), columnGap: u(21.33), rowGap: u(40), paddingTop: u(17), paddingBottom: u(69) }}>
         {visible.map((g) => (
-          <article key={g.id} className="relative" style={{ height: u(198) }}>
-            <img src={g.image} alt={g.title} referrerPolicy="no-referrer" className="w-full object-cover" style={{ height: u(128), borderRadius: u(5) }} />
-            <div style={{ padding: `0 ${u(8)}` }}>
-              <p className="uppercase text-[#8A7A6E]" style={{ fontFamily: SANS, fontSize: u(3.6), letterSpacing: '0.08em', lineHeight: 1, marginTop: u(9) }}>
+          <article key={g.id} className="flex flex-col items-center text-center">
+            <img
+              src={g.image}
+              alt={g.title}
+              referrerPolicy="no-referrer"
+              className="object-cover rounded-full"
+              style={{ width: u(120), height: u(120) }}
+            />
+            <div style={{ padding: `0 ${u(8)}`, marginTop: u(12) }}>
+              <p className="uppercase text-[#8A7A6E]" style={{ fontFamily: SANS, fontSize: u(3.6), letterSpacing: '0.08em', lineHeight: 1 }}>
                 {g.category}
               </p>
               <h3 className="font-normal text-[#2A1A10]" style={{ fontFamily: SERIF, fontSize: u(7), lineHeight: 1.1, marginTop: u(4) }}>
@@ -256,22 +249,13 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
                 {formatPrice(g.price)}
               </p>
             </div>
-            <div className="absolute flex items-center" style={{ left: u(8), right: u(8), top: u(186), gap: u(4) }}>
-              <div className="flex items-center bg-[#F6F3EC]" style={{ height: u(12), width: u(47), borderRadius: u(2) }}>
-                <button onClick={() => setQty(g.id, -1)} aria-label="Quitar uno" className="text-[#8A7A6E] cursor-pointer flex-1" style={{ fontSize: u(6), lineHeight: 1 }}>−</button>
-                <span className="bg-white text-center text-[#2A1A10] h-full flex items-center justify-center" style={{ fontFamily: SANS, fontSize: u(5), width: u(16) }}>
-                  {quantities[g.id] ?? 1}
-                </span>
-                <button onClick={() => setQty(g.id, 1)} aria-label="Agregar uno" className="text-[#8A7A6E] cursor-pointer flex-1" style={{ fontSize: u(6), lineHeight: 1 }}>+</button>
-              </div>
-              <button
-                onClick={() => setPaymentGift(g)}
-                className="uppercase text-white flex-1 cursor-pointer whitespace-nowrap"
-                style={{ backgroundColor: '#2D1A0E', height: u(12), borderRadius: u(1.5), fontFamily: SANS, fontSize: u(4.2), letterSpacing: '0.03em' }}
-              >
-                Agregar al regalo
-              </button>
-            </div>
+            <button
+              onClick={() => setPaymentGift(g)}
+              className="uppercase text-white w-full cursor-pointer whitespace-nowrap"
+              style={{ backgroundColor: '#2D1A0E', height: u(12), borderRadius: u(1.5), fontFamily: SANS, fontSize: u(4.2), letterSpacing: '0.03em', marginTop: u(12) }}
+            >
+              Regalá
+            </button>
           </article>
         ))}
       </div>
@@ -282,7 +266,7 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
         <GiftPaymentModal
           giftTitle={paymentGift.title}
           unitPrice={paymentGift.price}
-          quantity={quantities[paymentGift.id] ?? 1}
+          quantity={1}
           onClose={() => setPaymentGift(null)}
         />
       )}

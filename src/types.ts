@@ -66,6 +66,9 @@ export interface WeddingData {
   lodgingInfo?: string;
   transportInfo?: string;
   mapLocation?: string;
+  // Hashtag del casamiento (módulo "hashtag" de Tu sitio). Si no se carga, se arma uno
+  // por defecto con los nombres de la pareja (ver DEFAULT_HASHTAG en utils/microsite.ts).
+  hashtag?: string;
   // Fotos de la galería del micrositio — se muestran en el sitio de ejemplo solo si el
   // módulo "gallery" está tildado (ver MicrositeFeatures).
   galleryImages?: string[];
@@ -84,6 +87,7 @@ export interface MicrositeFeatures {
   giftRegistry: boolean; // Lista de regalos
   rsvp: boolean;         // Confirmar asistencia
   music: boolean;        // Sugerir música para la fiesta
+  hashtag: boolean;      // Hashtag del casamiento
 }
 
 // RSVP simple: 1 persona = 1 respuesta. Sin acompañantes, sin cantidad de invitados,
