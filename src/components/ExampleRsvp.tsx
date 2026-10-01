@@ -74,11 +74,17 @@ export const ExampleRsvp: React.FC<ExampleRsvpProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF9F5]" style={{ ['--u' as string]: 'min(1.1813px, 0.08203vw)' }}>
+    <div className="min-h-screen bg-[#FBF9F5]" style={{ ['--u' as string]: 'clamp(1px, 0.08203vw, 1.1813px)' }}>
       <ExampleHero active="rsvp" onNavigate={onNavigate} />
 
-      {/* Confirmación */}
-      <section className="flex flex-col items-center" style={{ paddingTop: u(42), paddingBottom: u(101) }}>
+      {/* Confirmación. Fondo sólido (no "sticky": este bloque ya es más alto que la
+          pantalla y nada lo sigue, así que alcanza con que tape al hero de arriba
+          scrolleando normal, sin pisarlo él mismo — "sticky" acá dejaría la pantalla
+          congelada un buen tramo de scroll sin que se vea nada moverse). */}
+      <section
+        className="relative z-10 flex flex-col items-center"
+        style={{ paddingTop: u(42), paddingBottom: u(101), backgroundColor: '#FBF9F5' }}
+      >
         <h2 className="uppercase font-medium text-[#7B6F63]" style={{ fontFamily: SANS, fontSize: u(13), lineHeight: 1, position: 'relative', left: u(-3.5) }}>
           Confirmación
         </h2>
@@ -86,7 +92,7 @@ export const ExampleRsvp: React.FC<ExampleRsvpProps> = ({ onNavigate }) => {
         {submitted ? (
           <div
             className="bg-white flex flex-col items-center text-center"
-            style={{ width: u(589), marginTop: u(43), padding: `${u(56)} ${u(39)}`, border: '1px solid #E9E8E4', borderRadius: u(2) }}
+            style={{ width: `min(${u(589)}, calc(100% - 32px))`, marginTop: u(43), padding: `${u(56)} ${u(39)}`, border: '1px solid #E9E8E4', borderRadius: u(2) }}
           >
             <span
               className="rounded-full flex items-center justify-center bg-[#2D1A0E]"
@@ -107,7 +113,7 @@ export const ExampleRsvp: React.FC<ExampleRsvpProps> = ({ onNavigate }) => {
           <form
             onSubmit={handleSubmit}
             className="bg-white"
-            style={{ width: u(589), marginTop: u(43), padding: `${u(40)} ${u(39)}`, border: '1px solid #E9E8E4', borderRadius: u(2) }}
+            style={{ width: `min(${u(589)}, calc(100% - 32px))`, marginTop: u(43), padding: `${u(40)} ${u(39)}`, border: '1px solid #E9E8E4', borderRadius: u(2) }}
           >
             <div className="grid grid-cols-2" style={{ columnGap: u(16.5) }}>
               <div>

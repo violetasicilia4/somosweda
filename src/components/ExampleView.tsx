@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { WeddingData, WeddingEvent } from '../types';
 import { ExampleGifts } from './ExampleGifts';
 import { ExampleRsvp } from './ExampleRsvp';
@@ -79,6 +79,43 @@ const bodyStyle: React.CSSProperties = {
   marginTop: u(18),
 };
 
+// Hace aparecer con un fade cada bloque de la página la primera vez que entra en pantalla
+// al scrollear. Cada bloque de adentro es "position: sticky" (ver más abajo, el efecto de
+// ir apilando una sección por encima de la anterior) — un sticky solo puede "pegarse" si su
+// contenedor directo es más alto que él mismo, así que esto NO puede envolver la sección en
+// un <div> propio (quedaría del mismo alto exacto que la sección, sin margen para pegarse, y
+// rompería el apilado). Por eso clona la sección que recibe como hijo y le mete el ref/estilo
+// directo, en vez de agregar un wrapper.
+const Reveal: React.FC<{ children: React.ReactElement<{ style?: React.CSSProperties }> }> = ({ children }) => {
+  const ref = useRef<HTMLElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.01 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return React.cloneElement(children, {
+    ref,
+    style: {
+      ...children.props.style,
+      opacity: visible ? 1 : 0,
+      transition: 'opacity 0.6s ease',
+    },
+  } as React.HTMLAttributes<HTMLElement> & { ref: React.Ref<HTMLElement> });
+};
+
 interface ExampleViewProps {
   // Sirven de fallback: esta vista siempre se abre en una pestaña nueva (ver
   // App.tsx/weddingStore.ts), así que lo real se lee de localStorage — estos props solo
@@ -122,54 +159,59 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
   const galleryImages = wedding.galleryImages && wedding.galleryImages.length > 0
     ? wedding.galleryImages
     : DEFAULT_GALLERY_IMAGES;
+
   const sections: Record<string, React.ReactNode> = {
     giftRegistry: (
-      <section
-        key="giftRegistry"
-        className="flex flex-col items-center text-center"
-        style={{ padding: `${u(58)} ${u(24)} ${u(77)}` }}
-      >
-        <h2 className="font-normal" style={{ ...headingStyle, marginTop: 0 }}>¡Nos casamos!</h2>
-        <p style={bodyStyle}>
-          Queremos compartir este camino con ustedes.
-        </p>
-      </section>
+      <Reveal key="giftRegistry">
+        <section
+          className="sticky top-0 flex flex-col items-center justify-center text-center"
+          style={{ minHeight: '79vh', padding: `${u(58)} ${u(24)}`, backgroundColor: '#FBF9F5' }}
+        >
+          <h2 className="font-normal" style={{ ...headingStyle, marginTop: 0 }}>¡Nos casamos!</h2>
+          <p style={bodyStyle}>
+            Queremos compartir este camino con ustedes.
+          </p>
+        </section>
+      </Reveal>
     ),
 
     giftCta: (
-      <section
-        key="giftCta"
-        className="relative w-full flex items-center justify-center"
-        style={{ minHeight: '60vh', backgroundColor: '#2D1A0E' }}
-      >
-        <div className="relative flex flex-col items-center text-center" style={{ padding: `${u(24)} ${u(24)}` }}>
-          <h2 className="font-normal" style={{ ...headingStyle, color: '#F5F0EA' }}>¿Nos querés sorprender?</h2>
-          <p style={{ ...bodyStyle, fontSize: u(15.5), lineHeight: u(22), color: '#F5F0EA' }}>
-            Armamos una lista con algunas ideas, por si querés darnos una mano con lo que viene.
-          </p>
-          <button
-            type="button"
-            onClick={() => setScreen('gifts')}
-            className="uppercase cursor-pointer"
-            style={{
-              fontFamily: SANS,
-              fontSize: u(11),
-              letterSpacing: '0.04em',
-              color: '#2A1A0D',
-              backgroundColor: '#F5F0EA',
-              padding: `${u(13)} ${u(28)}`,
-              borderRadius: u(2),
-              marginTop: u(24),
-            }}
-          >
-            Ver lista de regalos
-          </button>
-        </div>
-      </section>
+      <Reveal key="giftCta">
+        <section
+          className="sticky top-0 relative w-full flex items-center justify-center"
+          style={{ minHeight: '85vh', backgroundColor: '#2D1A0E' }}
+        >
+          <div className="relative flex flex-col items-center text-center" style={{ padding: `${u(24)} ${u(24)}` }}>
+            <h2 className="font-normal" style={{ ...headingStyle, color: '#F5F0EA' }}>¿Nos querés sorprender?</h2>
+            <p style={{ ...bodyStyle, fontSize: u(15.5), lineHeight: u(22), color: '#F5F0EA' }}>
+              Armamos una lista con algunas ideas, por si querés darnos una mano con lo que viene.
+            </p>
+            <button
+              type="button"
+              onClick={() => setScreen('gifts')}
+              className="uppercase cursor-pointer"
+              style={{
+                fontFamily: SANS,
+                fontSize: u(11),
+                letterSpacing: '0.04em',
+                color: '#2A1A0D',
+                backgroundColor: '#F5F0EA',
+                padding: `${u(13)} ${u(28)}`,
+                borderRadius: u(2),
+                marginTop: u(24),
+              }}
+            >
+              Ver lista de regalos
+            </button>
+          </div>
+        </section>
+      </Reveal>
     ),
 
     events: (
-      <section key="events" className="w-full grid grid-cols-1 sm:grid-cols-2 items-stretch">
+      <React.Fragment key="events">
+      <Reveal>
+      <section className="sticky top-0 w-full grid grid-cols-1 sm:grid-cols-2 items-stretch sm:min-h-[85vh]">
         {/* Izquierda: panel liso color papel, sin foto, con "Cronograma" en cursiva al centro.
             Padding simétrico arriba/abajo para que quede centrado dentro de este bloque.
             En mobile (columnas apiladas), el bloque de al lado arranca con padding-top 0
@@ -189,7 +231,7 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
             mobile para la cuenta de arriba, un valor fijo normal desde el breakpoint sm en
             adelante donde las columnas ya están lado a lado y no hace falta ese ajuste. */}
         <div
-          className="flex flex-col items-center text-center bg-white pt-0 sm:pt-10"
+          className="flex flex-col items-center text-center bg-white pt-0 sm:pt-10 sm:justify-center"
           style={{ paddingLeft: u(32), paddingRight: u(32), paddingBottom: u(48) }}
         >
           {/* Caja con un ícono por tipo de evento, como resumen rápido arriba de la lista */}
@@ -236,89 +278,127 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
           </div>
         </div>
       </section>
-    ),
+      </Reveal>
 
-    gallery: (
+      {/* Dress code como sección propia, justo después del Cronograma — antes vivía
+          adentro de "Guía para invitados", lo sacamos de ahí (ver más abajo). */}
+      <Reveal>
       <section
-        key="gallery"
-        className="flex flex-col items-center text-center"
-        style={{ padding: `${u(24)} ${u(24)} ${u(77)}` }}
-      >
-        <span className="uppercase" style={eyebrowStyle}>Galería</span>
-        <h2 className="font-normal" style={headingStyle}>Algunos recuerdos</h2>
-        <div
-          className="grid grid-cols-2 sm:grid-cols-4 mx-auto"
-          style={{ gap: u(14), marginTop: u(36), maxWidth: u(780), width: '100%' }}
-        >
-          {galleryImages.slice(0, 8).map((img, i) => (
-            <div key={i} className="overflow-hidden" style={{ borderRadius: u(6), aspectRatio: '1 / 1' }}>
-              <img src={img} alt={`Recuerdo ${i + 1}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-            </div>
-          ))}
-        </div>
-      </section>
-    ),
-
-    guestInfo: (
-      <section
-        key="guestInfo"
-        className="flex flex-col items-center text-center"
-        style={{ padding: `${u(24)} ${u(24)} ${u(77)}` }}
-      >
-        <span className="uppercase" style={eyebrowStyle}>Guía para invitados</span>
-        <h2 className="font-normal" style={headingStyle}>Todo lo que necesitás saber</h2>
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 mx-auto text-left"
-          style={{ gap: u(16), marginTop: u(36), maxWidth: u(700), width: '100%' }}
-        >
-          {[
-            { icon: Shirt, label: 'Dress code', value: wedding.dressCode || 'Elegante / Cocktail' },
-            { icon: Hotel, label: 'Hospedaje', value: wedding.lodgingInfo || DEFAULT_LODGING_INFO },
-            { icon: Navigation, label: 'Ubicación', value: wedding.mapLocation || `${wedding.venue || 'Estancia La Linda'}, ${wedding.city || 'Pilar, Buenos Aires'}` },
-            { icon: Bus, label: 'Transporte', value: wedding.transportInfo || DEFAULT_TRANSPORT_INFO },
-          ].map(({ icon: Icon, label, value }) => (
-            <div
-              key={label}
-              className="bg-white flex items-start"
-              style={{ padding: u(20), borderRadius: u(6), border: '1px solid #ECE6DC', gap: u(12) }}
-            >
-              <span
-                className="inline-flex items-center justify-center shrink-0"
-                style={{ width: u(32), height: u(32), borderRadius: u(9), backgroundColor: '#F3ECE1', color: '#463936' }}
-              >
-                <Icon style={{ width: u(15), height: u(15) }} />
-              </span>
-              <div>
-                <span className="uppercase block" style={{ fontFamily: SANS, fontSize: u(9), letterSpacing: '0.06em', color: '#8A7A6E' }}>
-                  {label}
-                </span>
-                <span className="block" style={{ fontFamily: SANS, fontSize: u(12.5), color: '#282018', marginTop: u(3), lineHeight: 1.4 }}>
-                  {value}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-    ),
-
-    music: (
-      <section
-        key="music"
-        className="flex flex-col items-center text-center"
-        style={{ padding: `${u(24)} ${u(24)} ${u(90)}` }}
+        className="sticky top-0 flex flex-col items-center justify-center text-center"
+        style={{ minHeight: '55vh', padding: `${u(56)} ${u(24)}`, backgroundColor: '#FBF9F5' }}
       >
         <span
           className="inline-flex items-center justify-center"
-          style={{ width: u(44), height: u(44), borderRadius: '50%', backgroundColor: '#1C1005', color: '#fff' }}
+          style={{ width: u(44), height: u(44), borderRadius: '50%', backgroundColor: '#F3ECE1', color: '#463936' }}
         >
-          <Music style={{ width: u(19), height: u(19) }} />
+          <Shirt style={{ width: u(19), height: u(19) }} />
         </span>
-        <h2 className="font-normal" style={{ ...headingStyle, marginTop: u(18) }}>Tu música, nuestra playlist</h2>
-        <p style={{ ...bodyStyle, fontSize: u(15.5), lineHeight: u(22) }}>
-          ¿Qué tema no puede faltar en la fiesta? Contanos y lo sumamos.
-        </p>
+        <span className="uppercase" style={{ ...eyebrowStyle, marginTop: u(16) }}>Dress code</span>
+        <h2 className="font-normal" style={{ ...headingStyle, marginTop: u(8) }}>
+          {wedding.dressCode || 'Elegante / Cocktail'}
+        </h2>
       </section>
+      </Reveal>
+
+      {/* CTA a RSVP, debajo de Dress code. Separado del módulo "Cronograma" en sí: solo
+          aparece si el módulo "Confirmar asistencia" está tildado en Tu sitio. */}
+      {features.rsvp && (
+        <Reveal>
+        <section
+          className="sticky top-0 flex flex-col items-center justify-center text-center"
+          style={{ minHeight: '63vh', padding: `${u(56)} ${u(24)} ${u(72)}`, backgroundColor: '#FFFFFF' }}
+        >
+          <h2 className="font-normal" style={{ ...headingStyle, marginTop: 0 }}>
+            Este día no sería lo mismo sin vos
+          </h2>
+          <button
+            type="button"
+            onClick={() => setScreen('rsvp')}
+            className="uppercase cursor-pointer"
+            style={{
+              fontFamily: SANS,
+              fontSize: u(11),
+              letterSpacing: '0.04em',
+              color: '#FFFFFF',
+              backgroundColor: '#2D1A0E',
+              padding: `${u(13)} ${u(28)}`,
+              borderRadius: u(2),
+              marginTop: u(24),
+            }}
+          >
+            Confirmar asistencia
+          </button>
+        </section>
+        </Reveal>
+      )}
+      </React.Fragment>
+    ),
+
+    gallery: (
+      <Reveal key="gallery">
+        <section className="sticky top-0 w-full bg-[#FBF9F5]">
+          {/* Galería a pantalla completa: sin texto, sin padding ni límite de ancho, las
+              fotos van de borde a borde. */}
+          <div className="grid grid-cols-2 sm:grid-cols-4">
+            {galleryImages.slice(0, 8).map((img, i) => (
+              <div key={i} className="overflow-hidden" style={{ aspectRatio: '1 / 1' }}>
+                <img src={img} alt={`Recuerdo ${i + 1}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+              </div>
+            ))}
+          </div>
+        </section>
+      </Reveal>
+    ),
+
+    guestInfo: (
+      <React.Fragment key="guestInfo">
+        {[
+          { icon: Hotel, label: 'Hospedaje', value: wedding.lodgingInfo || DEFAULT_LODGING_INFO, bg: '#FFFFFF', h: '65vh' },
+          { icon: Navigation, label: 'Ubicación', value: wedding.mapLocation || `${wedding.venue || 'Estancia La Linda'}, ${wedding.city || 'Pilar, Buenos Aires'}`, bg: '#FBF9F5', h: '65vh' },
+          { icon: Bus, label: 'Transporte', value: wedding.transportInfo || DEFAULT_TRANSPORT_INFO, bg: '#FFFFFF', h: '92vh' },
+        ].map(({ icon: Icon, label, value, bg, h }) => (
+          <Reveal key={label}>
+            <section
+              className="sticky top-0 flex flex-col items-center justify-center text-center"
+              style={{ minHeight: h, padding: `${u(56)} ${u(24)}`, backgroundColor: bg }}
+            >
+              <span
+                className="inline-flex items-center justify-center"
+                style={{ width: u(44), height: u(44), borderRadius: '50%', backgroundColor: '#F3ECE1', color: '#463936' }}
+              >
+                <Icon style={{ width: u(19), height: u(19) }} />
+              </span>
+              <span className="uppercase" style={{ ...eyebrowStyle, marginTop: u(16) }}>{label}</span>
+              <h2
+                className="font-normal"
+                style={{ fontFamily: SERIF, fontSize: u(24), lineHeight: 1.35, color: '#1C1005', marginTop: u(10), maxWidth: u(480) }}
+              >
+                {value}
+              </h2>
+            </section>
+          </Reveal>
+        ))}
+      </React.Fragment>
+    ),
+
+    music: (
+      <Reveal key="music">
+        <section
+          className="sticky top-0 flex flex-col items-center justify-center text-center"
+          style={{ minHeight: '65vh', padding: `${u(24)} ${u(24)} ${u(90)}`, backgroundColor: '#FBF9F5' }}
+        >
+          <span
+            className="inline-flex items-center justify-center"
+            style={{ width: u(44), height: u(44), borderRadius: '50%', backgroundColor: '#1C1005', color: '#fff' }}
+          >
+            <Music style={{ width: u(19), height: u(19) }} />
+          </span>
+          <h2 className="font-normal" style={{ ...headingStyle, marginTop: u(18) }}>Tu música, nuestra playlist</h2>
+          <p style={{ ...bodyStyle, fontSize: u(15.5), lineHeight: u(22) }}>
+            ¿Qué tema no puede faltar en la fiesta? Contanos y lo sumamos.
+          </p>
+        </section>
+      </Reveal>
     ),
   };
 
@@ -333,7 +413,7 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
 
       {features.giftRegistry && sections.giftRegistry}
       {MICROSITE_SECTION_ORDER.filter((key) => key !== 'story' && key !== 'giftRegistry' && features[key]).map((key) => sections[key])}
-      {sections.giftCta}
+      {features.giftRegistry && sections.giftCta}
     </div>
   );
 };

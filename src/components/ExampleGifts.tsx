@@ -1,11 +1,13 @@
 import React, { useMemo, useState } from 'react';
 import { ChevronDown, Search } from 'lucide-react';
 import { ExampleHero } from './ExampleHero';
+import { GiftPaymentModal } from './GiftPaymentModal';
 
 // Pantalla "Regalos" del ejemplo. Copia del diseño de referencia (frame de 710px de
 // ancho): todas las medidas están en "u", 1u = 1px a 710px de ancho del frame, que a
 // 1440px de viewport equivale a 2.028px. Se achica proporcionalmente por debajo y no
-// crece por encima de 1440px.
+// crece por encima de 1440px. Con piso (clamp) para que a tablet/desktop chico no se
+// achique de más.
 const u = (n: number) => `calc(${n} * var(--u))`;
 
 const SERIF = "'Instrument Serif', serif";
@@ -61,6 +63,7 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
   const [query, setQuery] = useState('');
   const [rangeId, setRangeId] = useState('all');
   const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const [paymentGift, setPaymentGift] = useState<ExampleGift | null>(null);
 
   const visible = useMemo(() => {
     const range = priceRanges.find((r) => r.id === rangeId) ?? priceRanges[0];
@@ -88,20 +91,74 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
     border: active ? '1px solid #2A1A0D' : '1px solid #EFEAE2',
   });
 
+  const pillMobile = (active: boolean) =>
+    `shrink-0 whitespace-nowrap rounded-full px-3 h-8 text-[12px] border cursor-pointer ${
+      active ? 'bg-[#2A1A0D] text-white border-[#2A1A0D]' : 'bg-white text-[#5A4A40] border-[#EFEAE2]'
+    }`;
+
   return (
-    <div className="min-h-screen bg-white" style={{ ['--u' as string]: 'min(2.028px, 0.14085vw)' }}>
+    <div className="min-h-screen bg-white" style={{ ['--u' as string]: 'clamp(1.6px, 0.14085vw, 2.028px)' }}>
       <ExampleHero active="gifts" onNavigate={onNavigate} />
+
+      {/* Todo lo de acá para abajo en un solo bloque con fondo sólido: al scrollear
+          normal, tapa completamente al hero de arriba en vez de dejarlo entreverse por
+          abajo. Sin "sticky": esta sección es mucho más alta que la pantalla (toda la
+          grilla de regalos) y nada la sigue, así que "sticky" acá dejaría la pantalla
+          congelada un buen tramo de scroll sin que se vea nada moverse. */}
+      <section className="relative z-10 bg-white">
 
       {/* Pista de scroll hacia la grilla de regalos */}
       <div className="flex flex-col items-center" style={{ paddingTop: u(14) }}>
-        <span className="uppercase text-[#8A7A6E]" style={{ fontFamily: SANS, fontSize: u(3.8), letterSpacing: '0.12em', lineHeight: 1 }}>
+        <span className="uppercase text-[#8A7A6E] text-[11px] sm:text-[length:inherit]" style={{ fontFamily: SANS, fontSize: `max(${u(3.8)}, 11px)`, letterSpacing: '0.12em', lineHeight: 1 }}>
           Explorar regalos
         </span>
-        <ChevronDown className="text-[#8A7A6E]" style={{ width: u(7), height: u(7), marginTop: u(4) }} strokeWidth={1.5} />
+        <ChevronDown className="text-[#8A7A6E]" style={{ width: `max(${u(7)}, 14px)`, height: `max(${u(7)}, 14px)`, marginTop: u(4) }} strokeWidth={1.5} />
       </div>
 
-      {/* Filtros */}
-      <div className="bg-[#FBF9F5]" style={{ height: u(37), paddingTop: u(11) }}>
+      {/* Filtros — mobile: pills en fila con scroll horizontal, buscador y rango apilados debajo */}
+      <div className="sticky top-0 z-20 sm:hidden bg-[#FBF9F5] px-4 pt-4 pb-4 flex flex-col gap-3">
+        <div
+          className="flex items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          <button onClick={() => setActiveFilter('all')} className={pillMobile(activeFilter === 'all')} style={{ fontFamily: SANS }}>
+            Ver todos <span className="opacity-60">({gifts.length})</span>
+          </button>
+          {filters.map((f) => (
+            <button key={f} onClick={() => setActiveFilter(f)} className={pillMobile(activeFilter === f)} style={{ fontFamily: SANS }}>
+              {f} <span className="opacity-60">({gifts.filter((g) => g.filter === f).length})</span>
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center gap-2">
+          <label className="flex-1 flex items-center bg-white border border-[#EFEAE2] rounded-full h-10 px-3 gap-2 min-w-0">
+            <Search className="text-[#8A6A55] w-4 h-4 shrink-0" strokeWidth={2} />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Buscar regalo..."
+              className="bg-transparent outline-none w-full min-w-0 text-[13px] text-[#5A4A40] placeholder:text-[#8A7A6E]"
+              style={{ fontFamily: SANS }}
+            />
+          </label>
+          <div className="relative flex items-center bg-white border border-[#EFEAE2] rounded-full h-10 shrink-0">
+            <select
+              value={rangeId}
+              onChange={(e) => setRangeId(e.target.value)}
+              className="appearance-none bg-transparent outline-none h-full cursor-pointer text-[13px] text-[#5A4A40] pl-3 pr-7 rounded-full"
+              style={{ fontFamily: SANS }}
+            >
+              {priceRanges.map((r) => (
+                <option key={r.id} value={r.id}>{r.label}</option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-2 w-4 h-4 pointer-events-none text-[#5A4A40]" strokeWidth={2} />
+          </div>
+        </div>
+      </div>
+
+      {/* Filtros — tablet/desktop (como antes) */}
+      <div className="sticky top-0 z-20 hidden sm:block bg-[#FBF9F5]" style={{ height: u(37), paddingTop: u(11) }}>
         <div className="flex items-center justify-between mx-auto" style={{ width: u(545) }}>
           <div className="flex items-center" style={{ gap: u(3.6) }}>
             <button onClick={() => setActiveFilter('all')} className="cursor-pointer" style={pill(activeFilter === 'all')}>
@@ -147,8 +204,44 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* Grilla de regalos */}
-      <div className="mx-auto grid grid-cols-4" style={{ width: u(576), columnGap: u(21.33), rowGap: u(32), paddingTop: u(17), paddingBottom: u(69) }}>
+      {/* Grilla de regalos — mobile: una tarjeta por fila, tamaños fijos en px para que se lean bien */}
+      <div className="sm:hidden flex flex-col gap-6 px-4 pt-5 pb-12">
+        {visible.map((g) => (
+          <article key={g.id} className="w-full">
+            <img src={g.image} alt={g.title} referrerPolicy="no-referrer" className="w-full h-52 object-cover rounded-md" />
+            <div className="pt-3">
+              <p className="uppercase text-[#8A7A6E] text-[11px] tracking-[0.08em]" style={{ fontFamily: SANS }}>
+                {g.category}
+              </p>
+              <h3 className="font-normal text-[#2A1A10] text-[21px] leading-tight mt-1" style={{ fontFamily: SERIF }}>
+                {g.title}
+              </h3>
+              <p className="font-bold text-[#3A3330] text-[15px] mt-1" style={{ fontFamily: SANS }}>
+                {formatPrice(g.price)}
+              </p>
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <div className="flex items-center bg-[#F6F3EC] rounded h-10 w-28 shrink-0">
+                <button onClick={() => setQty(g.id, -1)} aria-label="Quitar uno" className="text-[#8A7A6E] cursor-pointer flex-1 text-base">−</button>
+                <span className="bg-white text-center text-[#2A1A10] h-full flex items-center justify-center w-10 text-[13px]" style={{ fontFamily: SANS }}>
+                  {quantities[g.id] ?? 1}
+                </span>
+                <button onClick={() => setQty(g.id, 1)} aria-label="Agregar uno" className="text-[#8A7A6E] cursor-pointer flex-1 text-base">+</button>
+              </div>
+              <button
+                onClick={() => setPaymentGift(g)}
+                className="uppercase text-white flex-1 cursor-pointer whitespace-nowrap h-10 rounded text-[12px]"
+                style={{ backgroundColor: '#2D1A0E', fontFamily: SANS, letterSpacing: '0.03em' }}
+              >
+                Agregar al regalo
+              </button>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      {/* Grilla de regalos — tablet/desktop (como antes) */}
+      <div className="hidden sm:grid sm:grid-cols-4 mx-auto" style={{ width: u(576), columnGap: u(21.33), rowGap: u(32), paddingTop: u(17), paddingBottom: u(69) }}>
         {visible.map((g) => (
           <article key={g.id} className="relative" style={{ height: u(198) }}>
             <img src={g.image} alt={g.title} referrerPolicy="no-referrer" className="w-full object-cover" style={{ height: u(128), borderRadius: u(5) }} />
@@ -172,6 +265,7 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
                 <button onClick={() => setQty(g.id, 1)} aria-label="Agregar uno" className="text-[#8A7A6E] cursor-pointer flex-1" style={{ fontSize: u(6), lineHeight: 1 }}>+</button>
               </div>
               <button
+                onClick={() => setPaymentGift(g)}
                 className="uppercase text-white flex-1 cursor-pointer whitespace-nowrap"
                 style={{ backgroundColor: '#2D1A0E', height: u(12), borderRadius: u(1.5), fontFamily: SANS, fontSize: u(4.2), letterSpacing: '0.03em' }}
               >
@@ -182,6 +276,16 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
         ))}
       </div>
 
+      </section>
+
+      {paymentGift && (
+        <GiftPaymentModal
+          giftTitle={paymentGift.title}
+          unitPrice={paymentGift.price}
+          quantity={quantities[paymentGift.id] ?? 1}
+          onClose={() => setPaymentGift(null)}
+        />
+      )}
     </div>
   );
 };

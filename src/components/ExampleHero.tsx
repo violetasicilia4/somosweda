@@ -24,7 +24,7 @@ interface ExampleHeroProps {
 // que el piso del clamp anterior) y mantienen el clamp por vw desde sm.
 export const ExampleHero: React.FC<ExampleHeroProps> = ({ active, onNavigate }) => {
   return (
-    <section className="relative w-full overflow-hidden h-[88dvh] min-h-[560px] max-h-[820px] sm:h-[45vw] sm:min-h-[300px] sm:max-h-[620px]">
+    <section className="sticky top-0 relative w-full overflow-hidden h-[88dvh] min-h-[560px] max-h-[820px] sm:h-[45vw] sm:min-h-[300px] sm:max-h-[620px]">
         <img
           src="/mili-juan-hero.jpg"
           alt="Milagros y Juan riendo, abrazados"
