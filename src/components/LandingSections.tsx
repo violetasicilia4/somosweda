@@ -22,6 +22,7 @@ import {
   X,
 } from 'lucide-react';
 import { formatARS } from '../utils/format';
+import { PLAN_DETAILS } from '../utils/plan';
 
 const SANS = "'Schibsted Grotesk', sans-serif";
 const SERIF = "'Instrument Serif', serif";
@@ -524,6 +525,11 @@ export const HowItWorksTimeline: React.FC = () => (
 /* 8. PLANES                                                           */
 /* ------------------------------------------------------------------ */
 
+// Los 3 planes se leen directo de PLAN_DETAILS (utils/plan.ts) — esa es la única fuente
+// de nombres, precios y features de todo el producto (onboarding, Cuenta > Explorar
+// planes, modal de publicar). Antes este array vivía duplicado acá con nombres viejos
+// ("Invitados y RSVP", "Evento Completo") que ya no existían en el resto de la app; para
+// que no se vuelvan a desincronizar, el landing ahora consume directamente esa fuente.
 interface PricingPlan {
   name: string;
   badge?: string;
@@ -534,30 +540,21 @@ interface PricingPlan {
   highlighted?: boolean;
 }
 
-const pricingPlans: PricingPlan[] = [
-  {
-    name: 'Lista de Regalos',
-    description: 'Para parejas que solo quieren recibir regalos de forma simple.',
-    price: 'AR$ 99.000',
-    features: ['Lista de regalos personalizada', 'Regalos ilimitados', 'Fondos de regalo', 'URL personalizada'],
-  },
-  {
-    name: 'Invitados y RSVP',
-    description: 'Sumale confirmaciones online y gestión de invitados a tu lista.',
-    price: 'AR$ 129.000',
-    included: 'Todo lo incluido en Lista de Regalos',
-    features: ['RSVP online', 'Gestión de invitados', 'Exportación a Excel'],
-  },
-  {
-    name: 'Evento Completo',
-    badge: 'Más elegido',
-    description: 'Todo lo necesario para organizar y compartir tu casamiento, sin depender de WhatsApp ni Excel.',
-    price: 'AR$ 159.000',
-    included: 'Todo lo incluido en Invitados y RSVP',
-    features: ['Micrositio completo', 'Galería de fotos', 'Ubicación y cronograma'],
-    highlighted: true,
-  },
-];
+const pricingPlans: PricingPlan[] = PLAN_DETAILS.map((plan) => {
+  // La primera feature de Evento/Evento Plus es "Todo lo de X" — se muestra destacada
+  // arriba del resto, como antes, en vez de como un ítem más de la lista.
+  const [first, ...rest] = plan.features;
+  const included = first?.startsWith('Todo lo de') ? first : undefined;
+  return {
+    name: plan.name,
+    badge: plan.badge,
+    description: plan.description,
+    price: plan.price,
+    included,
+    features: included ? rest : plan.features,
+    highlighted: !!plan.badge,
+  };
+});
 
 const FeatureList: React.FC<{ items: string[] }> = ({ items }) => (
   <ul className="space-y-2.5">
@@ -579,7 +576,7 @@ const PricingCTA: React.FC<{ onClick: () => void; highlighted?: boolean }> = ({ 
     }`}
     style={{ fontFamily: SANS }}
   >
-    Crear mi evento
+    Probar este plan
     <span
       className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
         highlighted ? 'bg-white text-[#2D1A0E]' : 'bg-[#F4F0EB] text-[#2A1A10]'
@@ -631,7 +628,7 @@ export const Pricing: React.FC<{ onCreate: () => void }> = ({ onCreate }) => (
                 {plan.price}
               </span>
               <p className="text-[12px] text-[#8A7A6E] mt-1.5" style={{ fontFamily: SANS }}>
-                Pago único
+                Pago único · pagás al publicar, no ahora
               </p>
             </div>
 

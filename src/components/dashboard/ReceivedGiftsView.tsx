@@ -81,7 +81,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por nombre o regalo..."
-            className="w-full pl-9 pr-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+            className="w-full pl-9 pr-3 py-2.5 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
           />
         </div>
         <div className="flex gap-2">
@@ -94,7 +94,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
               key={opt.id}
               type="button"
               onClick={() => setFilter(opt.id)}
-              className={`uppercase px-3.5 py-2 rounded-xl text-xs font-normal transition-colors cursor-pointer ${ filter === opt.id ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50' }`}
+              className={`uppercase px-3.5 py-2 rounded-2xl text-xs font-normal transition-colors cursor-pointer ${ filter === opt.id ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50' }`}
             >
               {opt.label}
             </button>
@@ -102,7 +102,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-2xs">
+      <div className="bg-white rounded-3xl border border-gray-200 shadow-2xs">
         {receivedGifts.length === 0 ? (
           <p className="text-xs sm:text-sm text-gray-500 text-center py-12 px-6">
             Cuando sus invitados hagan un regalo o dejen una dedicatoria, aparecerán aquí para que puedan darles las gracias.
@@ -117,7 +117,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
                     Regaló: <span className="font-semibold text-gray-700">{rec.giftTitle}</span> (${rec.amount.toLocaleString()})
                   </p>
                   {rec.dedicationMessage && (
-                    <p className="text-xs italic text-gray-600 bg-gray-50 p-2 rounded-lg mt-1 border border-gray-100 max-w-lg">
+                    <p className="text-xs italic text-gray-600 bg-gray-50 p-2 rounded-xl mt-1 border border-gray-100 max-w-lg">
                       "{rec.dedicationMessage}"
                     </p>
                   )}
@@ -128,21 +128,21 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
                     <button
                       type="button"
                       onClick={() => setActiveReceiptGift(rec)}
-                      className="uppercase px-2.5 py-1 border border-gray-200 text-gray-600 hover:bg-gray-50 rounded-lg text-xs font-normal cursor-pointer inline-flex items-center gap-1"
+                      className="uppercase px-2.5 py-1 border border-gray-200 text-gray-600 hover:bg-gray-50 rounded-xl text-xs font-normal cursor-pointer inline-flex items-center gap-1"
                     >
                       <FileText className="w-3.5 h-3.5" />
                       <span>Comprobante</span>
                     </button>
                   )}
                   {rec.isThanked ? (
-                    <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+                    <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg">
                       Agradecido ✓
                     </span>
                   ) : (
                     <button
                       type="button"
                       onClick={() => handleOpenThankYou(rec)}
-                      className="uppercase px-2.5 py-1 bg-gray-900 text-white rounded-lg text-xs font-normal cursor-pointer hover:bg-black transition-colors"
+                      className="uppercase px-2.5 py-1 bg-gray-900 text-white rounded-xl text-xs font-normal cursor-pointer hover:bg-black transition-colors"
                     >
                       Agradecer
                     </button>
@@ -157,7 +157,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
       {/* MODAL: ENVIAR AGRADECIMIENTO */}
       {activeThankGift && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-100 animate-fade-in space-y-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-xl border border-gray-100 animate-fade-in space-y-4">
             <div className="flex justify-between items-start pb-3 border-b border-gray-100">
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-wider text-rose-500 block">
@@ -173,7 +173,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
               </button>
             </div>
 
-            <div className="bg-gray-50 border border-gray-200/70 p-3.5 rounded-xl space-y-1 text-xs">
+            <div className="bg-gray-50 border border-gray-200/70 p-3.5 rounded-2xl space-y-1 text-xs">
               <div className="flex justify-between text-gray-500">
                 <span>Regalo: <strong>{activeThankGift.giftTitle}</strong></span>
                 <span className="font-bold text-gray-900 font-mono">AR$ {activeThankGift.amount.toLocaleString()}</span>
@@ -196,7 +196,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
                   value={thankYouText}
                   onChange={(e) => setThankYouText(e.target.value)}
                   placeholder="¡Muchas gracias por acompañarnos y por este hermoso regalo!..."
-                  className="w-full px-3.5 py-2.5 border border-gray-300 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-gray-900 leading-relaxed"
+                  className="w-full px-3.5 py-2.5 border border-gray-300 rounded-2xl text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-gray-900 leading-relaxed"
                 />
               </div>
 
@@ -204,13 +204,13 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveThankGift(null)}
-                  className="uppercase px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl text-xs font-normal cursor-pointer"
+                  className="uppercase px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-2xl text-xs font-normal cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="uppercase px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-normal cursor-pointer shadow-xs flex items-center gap-1.5"
+                  className="uppercase px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-xs font-normal cursor-pointer shadow-xs flex items-center gap-1.5"
                 >
                   <Heart className="w-3.5 h-3.5 fill-white" />
                   <span>Guardar y enviar por WhatsApp</span>
@@ -224,7 +224,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
       {/* MODAL: VER COMPROBANTE */}
       {activeReceiptGift && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-100 animate-fade-in space-y-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-xl border border-gray-100 animate-fade-in space-y-4">
             <div className="flex justify-between items-start pb-2 border-b border-gray-100">
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">
@@ -242,7 +242,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
               </button>
             </div>
 
-            <div className="rounded-xl overflow-hidden border border-gray-200 bg-gray-100 max-h-80 flex items-center justify-center">
+            <div className="rounded-2xl overflow-hidden border border-gray-200 bg-gray-100 max-h-80 flex items-center justify-center">
               <img
                 src={activeReceiptGift.receiptUrl || 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80'}
                 alt="Comprobante"
@@ -260,7 +260,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveReceiptGift(null)}
-                className="uppercase px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl text-xs font-normal cursor-pointer"
+                className="uppercase px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-2xl text-xs font-normal cursor-pointer"
               >
                 Cerrar
               </button>
@@ -268,7 +268,7 @@ export const ReceivedGiftsView: React.FC<ReceivedGiftsViewProps> = ({
                 <button
                   type="button"
                   onClick={handleConfirmReceiptPayment}
-                  className="uppercase px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-normal cursor-pointer shadow-xs flex items-center gap-1.5"
+                  className="uppercase px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-xs font-normal cursor-pointer shadow-xs flex items-center gap-1.5"
                 >
                   <Check className="w-3.5 h-3.5" />
                   <span>Confirmar acreditación en banco</span>

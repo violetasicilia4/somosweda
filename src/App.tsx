@@ -3,9 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
-import { AppView, WeddingData, ManualGuest, ManualGuestStatus, GiftItem, WeddingEvent, ReceivedGift } from './types';
+import React, { useEffect, useState } from 'react';
+import { AppView, WeddingData, ManualGuest, ManualGuestStatus, GiftItem, WeddingEvent, ReceivedGift, WeddingPlan } from './types';
 import { initialWedding, initialManualGuests, initialGifts, initialEvents, initialReceivedGifts } from './data/initialData';
+import { withPlanChange } from './utils/plan';
+import { persistWedding, persistWeddingEvents } from './utils/weddingStore';
 import { LandingView } from './components/LandingView';
 import { AuthViews } from './components/AuthViews';
 import { ChoosePlanView } from './components/ChoosePlanView';
@@ -33,6 +35,22 @@ export default function App() {
   const [events, setEvents] = useState<WeddingEvent[]>(initialEvents);
   const [currentUser, setCurrentUser] = useState<{ name: string; email: string } | null>(null);
 
+  // Puente para "Ver tu lista": esa vista se abre en una pestaña nueva y completamente
+  // aparte (ver weddingStore.ts), así que cada cambio acá se refleja en localStorage
+  // para que el sitio de ejemplo pueda leer los datos reales en vez de mostrar defaults.
+  // Ojo: la propia pestaña de ejemplo también monta este componente (isExample=true) con
+  // wedding/events en sus valores default — si no la excluimos acá, pisaría con esos
+  // defaults lo que acababa de guardar la pestaña del dashboard.
+  useEffect(() => {
+    if (isExample) return;
+    persistWedding(wedding);
+  }, [isExample, wedding]);
+
+  useEffect(() => {
+    if (isExample) return;
+    persistWeddingEvents(events);
+  }, [isExample, events]);
+
   // "Ver tu lista" abre la página de ejemplo (la vista que ven los invitados),
   // nunca una simulación o preview dentro del dashboard.
   const handleOpenExample = (screen?: 'home' | 'gifts' | 'rsvp') => {
@@ -56,6 +74,13 @@ export default function App() {
 
   const handleUpdateWedding = (updated: Partial<WeddingData>) => {
     setWedding(prev => ({ ...prev, ...updated }));
+  };
+
+  // Cambiar de plan (onboarding, "Explorar planes", pantallas de "Probar X") nunca borra
+  // nada: withPlanChange se encarga de que highestPlan nunca baje, aunque el usuario
+  // vuelva a un plan más chico.
+  const handleSelectPlan = (plan: WeddingPlan) => {
+    setWedding(prev => ({ ...prev, ...withPlanChange(prev, plan) }));
   };
 
   const handleAddManualGuest = (newGuest: Omit<ManualGuest, 'id'>) => {
@@ -134,7 +159,7 @@ export default function App() {
   };
 
   if (isExample) {
-    return <ExampleView />;
+    return <ExampleView wedding={wedding} events={events} />;
   }
 
   if (isGuestStandalone) {
@@ -190,7 +215,7 @@ export default function App() {
         {currentView === 'choose-plan' && (
           <ChoosePlanView
             onNavigate={(view) => setCurrentView(view)}
-            onSelectPlan={(plan) => handleUpdateWedding({ plan })}
+            onSelectPlan={handleSelectPlan}
           />
         )}
 

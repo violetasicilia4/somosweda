@@ -33,9 +33,9 @@ export const ChoosePlanView: React.FC<ChoosePlanViewProps> = ({ onNavigate, onSe
         </div>
 
         <div className="text-center mb-8">
-          <h1 className="text-2xl sm:text-3xl font-normal text-gray-900 mb-1.5">¿Qué querés probar primero?</h1>
+          <h1 className="text-2xl sm:text-3xl font-normal text-gray-900 mb-1.5">¿Qué querés crear?</h1>
           <p className="text-sm text-gray-500 max-w-md mx-auto">
-            Empezá por donde quieras. Podés cambiar de plan más adelante, antes de publicar tu lista.
+            Elegí por dónde arrancar. Vas a poder cambiar y probar los demás cuando quieras, sin perder nada.
           </p>
         </div>
 
@@ -44,11 +44,13 @@ export const ChoosePlanView: React.FC<ChoosePlanViewProps> = ({ onNavigate, onSe
             const Icon = PLAN_ICONS[plan.id];
             const isSelected = selected === plan.id;
             return (
-              <button
+              <div
                 key={plan.id}
-                type="button"
+                role="button"
+                tabIndex={0}
                 id={`choose-plan-${plan.id}`}
                 onClick={() => setSelected(plan.id)}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelected(plan.id); }}
                 className={`relative text-left bg-white rounded-xl p-5 flex flex-col transition-all cursor-pointer ${
                   isSelected
                     ? 'border-2 border-[#2D1A0E] shadow-[0_8px_24px_rgba(45,26,14,0.1)]'
@@ -90,7 +92,18 @@ export const ChoosePlanView: React.FC<ChoosePlanViewProps> = ({ onNavigate, onSe
                     </li>
                   ))}
                 </ul>
-              </button>
+
+                <button
+                  type="button"
+                  id={`choose-plan-${plan.id}-try`}
+                  onClick={(e) => { e.stopPropagation(); setSelected(plan.id); }}
+                  className={`uppercase mt-4 w-full py-2 rounded-lg text-[11px] font-medium transition-colors cursor-pointer ${
+                    isSelected ? 'bg-[#2D1A0E] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Probar esta versión
+                </button>
+              </div>
             );
           })}
         </div>
@@ -104,7 +117,7 @@ export const ChoosePlanView: React.FC<ChoosePlanViewProps> = ({ onNavigate, onSe
           >
             Continuar
           </button>
-          <p className="text-[11px] text-gray-400">Podés mejorar tu plan cuando quieras, sin perder lo que ya armaste.</p>
+          <p className="text-[11px] text-gray-400">Sin tarjeta de crédito · Sin compromiso · Podés probar los demás cuando quieras</p>
         </div>
       </div>
     </div>

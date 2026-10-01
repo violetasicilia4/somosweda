@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
-import { WeddingData, WeddingEvent, GiftItem } from '../../types';
-import { 
-  Eye, 
-  ExternalLink, 
-  Check, 
-  Sparkles, 
+import { WeddingData, WeddingEvent, GiftItem, WeddingPlan, MicrositeFeatures } from '../../types';
+import { isTabLocked, isMicrositePremiumUnlocked, getPlanDetails, MICROSITE_PREMIUM_REQUIRED_PLAN } from '../../utils/plan';
+import {
+  getMicrositeFeatures,
+  DEFAULT_STORY_TEXT,
+  DEFAULT_LODGING_INFO,
+  DEFAULT_TRANSPORT_INFO,
+  DEFAULT_GALLERY_IMAGES,
+} from '../../utils/microsite';
+import { LockedFeatureNotice } from './LockedFeatureNotice';
+import {
+  Eye,
+  ExternalLink,
+  Check,
+  Sparkles,
   Image as ImageIcon,
   MapPin,
   Calendar,
@@ -27,7 +36,9 @@ import {
   UserCheck,
   CheckSquare,
   Square,
-  Volume2
+  Volume2,
+  Layout,
+  Lock,
 } from 'lucide-react';
 
 interface MicrositeBuilderViewProps {
@@ -36,18 +47,37 @@ interface MicrositeBuilderViewProps {
   gifts: GiftItem[];
   onUpdateWedding: (updated: Partial<WeddingData>) => void;
   onOpenMicrosite: () => void;
+  onSelectPlan: (plan: WeddingPlan) => void;
 }
 
-export interface MicrositeFeaturesState {
-  countdown: boolean;      // Cuenta regresiva
-  story: boolean;          // Nuestra historia
-  events: boolean;         // Cronograma de eventos
-  guestInfo: boolean;      // Info para invitados (Dress code, hospedaje, mapa, transporte)
-  gallery: boolean;        // Galería de fotos
-  giftRegistry: boolean;   // Lista de regalos
-  rsvp: boolean;           // Confirmar asistencia
-  music: boolean;          // Sugerir música para la fiesta
-}
+// Tarjeta chica que reemplaza una sección Premium cuando el plan actual es Evento
+// (Base): no oculta que la sección existe, invita a probar Evento Plus con una
+// descripción de lo que incluye, sin precios ni lenguaje de venta agresivo.
+const PremiumSectionTeaser: React.FC<{ title: string; description: string; onTry: () => void }> = ({
+  title,
+  description,
+  onTry,
+}) => (
+  <div className="bg-white rounded-3xl border border-dashed border-gray-300 p-5 sm:p-6 space-y-3">
+    <div className="flex items-center gap-2">
+      <span className="w-7 h-7 rounded-xl bg-gray-100 text-gray-500 flex items-center justify-center shrink-0">
+        <Lock className="w-3.5 h-3.5" />
+      </span>
+      <div className="min-w-0">
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 block">Micrositio Premium</span>
+        <h3 className="text-sm font-bold text-gray-900">{title}</h3>
+      </div>
+    </div>
+    <p className="text-xs text-gray-500 leading-relaxed">{description}</p>
+    <button
+      type="button"
+      onClick={onTry}
+      className="uppercase text-xs font-normal px-3 py-1.5 rounded-2xl border border-gray-300 text-gray-700 hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-colors cursor-pointer"
+    >
+      Probar Evento Plus
+    </button>
+  </div>
+);
 
 export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
   wedding,
@@ -55,24 +85,15 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
   gifts,
   onUpdateWedding,
   onOpenMicrosite,
+  onSelectPlan,
 }) => {
-  // FEATURES SECTIONS TOGGLE STATE (Tildar o destildar módulos)
-  const [features, setFeatures] = useState<MicrositeFeaturesState>({
-    countdown: true,
-    story: true,
-    events: true,
-    guestInfo: true,
-    gallery: true,
-    giftRegistry: true,
-    rsvp: true,
-    music: false,
-  });
+  // FEATURES SECTIONS TOGGLE STATE (Tildar o destildar módulos) — vive en wedding, no
+  // en estado local: así el sitio de ejemplo (ExampleView) puede leer exactamente lo
+  // mismo que se ve acá, y nada se pierde al recargar o cambiar de pestaña.
+  const features = getMicrositeFeatures(wedding);
 
-  const toggleFeature = (key: keyof MicrositeFeaturesState) => {
-    setFeatures((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
+  const toggleFeature = (key: keyof MicrositeFeatures) => {
+    onUpdateWedding({ micrositeFeatures: { ...features, [key]: !features[key] } });
   };
 
   // Modal states for focused editing
@@ -87,22 +108,17 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
     wedding.bannerImage || 
     'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=80'
   );
-  const [storyText, setStoryText] = useState(
-    wedding.storyText ||
-    'Nos conocimos hace 6 años y desde entonces supimos que queríamos caminar juntos para siempre. Nos llena de emoción celebrar este gran paso junto a las personas que más queremos en el mundo.'
-  );
+  const [storyText, setStoryText] = useState(wedding.storyText || DEFAULT_STORY_TEXT);
   const [dressCode, setDressCode] = useState(wedding.dressCode || 'Elegante / Cocktail');
-  const [lodgingInfo, setLodgingInfo] = useState('Hoteles recomendados: Sheraton Pilar, Ibis Pilar y posadas boutique de la zona.');
-  const [transportInfo, setTransportInfo] = useState('Combis de traslado ida y vuelta desde CABA (Plaza Italia) y estacionamiento con seguridad.');
+  const [lodgingInfo, setLodgingInfo] = useState(wedding.lodgingInfo || DEFAULT_LODGING_INFO);
+  const [transportInfo, setTransportInfo] = useState(wedding.transportInfo || DEFAULT_TRANSPORT_INFO);
   const [mapLocation, setMapLocation] = useState(`${wedding.venue || 'Estancia La Linda'}, ${wedding.city || 'Pilar, Buenos Aires'}`);
 
-  // Gallery Photos
-  const [galleryImages, setGalleryImages] = useState<string[]>([
-    'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
-  ]);
+  // Gallery Photos — persistidas en wedding.galleryImages para que se vean en el sitio
+  // de ejemplo real, no solo acá en el editor.
+  const galleryImages = wedding.galleryImages && wedding.galleryImages.length > 0
+    ? wedding.galleryImages
+    : DEFAULT_GALLERY_IMAGES;
   const [newGalleryUrl, setNewGalleryUrl] = useState('');
 
   // Editable events list (initialized from props)
@@ -178,6 +194,9 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
   const handleSaveInfo = () => {
     onUpdateWedding({
       dressCode,
+      lodgingInfo,
+      transportInfo,
+      mapLocation,
     });
     setActiveModal(null);
   };
@@ -206,19 +225,40 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
 
   const handleAddGalleryImage = () => {
     if (newGalleryUrl.trim()) {
-      setGalleryImages([...galleryImages, newGalleryUrl.trim()]);
+      onUpdateWedding({ galleryImages: [...galleryImages, newGalleryUrl.trim()] });
       setNewGalleryUrl('');
     }
   };
 
   const handleDeleteGalleryImage = (idx: number) => {
-    setGalleryImages(galleryImages.filter((_, i) => i !== idx));
+    onUpdateWedding({ galleryImages: galleryImages.filter((_, i) => i !== idx) });
   };
 
   // Calculate dynamic progress based on active and configured features
   const activeFeaturesCount = Object.values(features).filter(Boolean).length;
   const totalPossibleFeatures = 8;
   const progressPercentage = Math.min(100, Math.round((activeFeaturesCount / totalPossibleFeatures) * 100));
+
+  // Micrositio se desbloquea desde el plan Evento (versión Base). Con Lista de Regalos
+  // todavía no está incluido — se muestra la pantalla de "Probar/Restaurar" en vez del
+  // contenido, sin ocultar ni borrar nada de lo que ya se haya configurado antes.
+  if (isTabLocked('sitio', wedding)) {
+    return (
+      <LockedFeatureNotice
+        wedding={wedding}
+        requiredPlan="invitados-rsvp"
+        icon={Layout}
+        title="Armá el sitio de tu boda"
+        description="Compartí toda la info de tu casamiento con tus invitados: fecha, ubicación, cronograma y lista de regalos en un solo link."
+        onSelectPlan={onSelectPlan}
+      />
+    );
+  }
+
+  // Dentro de Micrositio hay dos niveles: Base (Evento) y Premium (Evento Plus). Base
+  // nunca se oculta ni se degrada — Premium simplemente se ofrece como algo para probar.
+  const premiumUnlocked = isMicrositePremiumUnlocked(wedding);
+  const premiumPlan = getPlanDetails(MICROSITE_PREMIUM_REQUIRED_PLAN);
 
   return (
     <div className="space-y-8 animate-fade-in font-sans pb-16">
@@ -238,7 +278,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={onOpenMicrosite}
-            className="uppercase px-4 py-2.5 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 rounded-xl text-xs sm:text-xs font-normal transition-all cursor-pointer inline-flex items-center gap-2 active:scale-[0.98]"
+            className="uppercase px-4 py-2.5 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 rounded-2xl text-xs sm:text-xs font-normal transition-all cursor-pointer inline-flex items-center gap-2 active:scale-[0.98]"
           >
             <span>Ver tu lista</span>
             <ExternalLink className="w-4 h-4" />
@@ -246,8 +286,31 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
         </div>
       </div>
 
+      {/* ================= BANNER: NIVEL BASE VS PREMIUM ================= */}
+      {premiumUnlocked ? (
+        <div className="flex items-center gap-2.5 bg-gray-900 text-white rounded-2xl px-4 py-3 text-xs">
+          <Sparkles className="w-4 h-4 text-amber-300 shrink-0" />
+          <span className="font-semibold">Estás probando Evento Plus</span>
+          <span className="text-white/60 hidden sm:inline">— tenés acceso a galería, guía para invitados y música.</span>
+        </div>
+      ) : (
+        <div className="flex flex-wrap items-center justify-between gap-3 bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-xs">
+          <span className="text-gray-700">
+            <span className="font-semibold">Actualmente estás usando Micrositio Base.</span>
+            <span className="text-gray-500"> Podés probar Micrositio Premium (galería, guía para invitados y música) sin cargo.</span>
+          </span>
+          <button
+            type="button"
+            onClick={() => onSelectPlan(MICROSITE_PREMIUM_REQUIRED_PLAN)}
+            className="uppercase whitespace-nowrap px-3 py-1.5 bg-gray-900 hover:bg-black text-white rounded-xl text-[11px] font-normal cursor-pointer transition-colors shrink-0"
+          >
+            Probar {premiumPlan.name}
+          </button>
+        </div>
+      )}
+
       {/* ================= 2. PROGRESS BAR & FEATURE STATUS ================= */}
-      <div className="bg-white rounded-2xl border border-gray-200/80 p-5 sm:p-6 shadow-2xs space-y-4">
+      <div className="bg-white rounded-3xl border border-gray-200/80 p-5 sm:p-6 shadow-2xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="space-y-0.5">
             <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
@@ -324,7 +387,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
       </div>
 
       {/* ================= FEATURE QUICK SELECTOR / TOGGLE BAR ================= */}
-      <div className="bg-white rounded-2xl border border-gray-200/90 p-5 shadow-2xs space-y-3">
+      <div className="bg-white rounded-3xl border border-gray-200/90 p-5 shadow-2xs space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
           <div className="flex flex-wrap items-center gap-2 min-w-0">
             <SlidersHorizontal className="w-4 h-4 text-gray-700" />
@@ -342,7 +405,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={() => toggleFeature('countdown')}
-            className={`uppercase px-3 py-1.5 rounded-xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.countdown ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
+            className={`uppercase px-3 py-1.5 rounded-2xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.countdown ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
           >
             {features.countdown ? (
               <CheckSquare className="w-3.5 h-3.5 text-white" />
@@ -356,7 +419,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={() => toggleFeature('story')}
-            className={`uppercase px-3 py-1.5 rounded-xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.story ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
+            className={`uppercase px-3 py-1.5 rounded-2xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.story ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
           >
             {features.story ? (
               <CheckSquare className="w-3.5 h-3.5 text-white" />
@@ -370,7 +433,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={() => toggleFeature('events')}
-            className={`uppercase px-3 py-1.5 rounded-xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.events ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
+            className={`uppercase px-3 py-1.5 rounded-2xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.events ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
           >
             {features.events ? (
               <CheckSquare className="w-3.5 h-3.5 text-white" />
@@ -384,7 +447,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={() => toggleFeature('guestInfo')}
-            className={`uppercase px-3 py-1.5 rounded-xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.guestInfo ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
+            className={`uppercase px-3 py-1.5 rounded-2xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.guestInfo ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
           >
             {features.guestInfo ? (
               <CheckSquare className="w-3.5 h-3.5 text-white" />
@@ -398,7 +461,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={() => toggleFeature('gallery')}
-            className={`uppercase px-3 py-1.5 rounded-xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.gallery ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
+            className={`uppercase px-3 py-1.5 rounded-2xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.gallery ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
           >
             {features.gallery ? (
               <CheckSquare className="w-3.5 h-3.5 text-white" />
@@ -412,7 +475,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={() => toggleFeature('giftRegistry')}
-            className={`uppercase px-3 py-1.5 rounded-xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.giftRegistry ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
+            className={`uppercase px-3 py-1.5 rounded-2xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.giftRegistry ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
           >
             {features.giftRegistry ? (
               <CheckSquare className="w-3.5 h-3.5 text-white" />
@@ -426,7 +489,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={() => toggleFeature('rsvp')}
-            className={`uppercase px-3 py-1.5 rounded-xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.rsvp ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
+            className={`uppercase px-3 py-1.5 rounded-2xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.rsvp ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
           >
             {features.rsvp ? (
               <CheckSquare className="w-3.5 h-3.5 text-white" />
@@ -440,7 +503,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           <button
             type="button"
             onClick={() => toggleFeature('music')}
-            className={`uppercase px-3 py-1.5 rounded-xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.music ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
+            className={`uppercase px-3 py-1.5 rounded-2xl text-xs font-normal cursor-pointer transition-all inline-flex items-center gap-1.5 border ${ features.music ? 'bg-gray-900 text-white border-gray-900 shadow-2xs' : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 hover:text-gray-600' }`}
           >
             {features.music ? (
               <CheckSquare className="w-3.5 h-3.5 text-white" />
@@ -459,13 +522,13 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
         <div className="lg:col-span-7 space-y-6">
 
           {/* CARD 1: PORTADA & ENCABEZADO */}
-          <div className="bg-white rounded-2xl border border-gray-200/90 p-5 sm:p-6 shadow-2xs hover:border-gray-300 transition-all space-y-4 group">
+          <div className="bg-white rounded-3xl border border-gray-200/90 p-5 sm:p-6 shadow-2xs hover:border-gray-300 transition-all space-y-4 group">
             <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
               <div className="flex flex-wrap items-center gap-2 min-w-0">
                 <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                   Portada principal
                 </span>
-                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/50">
+                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200/50">
                   Fija en el sitio
                 </span>
               </div>
@@ -475,7 +538,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => toggleFeature('countdown')}
-                  className={`whitespace-nowrap uppercase px-2.5 py-1 text-[11px] font-normal rounded-lg border transition-all cursor-pointer inline-flex items-center gap-1.5 ${ features.countdown ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-gray-50 text-gray-400 border-gray-200 hover:text-gray-600' }`}
+                  className={`whitespace-nowrap uppercase px-2.5 py-1 text-[11px] font-normal rounded-xl border transition-all cursor-pointer inline-flex items-center gap-1.5 ${ features.countdown ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-gray-50 text-gray-400 border-gray-200 hover:text-gray-600' }`}
                   title="Tildar para mostrar u ocultar la cuenta regresiva"
                 >
                   {features.countdown ? (
@@ -494,7 +557,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveModal('portada')}
-                  className="whitespace-nowrap uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
+                  className="whitespace-nowrap uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-2xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   <span>Editar portada</span>
@@ -504,7 +567,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
 
             <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
               {/* Photo thumbnail */}
-              <div className="w-full sm:w-36 h-28 rounded-xl overflow-hidden bg-gray-100 shrink-0 border border-gray-200/80 relative">
+              <div className="w-full sm:w-36 h-28 rounded-2xl overflow-hidden bg-gray-100 shrink-0 border border-gray-200/80 relative">
                 <img
                   src={bannerImage}
                   alt="Portada principal"
@@ -530,7 +593,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           </div>
 
           {/* CARD 2: NUESTRA HISTORIA (TOGGLEABLE) */}
-          <div className={`bg-white rounded-2xl border transition-all p-5 sm:p-6 shadow-2xs space-y-3 group ${
+          <div className={`bg-white rounded-3xl border transition-all p-5 sm:p-6 shadow-2xs space-y-3 group ${
             features.story ? 'border-gray-200/90 hover:border-gray-300' : 'border-dashed border-gray-300 bg-gray-50/40 opacity-75'
           }`}>
             <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
@@ -549,7 +612,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                     Nuestra historia
                   </span>
-                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-lg border ${
                     features.story 
                       ? 'text-emerald-700 bg-emerald-50 border-emerald-200/60' 
                       : 'text-gray-500 bg-gray-100 border-gray-200'
@@ -563,7 +626,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => toggleFeature('story')}
-                  className={`whitespace-nowrap uppercase text-xs font-normal px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${ features.story ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
+                  className={`whitespace-nowrap uppercase text-xs font-normal px-2.5 py-1 rounded-xl border transition-colors cursor-pointer ${ features.story ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
                 >
                   {features.story ? 'Destildar' : 'Tildar y mostrar'}
                 </button>
@@ -571,7 +634,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveModal('historia')}
-                  className="whitespace-nowrap uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
+                  className="whitespace-nowrap uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-2xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   <span>Editar historia</span>
@@ -580,13 +643,13 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
             </div>
 
             {features.story ? (
-              <div className="p-4 bg-gray-50/70 rounded-xl border border-gray-100 text-sm text-gray-700 leading-relaxed italic relative">
+              <div className="p-4 bg-gray-50/70 rounded-2xl border border-gray-100 text-sm text-gray-700 leading-relaxed italic relative">
                 <p className="line-clamp-3">
                   "{storyText}"
                 </p>
               </div>
             ) : (
-              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
+              <div className="p-3.5 bg-amber-50/60 rounded-2xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
                 <span>Esta sección está oculta y no aparecerá en el sitio de tus invitados.</span>
                 <button 
                   type="button" 
@@ -600,7 +663,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           </div>
 
           {/* CARD 3: EVENTOS (TOGGLEABLE) */}
-          <div className={`bg-white rounded-2xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
+          <div className={`bg-white rounded-3xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
             features.events ? 'border-gray-200/90 hover:border-gray-300' : 'border-dashed border-gray-300 bg-gray-50/40 opacity-75'
           }`}>
             <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
@@ -620,7 +683,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                     <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                       Itinerario del día
                     </span>
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-lg border ${
                       features.events 
                         ? 'text-emerald-700 bg-emerald-50 border-emerald-200/60' 
                         : 'text-gray-500 bg-gray-100 border-gray-200'
@@ -638,7 +701,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => toggleFeature('events')}
-                  className={`whitespace-nowrap uppercase text-xs font-normal px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${ features.events ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
+                  className={`whitespace-nowrap uppercase text-xs font-normal px-2.5 py-1 rounded-xl border transition-colors cursor-pointer ${ features.events ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
                 >
                   {features.events ? 'Destildar' : 'Tildar y mostrar'}
                 </button>
@@ -646,7 +709,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveModal('eventos')}
-                  className="whitespace-nowrap uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
+                  className="whitespace-nowrap uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-2xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   <span>Editar eventos</span>
@@ -659,10 +722,10 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 {eventList.map((ev, idx) => (
                   <div
                     key={ev.id || idx}
-                    className="p-3.5 bg-gray-50/70 hover:bg-gray-50 rounded-xl border border-gray-150 flex items-center justify-between gap-3 transition-colors"
+                    className="p-3.5 bg-gray-50/70 hover:bg-gray-50 rounded-2xl border border-gray-150 flex items-center justify-between gap-3 transition-colors"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-700 shrink-0">
+                      <div className="w-8 h-8 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-700 shrink-0">
                         {ev.iconType === 'church' ? (
                           <Church className="w-4 h-4" />
                         ) : (
@@ -679,14 +742,14 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                       </div>
                     </div>
 
-                    <span className="text-[11px] font-semibold text-gray-700 bg-white px-2.5 py-1 rounded-lg border border-gray-200 shrink-0 shadow-2xs">
+                    <span className="text-[11px] font-semibold text-gray-700 bg-white px-2.5 py-1 rounded-xl border border-gray-200 shrink-0 shadow-2xs">
                       {ev.time}
                     </span>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
+              <div className="p-3.5 bg-amber-50/60 rounded-2xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
                 <span>El itinerario no será visible en el sitio para los invitados.</span>
                 <button 
                   type="button" 
@@ -699,8 +762,15 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
             )}
           </div>
 
-          {/* CARD 4: INFORMACIÓN PARA INVITADOS (TOGGLEABLE) */}
-          <div className={`bg-white rounded-2xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
+          {/* CARD 4: INFORMACIÓN PARA INVITADOS (TOGGLEABLE) — Premium */}
+          {!premiumUnlocked ? (
+            <PremiumSectionTeaser
+              title="Guía para invitados"
+              description="Dress code, hospedaje sugerido, mapa y transporte, todo en una sección lista para tus invitados."
+              onTry={() => onSelectPlan(MICROSITE_PREMIUM_REQUIRED_PLAN)}
+            />
+          ) : (
+          <div className={`bg-white rounded-3xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
             features.guestInfo ? 'border-gray-200/90 hover:border-gray-300' : 'border-dashed border-gray-300 bg-gray-50/40 opacity-75'
           }`}>
             <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
@@ -720,7 +790,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                     <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                       Guía para invitados
                     </span>
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-lg border ${
                       features.guestInfo 
                         ? 'text-emerald-700 bg-emerald-50 border-emerald-200/60' 
                         : 'text-gray-500 bg-gray-100 border-gray-200'
@@ -738,7 +808,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => toggleFeature('guestInfo')}
-                  className={`whitespace-nowrap uppercase text-xs font-normal px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${ features.guestInfo ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
+                  className={`whitespace-nowrap uppercase text-xs font-normal px-2.5 py-1 rounded-xl border transition-colors cursor-pointer ${ features.guestInfo ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
                 >
                   {features.guestInfo ? 'Destildar' : 'Tildar y mostrar'}
                 </button>
@@ -746,7 +816,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveModal('info')}
-                  className="whitespace-nowrap uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
+                  className="whitespace-nowrap uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-2xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   <span>Editar información</span>
@@ -757,8 +827,8 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
             {features.guestInfo ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {/* Dress Code */}
-                <div className="p-3 bg-gray-50/70 rounded-xl border border-gray-150 flex items-start gap-2.5">
-                  <div className="p-1.5 rounded-lg bg-white border border-gray-200 text-gray-700 shrink-0 mt-0.5">
+                <div className="p-3 bg-gray-50/70 rounded-2xl border border-gray-150 flex items-start gap-2.5">
+                  <div className="p-1.5 rounded-xl bg-white border border-gray-200 text-gray-700 shrink-0 mt-0.5">
                     <Shirt className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
@@ -772,8 +842,8 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 </div>
 
                 {/* Hospedaje */}
-                <div className="p-3 bg-gray-50/70 rounded-xl border border-gray-150 flex items-start gap-2.5">
-                  <div className="p-1.5 rounded-lg bg-white border border-gray-200 text-gray-700 shrink-0 mt-0.5">
+                <div className="p-3 bg-gray-50/70 rounded-2xl border border-gray-150 flex items-start gap-2.5">
+                  <div className="p-1.5 rounded-xl bg-white border border-gray-200 text-gray-700 shrink-0 mt-0.5">
                     <Hotel className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
@@ -787,8 +857,8 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 </div>
 
                 {/* Mapa */}
-                <div className="p-3 bg-gray-50/70 rounded-xl border border-gray-150 flex items-start gap-2.5">
-                  <div className="p-1.5 rounded-lg bg-white border border-gray-200 text-gray-700 shrink-0 mt-0.5">
+                <div className="p-3 bg-gray-50/70 rounded-2xl border border-gray-150 flex items-start gap-2.5">
+                  <div className="p-1.5 rounded-xl bg-white border border-gray-200 text-gray-700 shrink-0 mt-0.5">
                     <Navigation className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
@@ -802,8 +872,8 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 </div>
 
                 {/* Transporte */}
-                <div className="p-3 bg-gray-50/70 rounded-xl border border-gray-150 flex items-start gap-2.5">
-                  <div className="p-1.5 rounded-lg bg-white border border-gray-200 text-gray-700 shrink-0 mt-0.5">
+                <div className="p-3 bg-gray-50/70 rounded-2xl border border-gray-150 flex items-start gap-2.5">
+                  <div className="p-1.5 rounded-xl bg-white border border-gray-200 text-gray-700 shrink-0 mt-0.5">
                     <Bus className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
@@ -817,7 +887,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 </div>
               </div>
             ) : (
-              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
+              <div className="p-3.5 bg-amber-50/60 rounded-2xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
                 <span>La guía de dress code y ubicación estará oculta en el sitio.</span>
                 <button 
                   type="button" 
@@ -829,9 +899,17 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               </div>
             )}
           </div>
+          )}
 
-          {/* CARD 5: GALERÍA DE FOTOS (TOGGLEABLE) */}
-          <div className={`bg-white rounded-2xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
+          {/* CARD 5: GALERÍA DE FOTOS (TOGGLEABLE) — Premium */}
+          {!premiumUnlocked ? (
+            <PremiumSectionTeaser
+              title="Galería de fotos"
+              description="Un mosaico de fotos de la pareja para que tus invitados conozcan más de su historia."
+              onTry={() => onSelectPlan(MICROSITE_PREMIUM_REQUIRED_PLAN)}
+            />
+          ) : (
+          <div className={`bg-white rounded-3xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
             features.gallery ? 'border-gray-200/90 hover:border-gray-300' : 'border-dashed border-gray-300 bg-gray-50/40 opacity-75'
           }`}>
             <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
@@ -851,7 +929,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                     <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                       Recuerdos visuales
                     </span>
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-lg border ${
                       features.gallery 
                         ? 'text-emerald-700 bg-emerald-50 border-emerald-200/60' 
                         : 'text-gray-500 bg-gray-100 border-gray-200'
@@ -869,7 +947,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => toggleFeature('gallery')}
-                  className={`whitespace-nowrap uppercase text-xs font-normal px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${ features.gallery ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
+                  className={`whitespace-nowrap uppercase text-xs font-normal px-2.5 py-1 rounded-xl border transition-colors cursor-pointer ${ features.gallery ? 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
                 >
                   {features.gallery ? 'Destildar' : 'Tildar y mostrar'}
                 </button>
@@ -877,7 +955,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveModal('galeria')}
-                  className="whitespace-nowrap uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
+                  className="whitespace-nowrap uppercase px-3 py-1.5 bg-gray-50 hover:bg-gray-900 hover:text-white text-gray-700 text-xs font-normal rounded-2xl border border-gray-200/80 transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-2xs"
                 >
                   <ImageIcon className="w-3.5 h-3.5" />
                   <span>Administrar galería</span>
@@ -890,7 +968,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 {galleryImages.slice(0, 4).map((img, i) => (
                   <div 
                     key={i} 
-                    className="aspect-square rounded-xl overflow-hidden bg-gray-100 border border-gray-200 relative group/photo"
+                    className="aspect-square rounded-2xl overflow-hidden bg-gray-100 border border-gray-200 relative group/photo"
                   >
                     <img
                       src={img}
@@ -903,7 +981,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 ))}
               </div>
             ) : (
-              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
+              <div className="p-3.5 bg-amber-50/60 rounded-2xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
                 <span>La galería de fotos no aparecerá en el sitio de tus invitados.</span>
                 <button 
                   type="button" 
@@ -915,9 +993,10 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               </div>
             )}
           </div>
+          )}
 
           {/* CARD 6: LISTA DE REGALOS (TOGGLEABLE) */}
-          <div className={`bg-white rounded-2xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
+          <div className={`bg-white rounded-3xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
             features.giftRegistry ? 'border-gray-200/90 hover:border-gray-300' : 'border-dashed border-gray-300 bg-gray-50/40 opacity-75'
           }`}>
             <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
@@ -937,7 +1016,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                     <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                       Mesa de regalos
                     </span>
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-lg border ${
                       features.giftRegistry 
                         ? 'text-emerald-700 bg-emerald-50 border-emerald-200/60' 
                         : 'text-gray-500 bg-gray-100 border-gray-200'
@@ -955,21 +1034,21 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={() => toggleFeature('giftRegistry')}
-                className={`uppercase text-xs font-normal px-3 py-1.5 rounded-xl border transition-colors cursor-pointer ${ features.giftRegistry ? 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
+                className={`uppercase text-xs font-normal px-3 py-1.5 rounded-2xl border transition-colors cursor-pointer ${ features.giftRegistry ? 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
               >
                 {features.giftRegistry ? 'Destildar' : 'Tildar y mostrar'}
               </button>
             </div>
 
             {features.giftRegistry ? (
-              <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-150 flex flex-wrap items-center justify-between gap-2 text-xs text-gray-600">
+              <div className="p-3.5 bg-gray-50 rounded-2xl border border-gray-150 flex flex-wrap items-center justify-between gap-2 text-xs text-gray-600">
                 <span>Tus invitados podrán elegir y transferir directo para sus regalos favoritos.</span>
-                <span className="font-semibold text-gray-900 bg-white px-2.5 py-1 rounded-lg border border-gray-200">
+                <span className="font-semibold text-gray-900 bg-white px-2.5 py-1 rounded-xl border border-gray-200">
                   {wedding.bankAlias || 'boda.milagros.juan'}
                 </span>
               </div>
             ) : (
-              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
+              <div className="p-3.5 bg-amber-50/60 rounded-2xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
                 <span>El bloque de regalos no se mostrará a los invitados en el sitio.</span>
                 <button 
                   type="button" 
@@ -983,7 +1062,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           </div>
 
           {/* CARD 7: CONFIRMACIÓN RSVP (TOGGLEABLE) */}
-          <div className={`bg-white rounded-2xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
+          <div className={`bg-white rounded-3xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
             features.rsvp ? 'border-gray-200/90 hover:border-gray-300' : 'border-dashed border-gray-300 bg-gray-50/40 opacity-75'
           }`}>
             <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
@@ -1003,7 +1082,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                     <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                       Asistencia
                     </span>
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-lg border ${
                       features.rsvp 
                         ? 'text-emerald-700 bg-emerald-50 border-emerald-200/60' 
                         : 'text-gray-500 bg-gray-100 border-gray-200'
@@ -1021,18 +1100,18 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={() => toggleFeature('rsvp')}
-                className={`uppercase text-xs font-normal px-3 py-1.5 rounded-xl border transition-colors cursor-pointer ${ features.rsvp ? 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
+                className={`uppercase text-xs font-normal px-3 py-1.5 rounded-2xl border transition-colors cursor-pointer ${ features.rsvp ? 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100' : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700 shadow-2xs' }`}
               >
                 {features.rsvp ? 'Destildar' : 'Tildar y mostrar'}
               </button>
             </div>
 
             {features.rsvp ? (
-              <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-150 text-xs text-gray-600">
+              <div className="p-3.5 bg-gray-50 rounded-2xl border border-gray-150 text-xs text-gray-600">
                 Los invitados podrán confirmar su presencia, indicar menú especial o restricciones alimentarias directamente desde el sitio.
               </div>
             ) : (
-              <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
+              <div className="p-3.5 bg-amber-50/60 rounded-2xl border border-amber-200/50 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
                 <span>El botón y formulario de confirmación de asistencia estarán ocultos.</span>
                 <button 
                   type="button" 
@@ -1045,8 +1124,15 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
             )}
           </div>
 
-          {/* CARD 8: MÚSICA / SUGERIR CANCIONES (BONUS TOGGLEABLE FEATURE) */}
-          <div className={`bg-white rounded-2xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
+          {/* CARD 8: MÚSICA / SUGERIR CANCIONES (BONUS TOGGLEABLE FEATURE) — Premium */}
+          {!premiumUnlocked ? (
+            <PremiumSectionTeaser
+              title="Música para la fiesta"
+              description="Tus invitados podrán sugerir canciones que no pueden faltar en la fiesta, directo desde el sitio."
+              onTry={() => onSelectPlan(MICROSITE_PREMIUM_REQUIRED_PLAN)}
+            />
+          ) : (
+          <div className={`bg-white rounded-3xl border transition-all p-5 sm:p-6 shadow-2xs space-y-4 group ${
             features.music ? 'border-gray-200/90 hover:border-gray-300' : 'border-dashed border-gray-300 bg-gray-50/40 opacity-75'
           }`}>
             <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
@@ -1066,7 +1152,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                     <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                       Interactividad
                     </span>
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-lg border ${
                       features.music 
                         ? 'text-emerald-700 bg-emerald-50 border-emerald-200/60' 
                         : 'text-gray-500 bg-gray-100 border-gray-200'
@@ -1084,21 +1170,21 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={() => toggleFeature('music')}
-                className={`uppercase text-xs font-normal px-3 py-1.5 rounded-xl border transition-colors cursor-pointer ${ features.music ? 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100' : 'bg-gray-900 text-white border-gray-900 hover:bg-black shadow-2xs' }`}
+                className={`uppercase text-xs font-normal px-3 py-1.5 rounded-2xl border transition-colors cursor-pointer ${ features.music ? 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100' : 'bg-gray-900 text-white border-gray-900 hover:bg-black shadow-2xs' }`}
               >
                 {features.music ? 'Destildar' : '+ Tildar y activar'}
               </button>
             </div>
 
             {features.music ? (
-              <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-150 text-xs text-gray-600 flex flex-wrap items-center justify-between gap-2">
+              <div className="p-3.5 bg-gray-50 rounded-2xl border border-gray-150 text-xs text-gray-600 flex flex-wrap items-center justify-between gap-2">
                 <span>Habilita un campo para que los invitados pidan temas que no pueden faltar en la fiesta.</span>
                 <span className="text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/50">
                   Visible en celular
                 </span>
               </div>
             ) : (
-              <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-150 text-xs text-gray-500 flex flex-wrap items-center justify-between gap-2">
+              <div className="p-3.5 bg-gray-50 rounded-2xl border border-gray-150 text-xs text-gray-500 flex flex-wrap items-center justify-between gap-2">
                 <span>¿Querés que los invitados te propongan canciones para la fiesta? Podés tildar esta sección.</span>
                 <button
                   type="button"
@@ -1110,6 +1196,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               </div>
             )}
           </div>
+          )}
 
         </div>
 
@@ -1128,7 +1215,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
           </div>
 
           {/* VISTA PREVIA: llama al sitio real, sin mockups ni simuladores */}
-          <div className="bg-white rounded-3xl border border-gray-200 shadow-xs overflow-hidden">
+          <div className="bg-white rounded-[32px] border border-gray-200 shadow-xs overflow-hidden">
             <div className="relative h-56 w-full">
               <img
                 src={bannerImage}
@@ -1153,7 +1240,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={onOpenMicrosite}
-                className="uppercase w-full py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal inline-flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer"
+                className="uppercase w-full py-3 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal inline-flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer"
               >
                 <ExternalLink className="w-4 h-4" />
                 <span>Ver tu sitio</span>
@@ -1169,7 +1256,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
       {/* MODAL 1: EDITAR PORTADA */}
       {activeModal === 'portada' && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in">
             <div className="flex items-center justify-between gap-3 pb-3 border-b border-gray-100">
               <h3 className="text-base font-bold text-gray-900">Editar portada</h3>
               <button 
@@ -1189,7 +1276,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   type="text"
                   value={coupleName}
                   onChange={(e) => setCoupleName(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
                 />
               </div>
 
@@ -1202,7 +1289,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   value={weddingDate}
                   onChange={(e) => setWeddingDate(e.target.value)}
                   placeholder="Ej. 24 de Octubre, 2026"
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
                 />
               </div>
 
@@ -1215,7 +1302,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                     <div
                       key={i}
                       onClick={() => setBannerImage(photo.url)}
-                      className={`relative h-20 rounded-xl overflow-hidden border-2 cursor-pointer transition-all ${
+                      className={`relative h-20 rounded-2xl overflow-hidden border-2 cursor-pointer transition-all ${
                         bannerImage === photo.url ? 'border-gray-900 ring-2 ring-gray-900/20' : 'border-transparent hover:border-gray-300'
                       }`}
                     >
@@ -1244,7 +1331,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   value={bannerImage}
                   onChange={(e) => setBannerImage(e.target.value)}
                   placeholder="https://images.unsplash.com/..."
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:ring-1 focus:ring-gray-900"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-2xl text-xs font-mono focus:outline-none focus:ring-1 focus:ring-gray-900"
                 />
               </div>
             </div>
@@ -1253,14 +1340,14 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="uppercase px-4 py-2 text-xs font-normal text-gray-600 hover:text-gray-900 rounded-xl"
+                className="uppercase px-4 py-2 text-xs font-normal text-gray-600 hover:text-gray-900 rounded-2xl"
               >
                 Cancelar
               </button>
               <button
                 type="button"
                 onClick={handleSaveCover}
-                className="uppercase px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-xl shadow-xs"
+                className="uppercase px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-2xl shadow-xs"
               >
                 Guardar cambios
               </button>
@@ -1272,7 +1359,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
       {/* MODAL 2: EDITAR HISTORIA */}
       {activeModal === 'historia' && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in">
             <div className="flex items-center justify-between gap-3 pb-3 border-b border-gray-100">
               <h3 className="text-base font-bold text-gray-900">Editar nuestra historia</h3>
               <button 
@@ -1291,7 +1378,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 rows={5}
                 value={storyText}
                 onChange={(e) => setStoryText(e.target.value)}
-                className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm leading-relaxed focus:outline-none focus:ring-1 focus:ring-gray-900"
+                className="w-full px-3.5 py-2.5 border border-gray-200 rounded-2xl text-sm leading-relaxed focus:outline-none focus:ring-1 focus:ring-gray-900"
                 placeholder="Compartí cómo se conocieron, un recuerdo especial o su mensaje de bienvenida..."
               />
               <span className="text-[11px] text-gray-400 block text-right">
@@ -1303,14 +1390,14 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="uppercase px-4 py-2 text-xs font-normal text-gray-600 hover:text-gray-900 rounded-xl"
+                className="uppercase px-4 py-2 text-xs font-normal text-gray-600 hover:text-gray-900 rounded-2xl"
               >
                 Cancelar
               </button>
               <button
                 type="button"
                 onClick={handleSaveStory}
-                className="uppercase px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-xl shadow-xs"
+                className="uppercase px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-2xl shadow-xs"
               >
                 Guardar historia
               </button>
@@ -1322,7 +1409,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
       {/* MODAL 3: EDITAR EVENTOS */}
       {activeModal === 'eventos' && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between gap-3 pb-3 border-b border-gray-100">
               <h3 className="text-base font-bold text-gray-900">Editar eventos</h3>
               <button 
@@ -1339,7 +1426,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                 Eventos actuales
               </span>
               {eventList.map((ev) => (
-                <div key={ev.id} className="p-3 bg-gray-50 rounded-xl border border-gray-200 flex items-center justify-between gap-3">
+                <div key={ev.id} className="p-3 bg-gray-50 rounded-2xl border border-gray-200 flex items-center justify-between gap-3">
                   <div>
                     <span className="text-xs font-bold text-gray-900 block">{ev.title}</span>
                     <span className="text-[11px] text-gray-500">{ev.time} • {ev.locationName}</span>
@@ -1356,7 +1443,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
             </div>
 
             {/* Form to add a new event */}
-            <div className="p-4 bg-gray-50/80 rounded-xl border border-gray-200/80 space-y-3">
+            <div className="p-4 bg-gray-50/80 rounded-2xl border border-gray-200/80 space-y-3">
               <span className="text-xs font-bold text-gray-900 block">
                 + Agregar nuevo evento (Ej. After Party)
               </span>
@@ -1366,7 +1453,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   placeholder="Título (Ej. After Party / Brindis)"
                   value={newEventTitle}
                   onChange={(e) => setNewEventTitle(e.target.value)}
-                  className="w-full px-3 py-1.5 text-xs border border-gray-200 rounded-lg bg-white"
+                  className="w-full px-3 py-1.5 text-xs border border-gray-200 rounded-xl bg-white"
                 />
               </div>
               <div className="grid grid-cols-2 gap-2">
@@ -1375,20 +1462,20 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   placeholder="Horario (Ej. 01:30 hs)"
                   value={newEventTime}
                   onChange={(e) => setNewEventTime(e.target.value)}
-                  className="w-full px-3 py-1.5 text-xs border border-gray-200 rounded-lg bg-white"
+                  className="w-full px-3 py-1.5 text-xs border border-gray-200 rounded-xl bg-white"
                 />
                 <input
                   type="text"
                   placeholder="Lugar (Ej. Pista principal)"
                   value={newEventLocation}
                   onChange={(e) => setNewEventLocation(e.target.value)}
-                  className="w-full px-3 py-1.5 text-xs border border-gray-200 rounded-lg bg-white"
+                  className="w-full px-3 py-1.5 text-xs border border-gray-200 rounded-xl bg-white"
                 />
               </div>
               <button
                 type="button"
                 onClick={handleAddEvent}
-                className="uppercase w-full py-1.5 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-lg"
+                className="uppercase w-full py-1.5 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-xl"
               >
                 Agregar evento
               </button>
@@ -1398,7 +1485,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="uppercase px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-xl shadow-xs"
+                className="uppercase px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-2xl shadow-xs"
               >
                 Listo
               </button>
@@ -1410,7 +1497,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
       {/* MODAL 4: EDITAR INFORMACIÓN */}
       {activeModal === 'info' && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in">
             <div className="flex items-center justify-between gap-3 pb-3 border-b border-gray-100">
               <h3 className="text-base font-bold text-gray-900">Editar información para invitados</h3>
               <button 
@@ -1431,7 +1518,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   value={dressCode}
                   onChange={(e) => setDressCode(e.target.value)}
                   placeholder="Ej. Elegante / Cocktail / Black Tie"
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
                 />
               </div>
 
@@ -1444,7 +1531,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   value={lodgingInfo}
                   onChange={(e) => setLodgingInfo(e.target.value)}
                   placeholder="Hoteles o posadas cercanas..."
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
                 />
               </div>
 
@@ -1457,7 +1544,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   value={transportInfo}
                   onChange={(e) => setTransportInfo(e.target.value)}
                   placeholder="Información sobre combis o autos..."
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
                 />
               </div>
 
@@ -1469,7 +1556,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   type="text"
                   value={mapLocation}
                   onChange={(e) => setMapLocation(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
                 />
               </div>
             </div>
@@ -1478,14 +1565,14 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="uppercase px-4 py-2 text-xs font-normal text-gray-600 hover:text-gray-900 rounded-xl"
+                className="uppercase px-4 py-2 text-xs font-normal text-gray-600 hover:text-gray-900 rounded-2xl"
               >
                 Cancelar
               </button>
               <button
                 type="button"
                 onClick={handleSaveInfo}
-                className="uppercase px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-xl shadow-xs"
+                className="uppercase px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-2xl shadow-xs"
               >
                 Guardar cambios
               </button>
@@ -1497,7 +1584,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
       {/* MODAL 5: ADMINISTRAR GALERÍA */}
       {activeModal === 'galeria' && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-xl border border-gray-200 space-y-5 animate-fade-in max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between gap-3 pb-3 border-b border-gray-100">
               <h3 className="text-base font-bold text-gray-900">Administrar galería de fotos</h3>
               <button 
@@ -1514,12 +1601,12 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               </span>
               <div className="grid grid-cols-3 gap-2.5">
                 {galleryImages.map((img, idx) => (
-                  <div key={idx} className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 border border-gray-200 group">
+                  <div key={idx} className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100 border border-gray-200 group">
                     <img src={img} alt={`Foto ${idx}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                     <button
                       type="button"
                       onClick={() => handleDeleteGalleryImage(idx)}
-                      className="absolute top-1 right-1 bg-black/60 hover:bg-rose-600 text-white p-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-1 right-1 bg-black/60 hover:bg-rose-600 text-white p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <Trash2 className="w-3 h-3" />
                     </button>
@@ -1538,12 +1625,12 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
                   placeholder="https://images.unsplash.com/..."
                   value={newGalleryUrl}
                   onChange={(e) => setNewGalleryUrl(e.target.value)}
-                  className="flex-1 px-3 py-1.5 text-xs border border-gray-200 rounded-xl"
+                  className="flex-1 px-3 py-1.5 text-xs border border-gray-200 rounded-2xl"
                 />
                 <button
                   type="button"
                   onClick={handleAddGalleryImage}
-                  className="uppercase px-4 py-1.5 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-xl"
+                  className="uppercase px-4 py-1.5 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-2xl"
                 >
                   Sumar
                 </button>
@@ -1554,7 +1641,7 @@ export const MicrositeBuilderView: React.FC<MicrositeBuilderViewProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="uppercase px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-xl shadow-xs"
+                className="uppercase px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-2xl shadow-xs"
               >
                 Listo
               </button>

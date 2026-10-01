@@ -55,14 +55,14 @@ export const CobrosView: React.FC<CobrosViewProps> = ({ wedding, onUpdateWedding
         </div>
       )}
 
-      <div className={`bg-white rounded-2xl border border-gray-200 space-y-5 ${compact ? 'p-4 sm:p-5' : 'p-6 sm:p-8 shadow-xs'}`}>
+      <div className={`bg-white rounded-3xl border border-gray-200 space-y-5 ${compact ? 'p-4 sm:p-5' : 'p-6 sm:p-8 shadow-xs'}`}>
         <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
           <ShieldCheck className="w-4 h-4 text-emerald-600" />
           <span>Weda nunca toca tu dinero: tus invitados transfieren directo a tu cuenta, sin comisión por regalo.</span>
         </div>
 
         {configSaved && (
-          <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-semibold text-emerald-800 flex items-center gap-2">
+          <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs font-semibold text-emerald-800 flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
             <span>Cuenta de cobro guardada.</span>
           </div>
@@ -79,7 +79,7 @@ export const CobrosView: React.FC<CobrosViewProps> = ({ wedding, onUpdateWedding
                 value={bankAlias}
                 onChange={(e) => setBankAlias(e.target.value)}
                 placeholder="ej: boda.milagros.juan"
-                className="w-full px-3.5 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm font-mono text-gray-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-gray-900"
+                className="w-full px-3.5 py-2 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-mono text-gray-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-gray-900"
               />
               {errors.alias && <p className="text-[11px] text-rose-600 mt-1">{errors.alias}</p>}
             </div>
@@ -92,7 +92,7 @@ export const CobrosView: React.FC<CobrosViewProps> = ({ wedding, onUpdateWedding
                 value={bankCbu}
                 onChange={(e) => setBankCbu(e.target.value)}
                 placeholder="22 dígitos"
-                className="w-full px-3.5 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm font-mono text-gray-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-gray-900"
+                className="w-full px-3.5 py-2 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-mono text-gray-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-gray-900"
               />
               {errors.cbu && <p className="text-[11px] text-rose-600 mt-1">{errors.cbu}</p>}
             </div>
@@ -105,7 +105,7 @@ export const CobrosView: React.FC<CobrosViewProps> = ({ wedding, onUpdateWedding
                 value={bankHolder}
                 onChange={(e) => setBankHolder(e.target.value)}
                 placeholder="Nombre y Apellido"
-                className="w-full px-3.5 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-gray-900"
+                className="w-full px-3.5 py-2 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-gray-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-gray-900"
               />
             </div>
             <div>
@@ -117,7 +117,7 @@ export const CobrosView: React.FC<CobrosViewProps> = ({ wedding, onUpdateWedding
                 value={mpAlias}
                 onChange={(e) => setMpAlias(e.target.value)}
                 placeholder="ej: milagros.juan.mp"
-                className="w-full px-3.5 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm font-mono text-gray-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-gray-900"
+                className="w-full px-3.5 py-2 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-mono text-gray-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-gray-900"
               />
             </div>
           </div>
@@ -125,7 +125,7 @@ export const CobrosView: React.FC<CobrosViewProps> = ({ wedding, onUpdateWedding
           <div className="flex justify-end pt-1">
             <button
               type="submit"
-              className="uppercase px-5 py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal transition-all cursor-pointer"
+              className="uppercase px-5 py-2.5 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal transition-all cursor-pointer"
             >
               Guardar cuenta de cobro
             </button>

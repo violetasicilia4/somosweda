@@ -9,13 +9,13 @@ import {
   CuentaSection,
   ManualGuest,
   ManualGuestStatus,
+  WeddingPlan,
 } from '../types';
 import { formatLongDate } from '../utils/format';
-import { getPlanDetails, isTabLocked } from '../utils/plan';
+import { getPlanDetails, getHighestPlan, planRank, withPlanChange, isPlanAtLeast } from '../utils/plan';
 import { DashboardSidebar } from './dashboard/DashboardSidebar';
 import { HomeChecklistView } from './dashboard/HomeChecklistView';
 import { GiftRegistryView } from './dashboard/GiftRegistryView';
-import { ReceivedGiftsView } from './dashboard/ReceivedGiftsView';
 import { RsvpView } from './dashboard/RsvpView';
 import { MicrositeBuilderView } from './dashboard/MicrositeBuilderView';
 import { AccountView } from './dashboard/AccountView';
@@ -26,7 +26,7 @@ import {
   CreditCard,
   Globe,
   Menu,
-  Lock,
+  ArrowRight,
 } from 'lucide-react';
 
 interface DashboardViewProps {
@@ -69,14 +69,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [activeTab, setActiveTab] = useState<DashboardTab>('inicio');
   // Menú lateral: fijo en escritorio, cajón deslizable en pantallas chicas
   const [menuOpen, setMenuOpen] = useState(false);
-  // Se abre cuando tocan una pestaña que su plan no incluye (por ahora, solo "Tu sitio")
-  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
   const [cuentaSection, setCuentaSection] = useState<CuentaSection>('datos');
   // Paso 5 del checklist: se completa al abrir "Ver tu lista"
   const [siteViewed, setSiteViewed] = useState(false);
 
-  // Publish modal state
+  // Publish modal state. "compare" es el paso previo que aparece cuando lo que
+  // configuraron usa funcionalidades de un plan más alto que el actual; "pay" es el
+  // pago único de siempre.
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [publishStep, setPublishStep] = useState<'compare' | 'pay'>('pay');
   const [isPublishingInProgress, setIsPublishingInProgress] = useState(false);
   // La cuenta de cobro (dónde reciben el dinero de los regalos) se carga en el paso 2
   // del checklist — no tiene que ver con el pago del plan, así que no se muestra acá.
@@ -90,18 +91,36 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
   const isPublished = wedding.status === 'PUBLICADO';
 
+  // El header, la barra de prueba y el modal de publicación son globales a todo el
+  // dashboard — en Evento/Evento Plus no pueden seguir hablando solo de "tu lista"
+  // mientras el usuario mira RSVP o Tu sitio, así que el sustantivo usado en esos
+  // lugares depende del plan (ver también HomeChecklistView, que tiene la misma lógica).
+  const isEventPlan = isPlanAtLeast(wedding.plan, 'invitados-rsvp');
+  const siteNoun = isEventPlan ? 'sitio' : 'lista';
+
   // Regalos recibidos que todavía esperan un agradecimiento — badge de Regalos
   const pendingReceivedCount = receivedGifts.filter((r) => !r.isThanked).length;
 
   // El pago es por plan, ya no por plazo: un solo precio, un solo pago.
   const plan = getPlanDetails(wedding.plan);
+  // El plan más alto que la pareja probó/configuró alguna vez (nunca baja, aunque
+  // después cambien a uno más chico). Se usa para las pantallas de "Probar/Restaurar" y
+  // para exigir el plan correcto recién al momento de publicar.
+  const highestPlan = getHighestPlan(wedding);
+  const requiresUpgradeToPublish = planRank(highestPlan) > planRank(wedding.plan ?? 'regalos');
+  const highestPlanDetails = getPlanDetails(highestPlan);
 
+  // Cambiar de plan es instantáneo, gratis y nunca borra nada: solo determina qué
+  // secciones se muestran desbloqueadas. Se usa en todo el dashboard (sidebar, pantallas
+  // de "Probar X", Cuenta > Explorar planes).
+  const handleSelectPlan = (newPlan: WeddingPlan) => {
+    onUpdateWedding(withPlanChange(wedding, newPlan));
+  };
+
+  // Todas las pestañas son siempre navegables — nunca se bloquea la navegación en sí.
+  // Cada pestaña decide internamente si muestra su contenido o una pantalla de
+  // "Probar/Restaurar" según el plan actual (ver utils/plan.ts).
   const goTo = (tab: DashboardTab, section?: CuentaSection) => {
-    if (isTabLocked(tab, wedding)) {
-      setIsUpgradeModalOpen(true);
-      setMenuOpen(false);
-      return;
-    }
     setActiveTab(tab);
     setMenuOpen(false);
     if (tab === 'cuenta' && section) setCuentaSection(section);
@@ -113,6 +132,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   };
 
   const handleOpenPublishModal = () => {
+    // Si lo que configuraron usa funcionalidades de un plan más alto que el actual
+    // (por ejemplo: armaron el Micrositio Premium y después volvieron a Evento), no se
+    // pierde nada — pero para publicar hace falta ese plan. Se lo mostramos recién acá,
+    // nunca antes.
+    setPublishStep(requiresUpgradeToPublish ? 'compare' : 'pay');
     setIsPaymentModalOpen(true);
   };
 
@@ -141,7 +165,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         wedding={wedding}
         pendingReceivedCount={pendingReceivedCount}
         onLogout={() => onNavigate('landing')}
-        onLockedTab={() => setIsUpgradeModalOpen(true)}
         open={menuOpen}
         onClose={() => setMenuOpen(false)}
       />
@@ -162,7 +185,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               type="button"
               onClick={() => setMenuOpen(true)}
               aria-label="Abrir menú"
-              className="lg:hidden p-1.5 -ml-1.5 rounded-lg text-gray-700 hover:bg-gray-100 cursor-pointer shrink-0"
+              className="lg:hidden p-1.5 -ml-1.5 rounded-xl text-gray-700 hover:bg-gray-100 cursor-pointer shrink-0"
             >
               <Menu className="w-5 h-5" />
             </button>
@@ -182,7 +205,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </span>
             {!isPublished && (
               <span className="text-[11px] text-gray-500 hidden 2xl:inline">
-                Tu lista no es pública hasta que la publiques.
+                Tu {siteNoun} no es {isEventPlan ? 'público' : 'pública'} hasta que {isEventPlan ? 'lo' : 'la'} publiques.
               </span>
             )}
           </div>
@@ -191,30 +214,50 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <button
               type="button"
               onClick={openSite}
-              aria-label="Ver tu lista"
-              className="whitespace-nowrap uppercase px-2.5 sm:px-3 py-1.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-normal inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+              aria-label={`Ver tu ${siteNoun}`}
+              className="whitespace-nowrap uppercase px-2.5 sm:px-3 py-1.5 rounded-2xl border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-normal inline-flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <ExternalLink className="w-3.5 h-3.5 text-gray-500" />
-              <span className="hidden sm:inline">Ver tu lista</span>
+              <span className="hidden sm:inline">Ver tu {siteNoun}</span>
             </button>
 
             {!isPublished ? (
               <button
                 type="button"
                 onClick={handleOpenPublishModal}
-                className="whitespace-nowrap uppercase px-3 sm:px-4 py-1.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="whitespace-nowrap uppercase px-3 sm:px-4 py-1.5 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal inline-flex items-center gap-1.5 transition-colors cursor-pointer"
               >
-                <span className="hidden sm:inline">Publicar tu lista</span>
+                <span className="hidden sm:inline">Publicar tu {siteNoun}</span>
                 <span className="sm:hidden">Publicar</span>
               </button>
             ) : (
-              <div className="text-xs text-emerald-800 font-semibold px-2 py-1 bg-emerald-50 rounded-lg flex items-center gap-1">
+              <div className="text-xs text-emerald-800 font-semibold px-2 py-1 bg-emerald-50 rounded-xl flex items-center gap-1">
                 <Globe className="w-3.5 h-3.5 text-emerald-600" />
                 <span>En vivo</span>
               </div>
             )}
           </div>
         </header>
+
+        {/* BARRA DE PRUEBA: discreta, siempre visible, sin lenguaje de venta agresivo */}
+        <div className="bg-[#FBF9F5] border-b border-gray-200 px-4 sm:px-8 py-2 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 min-w-0">
+            <span className="font-semibold text-gray-800 whitespace-nowrap">
+              Estás probando {plan.name}
+            </span>
+            <span className="text-gray-400 hidden sm:inline">·</span>
+            <span className="text-gray-500 hidden sm:inline whitespace-nowrap">
+              Sin tarjeta de crédito · Sin compromiso · Pagás solo al publicar
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => goTo('cuenta', 'plan')}
+            className="uppercase whitespace-nowrap font-semibold text-gray-700 hover:text-gray-900 underline decoration-gray-300 cursor-pointer"
+          >
+            Ver planes
+          </button>
+        </div>
 
         {/* MAIN BODY VIEW */}
         <main className="flex-1 p-4 sm:p-8 lg:p-10 max-w-6xl w-full mx-auto">
@@ -223,6 +266,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               wedding={wedding}
               gifts={gifts}
               receivedGifts={receivedGifts}
+              manualGuests={manualGuests}
               isPaymentConfigured={isPaymentConfigured}
               siteViewed={siteViewed}
               onGoTo={goTo}
@@ -235,19 +279,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <GiftRegistryView
               wedding={wedding}
               gifts={gifts}
+              receivedGifts={receivedGifts}
               onAddGift={onAddGift}
               onDeleteGift={onDeleteGift}
               onUpdateGift={onUpdateGift}
+              onUpdateReceivedGift={onUpdateReceivedGift}
+              onUpdateWedding={onUpdateWedding}
               onOpenMicrosite={openSite}
             />
           )}
 
-          {activeTab === 'recibidos' && (
-            <ReceivedGiftsView receivedGifts={receivedGifts} onUpdateReceivedGift={onUpdateReceivedGift} />
-          )}
-
           {activeTab === 'rsvp' && (
             <RsvpView
+              wedding={wedding}
+              onSelectPlan={handleSelectPlan}
               manualGuests={manualGuests}
               onAddManualGuest={onAddManualGuest}
               onUpdateManualGuestStatus={onUpdateManualGuestStatus}
@@ -263,6 +308,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               gifts={gifts}
               onUpdateWedding={onUpdateWedding}
               onOpenMicrosite={openSite}
+              onSelectPlan={handleSelectPlan}
             />
           )}
 
@@ -280,15 +326,51 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* ================= MODAL: PUBLICAR TU LISTA ================= */}
-      {isPaymentModalOpen && (
+      {isPaymentModalOpen && publishStep === 'compare' && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-xl w-full p-6 border border-gray-100 animate-fade-in space-y-5 max-h-[92vh] overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-sm w-full p-6 border border-gray-100 animate-fade-in text-center space-y-4">
+            <span className="w-11 h-11 rounded-full bg-gray-100 text-gray-700 flex items-center justify-center mx-auto">
+              <ArrowRight className="w-5 h-5" />
+            </span>
+            <div className="space-y-1.5">
+              <h3 className="font-bold text-lg text-gray-900">Necesitás {highestPlanDetails.name} para publicar</h3>
+              <p className="text-sm text-gray-500">
+                Tu evento usa funcionalidades de <strong className="text-gray-700">{highestPlanDetails.name}</strong>,
+                que no están en tu plan actual ({plan.name}). No se perdió nada de lo que configuraste.
+              </p>
+            </div>
+            <div className="pt-1 flex flex-col gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  handleSelectPlan(highestPlan);
+                  setPublishStep('pay');
+                }}
+                className="uppercase w-full py-2.5 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal cursor-pointer transition-colors"
+              >
+                Continuar con {highestPlanDetails.name}
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsPaymentModalOpen(false)}
+                className="uppercase w-full py-2 text-xs font-normal text-gray-500 hover:text-gray-800 cursor-pointer"
+              >
+                Seguir explorando
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isPaymentModalOpen && publishStep === 'pay' && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-xl w-full p-6 border border-gray-100 animate-fade-in space-y-5 max-h-[92vh] overflow-y-auto">
             <div className="flex justify-between items-start pb-2 border-b border-gray-100">
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full inline-block mb-1">
                   Un solo pago
                 </span>
-                <h3 className="font-bold text-lg text-gray-900">Publicar tu lista</h3>
+                <h3 className="font-bold text-lg text-gray-900">Publicar tu {siteNoun}</h3>
               </div>
               <button
                 onClick={() => setIsPaymentModalOpen(false)}
@@ -313,13 +395,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 </button>
               </div>
 
-              <div className="bg-gray-50 border border-gray-200/80 p-4 rounded-xl space-y-1">
+              <div className="bg-gray-50 border border-gray-200/80 p-4 rounded-2xl space-y-1">
                 <div className="flex justify-between items-center text-sm font-bold text-gray-900">
                   <span>{plan.name}</span>
                   <span className="text-base">{plan.price}</span>
                 </div>
                 <p className="text-xs text-gray-500">
-                  Pago único, sin plazos ni renovaciones. Tu lista queda activa desde que la publiques.
+                  Pago único, sin plazos ni renovaciones. Tu {siteNoun} queda {isEventPlan ? 'activo' : 'activa'} desde que {isEventPlan ? 'lo' : 'la'} publiques.
                 </p>
               </div>
 
@@ -342,14 +424,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 type="button"
                 disabled={isPublishingInProgress || !canPublish}
                 onClick={handleExecutePayment}
-                className="uppercase w-full py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal cursor-pointer flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="uppercase w-full py-3 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal cursor-pointer flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isPublishingInProgress ? (
-                  <span>Publicando tu lista...</span>
+                  <span>Publicando tu {siteNoun}...</span>
                 ) : (
                   <>
                     <CreditCard className="w-4 h-4" />
-                    <span>Pagar {plan.price} y publicar tu lista</span>
+                    <span>Pagar {plan.price} y publicar tu {siteNoun}</span>
                   </>
                 )}
               </button>
@@ -357,7 +439,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 <p className="text-[11px] text-center text-amber-700">
                   {!isPaymentConfigured
                     ? 'Cargá tu cuenta de cobro para poder publicar.'
-                    : `Sumá al menos 5 regalos a tu lista para poder publicar (tenés ${gifts.length}).`}
+                    : `Sumá al menos 5 regalos a tu lista de regalos para poder publicar (tenés ${gifts.length}).`}
                 </p>
               )}
 
@@ -373,43 +455,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
       )}
 
-      {/* ================= MODAL: MEJORÁ TU PLAN (pestaña bloqueada) ================= */}
-      {isUpgradeModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-sm w-full p-6 border border-gray-100 animate-fade-in text-center space-y-4">
-            <span className="w-11 h-11 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center mx-auto">
-              <Lock className="w-5 h-5" />
-            </span>
-            <div>
-              <h3 className="font-bold text-lg text-gray-900">Tu sitio no está en tu plan</h3>
-              <p className="text-sm text-gray-500 mt-1.5">
-                Tu plan actual es <strong className="text-gray-700">{plan.name}</strong>. El micrositio completo
-                (galería, ubicación, cronograma) es parte de Evento Completo.
-              </p>
-            </div>
-            <div className="pt-1 flex flex-col gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  onUpdateWedding({ plan: 'completo' });
-                  setIsUpgradeModalOpen(false);
-                  setActiveTab('sitio');
-                }}
-                className="uppercase w-full py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal cursor-pointer transition-colors"
-              >
-                Cambiar a Evento Completo
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsUpgradeModalOpen(false)}
-                className="uppercase w-full py-2 text-xs font-normal text-gray-500 hover:text-gray-800 cursor-pointer"
-              >
-                Seguir con mi plan
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

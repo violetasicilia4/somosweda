@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { WeddingData, CuentaSection } from '../../types';
 import { Check } from 'lucide-react';
 import { formatLongDate } from '../../utils/format';
-import { CobrosView } from './CobrosView';
 import { PlanView } from './PlanView';
 
 interface AccountViewProps {
@@ -14,8 +13,7 @@ interface AccountViewProps {
 
 const SECTIONS: { id: CuentaSection; label: string }[] = [
   { id: 'datos', label: 'Datos de la boda' },
-  { id: 'plan', label: 'Tu plan' },
-  { id: 'cobro', label: 'Cuenta de cobro' },
+  { id: 'plan', label: 'Explorar planes' },
 ];
 
 export const AccountView: React.FC<AccountViewProps> = ({
@@ -52,7 +50,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
           Cuenta
         </h2>
         <p className="text-sm text-gray-500 mt-1">
-          Los datos de tu boda, tu plan y dónde recibís el dinero.
+          Los datos de tu boda y tu plan. La cuenta de cobro se configura desde Regalos.
         </p>
       </div>
 
@@ -73,17 +71,15 @@ export const AccountView: React.FC<AccountViewProps> = ({
 
       {section === 'plan' && <PlanView wedding={wedding} onUpdateWedding={onUpdateWedding} />}
 
-      {section === 'cobro' && <CobrosView wedding={wedding} onUpdateWedding={onUpdateWedding} hideTitle />}
-
       {section === 'datos' && (
         <>
 
       {/* PROFILE HEADER */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-5 shadow-xs flex items-center gap-4">
+      <div className="bg-white rounded-3xl border border-gray-200 p-5 shadow-xs flex items-center gap-4">
         <img
           src={wedding.bannerImage}
           alt={wedding.coupleName}
-          className="w-16 h-16 rounded-xl object-cover shrink-0 border border-gray-200"
+          className="w-16 h-16 rounded-2xl object-cover shrink-0 border border-gray-200"
           referrerPolicy="no-referrer"
         />
         <div className="min-w-0 flex-1">
@@ -101,9 +97,9 @@ export const AccountView: React.FC<AccountViewProps> = ({
         </span>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-xs space-y-6">
+      <div className="bg-white rounded-3xl border border-gray-200 p-6 sm:p-8 shadow-xs space-y-6">
         {savedSuccess && (
-          <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-semibold text-emerald-900 flex items-center gap-2">
+          <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs font-semibold text-emerald-900 flex items-center gap-2">
             <Check className="w-4 h-4 text-emerald-600" />
             <span>Datos actualizados con éxito.</span>
           </div>
@@ -120,7 +116,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
                 required
                 value={partner1}
                 onChange={(e) => setPartner1(e.target.value)}
-                className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                className="w-full px-3.5 py-2 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
               />
             </div>
 
@@ -133,7 +129,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
                 required
                 value={partner2}
                 onChange={(e) => setPartner2(e.target.value)}
-                className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                className="w-full px-3.5 py-2 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
               />
             </div>
           </div>
@@ -148,7 +144,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
                 required
                 value={weddingDate}
                 onChange={(e) => setWeddingDate(e.target.value)}
-                className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                className="w-full px-3.5 py-2 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
               />
             </div>
 
@@ -161,7 +157,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
                 required
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                className="w-full px-3.5 py-2 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
               />
             </div>
           </div>
@@ -175,14 +171,14 @@ export const AccountView: React.FC<AccountViewProps> = ({
               required
               value={venue}
               onChange={(e) => setVenue(e.target.value)}
-              className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+              className="w-full px-3.5 py-2 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
             />
           </div>
 
           <div className="pt-2 flex justify-end">
             <button
               type="submit"
-              className="uppercase px-6 py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs sm:text-xs font-normal cursor-pointer shadow-xs"
+              className="uppercase px-6 py-2.5 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs sm:text-xs font-normal cursor-pointer shadow-xs"
             >
               Guardar cambios
             </button>

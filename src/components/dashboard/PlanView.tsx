@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { WeddingData, WeddingPlan } from '../../types';
 import { Check, Gift, Layout, Users } from 'lucide-react';
-import { PLAN_DETAILS } from '../../utils/plan';
+import { PLAN_DETAILS, withPlanChange } from '../../utils/plan';
 
 interface PlanViewProps {
   wedding: WeddingData;
@@ -20,7 +20,7 @@ export const PlanView: React.FC<PlanViewProps> = ({ wedding, onUpdateWedding }) 
 
   const handleChangePlan = (plan: WeddingPlan) => {
     if (plan === currentPlan) return;
-    onUpdateWedding({ plan });
+    onUpdateWedding(withPlanChange(wedding, plan));
     setJustChanged(true);
     setTimeout(() => setJustChanged(false), 3000);
   };
@@ -28,15 +28,15 @@ export const PlanView: React.FC<PlanViewProps> = ({ wedding, onUpdateWedding }) 
   return (
     <div className="space-y-4 animate-fade-in">
       {justChanged && (
-        <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-semibold text-emerald-900 flex items-center gap-2">
+        <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs font-semibold text-emerald-900 flex items-center gap-2">
           <Check className="w-4 h-4 text-emerald-600" />
-          <span>Plan actualizado.</span>
+          <span>Listo, ya estás probando este plan.</span>
         </div>
       )}
 
       <p className="text-sm text-gray-500 max-w-xl">
-        Cambiá de plan cuando quieras. El pago real se hace recién al publicar tu lista, así que probar otro plan
-        antes no te cobra nada.
+        Probá cualquier plan las veces que quieras, sin tarjeta de crédito y sin compromiso. Nada de lo que
+        configures se pierde al cambiar — el pago real se hace recién al publicar tu lista.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -48,7 +48,7 @@ export const PlanView: React.FC<PlanViewProps> = ({ wedding, onUpdateWedding }) 
               key={plan.id}
               type="button"
               onClick={() => handleChangePlan(plan.id)}
-              className={`relative text-left bg-white rounded-2xl p-5 flex flex-col transition-all cursor-pointer ${
+              className={`relative text-left bg-white rounded-3xl p-5 flex flex-col transition-all cursor-pointer ${
                 isCurrent ? 'border-2 border-gray-900 shadow-xs' : 'border border-gray-200 hover:border-gray-300'
               }`}
             >
@@ -59,11 +59,11 @@ export const PlanView: React.FC<PlanViewProps> = ({ wedding, onUpdateWedding }) 
               )}
               {isCurrent && (
                 <span className="absolute -top-2.5 right-4 uppercase text-[9px] tracking-[0.08em] bg-emerald-600 text-white px-2.5 py-1 rounded-full">
-                  Tu plan
+                  Estás probando este
                 </span>
               )}
 
-              <span className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${isCurrent ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500'}`}>
+              <span className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${isCurrent ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500'}`}>
                 <Icon className="w-4.5 h-4.5" />
               </span>
 
@@ -80,8 +80,8 @@ export const PlanView: React.FC<PlanViewProps> = ({ wedding, onUpdateWedding }) 
               </ul>
 
               {!isCurrent && (
-                <span className="mt-4 uppercase text-center py-2 border border-gray-300 rounded-lg text-[11px] font-normal text-gray-700">
-                  Cambiar a este plan
+                <span className="mt-4 uppercase text-center py-2 border border-gray-300 rounded-xl text-[11px] font-normal text-gray-700">
+                  Probar esta versión
                 </span>
               )}
             </button>

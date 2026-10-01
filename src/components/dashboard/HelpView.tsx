@@ -8,16 +8,20 @@ export const HelpView: React.FC = () => {
       a: 'Tus invitados pagan con Mercado Pago o por transferencia bancaria, directo a tu cuenta. Weda nunca toca ni retiene el dinero y no cobra comisión por regalo.',
     },
     {
-      q: '¿Cuándo pago?',
-      a: 'Es un pago único, según cuánto tiempo querés mantener tu lista activa. Sin suscripción y sin comisión por regalo.',
+      q: '¿Cuándo pago yo?',
+      a: 'Es un pago único por plan, no una suscripción: probás todo (regalos, invitados, RSVP, micrositio) las veces que quieras sin tarjeta, y pagás una sola vez recién cuando publicás tu evento.',
     },
     {
       q: '¿Mis invitados necesitan crear una cuenta?',
-      a: 'No. Entran con el enlace, confirman su asistencia y regalan en menos de un minuto.',
+      a: 'No. Entran con el enlace de tu sitio, confirman su asistencia y regalan en menos de un minuto.',
     },
     {
-      q: '¿Puedo cambiar el enlace de mi lista?',
-      a: 'Tu lista tiene un enlace corto con el formato weda.app/boda/nombre-y-nombre.',
+      q: '¿Puedo cambiar el enlace de mi sitio?',
+      a: 'Tu evento tiene un enlace corto con el formato weda.app/boda/nombre-y-nombre, el mismo para el micrositio, el RSVP y los regalos.',
+    },
+    {
+      q: '¿Qué pasa si cambio de plan?',
+      a: 'Nada se pierde: podés pasar de un plan a otro las veces que quieras mientras lo probás. Lo que ya configuraste (invitados, secciones del sitio, regalos) queda guardado aunque vuelvas a un plan más chico.',
     },
   ];
 
@@ -28,12 +32,12 @@ export const HelpView: React.FC = () => {
           Ayuda
         </h2>
         <p className="text-sm text-gray-500 mt-1">
-          Respondemos tus dudas sobre tu lista de regalos.
+          Respondemos tus dudas sobre tu evento: regalos, invitados, RSVP y micrositio.
         </p>
       </div>
 
       {/* Soporte */}
-      <div className="bg-emerald-50 border border-emerald-200/80 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-emerald-50 border border-emerald-200/80 rounded-3xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 uppercase tracking-wider">
             <MessageCircle className="w-4 h-4 text-emerald-600" />
@@ -49,7 +53,7 @@ export const HelpView: React.FC = () => {
           href="https://wa.me/5491155551234?text=Hola%20Weda!%20Tengo%20una%20consulta%20sobre%20mi%20boda"
           target="_blank"
           rel="noopener noreferrer"
-          className="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-xs transition-colors shrink-0"
+          className="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold rounded-2xl flex items-center justify-center gap-2 cursor-pointer shadow-xs transition-colors shrink-0"
         >
           <MessageCircle className="w-4 h-4" />
           <span>Escribir por WhatsApp</span>
@@ -57,7 +61,7 @@ export const HelpView: React.FC = () => {
       </div>
 
       {/* FAQs */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-7 shadow-xs space-y-4">
+      <div className="bg-white rounded-3xl border border-gray-200 p-6 sm:p-7 shadow-xs space-y-4">
         <h3 className="font-bold text-base text-gray-900">Preguntas frecuentes</h3>
 
         <div className="divide-y divide-gray-100">

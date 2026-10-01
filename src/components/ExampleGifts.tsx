@@ -173,7 +173,7 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
               </div>
               <button
                 className="uppercase text-white flex-1 cursor-pointer whitespace-nowrap"
-                style={{ backgroundColor: '#081034', height: u(12), borderRadius: u(1.5), fontFamily: SANS, fontSize: u(4.2), letterSpacing: '0.03em' }}
+                style={{ backgroundColor: '#2D1A0E', height: u(12), borderRadius: u(1.5), fontFamily: SANS, fontSize: u(4.2), letterSpacing: '0.03em' }}
               >
                 Agregar al regalo
               </button>

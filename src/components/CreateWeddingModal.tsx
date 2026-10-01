@@ -3,6 +3,7 @@ import { WeddingData, AppView } from '../types';
 import { coverPresets } from '../data/initialData';
 import { Heart, Calendar, Check, Upload } from 'lucide-react';
 import { Wordmark } from './Wordmark';
+import { isPlanAtLeast } from '../utils/plan';
 
 interface CreateWeddingModalProps {
   wedding: WeddingData;
@@ -20,6 +21,12 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
   const [weddingDate, setWeddingDate] = useState('');
   const [bannerImage, setBannerImage] = useState(coverPresets[0].url);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // El plan ya se eligió en la pantalla anterior ("¿Qué querés crear?") — este formulario
+  // no puede seguir hablando solo de "lista de regalos" para quien vino a armar un
+  // evento completo (con invitados, RSVP y micrositio), o la elección que acaba de hacer
+  // se siente ignorada.
+  const isEventPlan = isPlanAtLeast(wedding.plan, 'invitados-rsvp');
 
   const handleUploadClick = () => fileInputRef.current?.click();
 
@@ -66,8 +73,12 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
         </div>
 
         <div className="mb-8">
-          <h1 className="text-2xl font-normal text-gray-900 mb-1.5">Creemos tu lista de regalos</h1>
-          <p className="text-sm text-gray-500">Tres datos y tu lista queda lista para armar.</p>
+          <h1 className="text-2xl font-normal text-gray-900 mb-1.5">
+            {isEventPlan ? 'Creemos tu evento' : 'Creemos tu lista de regalos'}
+          </h1>
+          <p className="text-sm text-gray-500">
+            {isEventPlan ? 'Tres datos y tu evento queda listo para armar.' : 'Tres datos y tu lista queda lista para armar.'}
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -159,7 +170,7 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
             type="submit"
             className="uppercase w-full h-[41px] bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[12px] transition-all shadow-xs cursor-pointer mt-4"
           >
-            Crear mi lista
+            {isEventPlan ? 'Crear mi evento' : 'Crear mi lista'}
           </button>
         </form>
       </div>

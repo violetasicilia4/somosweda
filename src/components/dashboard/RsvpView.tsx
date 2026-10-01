@@ -1,23 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ManualGuest, ManualGuestStatus, RsvpEntry } from '../../types';
+import { ManualGuest, ManualGuestStatus, RsvpEntry, WeddingData, WeddingPlan } from '../../types';
 import { getRsvpEntries, subscribeToRsvpEntries } from '../../utils/rsvpStore';
-import { Check, Circle, MessageCircle, Plus, Trash2, Upload, X } from 'lucide-react';
+import { isTabLocked } from '../../utils/plan';
+import { LockedFeatureNotice } from './LockedFeatureNotice';
+import { Check, Circle, Link2, MessageCircle, Plus, Trash2, Upload, UserCheck, X } from 'lucide-react';
 
 interface RsvpViewProps {
+  wedding: WeddingData;
+  onSelectPlan: (plan: WeddingPlan) => void;
   manualGuests: ManualGuest[];
   onAddManualGuest: (guest: Omit<ManualGuest, 'id'>) => void;
   onUpdateManualGuestStatus: (id: string, status: ManualGuestStatus) => void;
   onDeleteManualGuest: (id: string) => void;
   onImportManualGuests: (guests: Omit<ManualGuest, 'id'>[]) => void;
 }
-
-const formatDate = (iso: string) => {
-  try {
-    return new Date(iso).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' });
-  } catch {
-    return iso;
-  }
-};
 
 const manualStatusMeta: Record<ManualGuestStatus, { label: string; className: string; icon: React.ComponentType<{ className?: string; strokeWidth?: number }> }> = {
   confirmado: { label: 'Confirmado', className: 'bg-gray-900 text-white', icon: Check },
@@ -34,7 +30,7 @@ const nextManualStatus: Record<ManualGuestStatus, ManualGuestStatus> = {
 };
 
 // Parser de CSV mínimo (exportado desde Excel/Sheets): espera columnas
-// Nombre, Apellido, Estado, en ese orden, con o sin fila de encabezado.
+// Nombre, Apellido, Estado, Teléfono (opcional), en ese orden, con o sin encabezado.
 const parseGuestsCsv = (text: string): Omit<ManualGuest, 'id'>[] => {
   const statusMap: Record<string, ManualGuestStatus> = {
     confirmado: 'confirmado',
@@ -51,14 +47,41 @@ const parseGuestsCsv = (text: string): Omit<ManualGuest, 'id'>[] => {
     .map((line) => line.split(',').map((cell) => cell.trim().replace(/^"|"$/g, '')))
     .filter((cells) => cells.length >= 2)
     .filter((cells) => cells[0].toLowerCase() !== 'nombre') // salta el encabezado si vino
-    .map(([firstName, lastName, statusRaw]) => ({
+    .map(([firstName, lastName, statusRaw, phoneRaw]) => ({
       firstName,
       lastName: lastName || '',
       status: statusMap[(statusRaw || '').toLowerCase().trim()] ?? 'pendiente',
+      phone: phoneRaw?.trim() || undefined,
     }));
 };
 
+// Clave para cruzar una respuesta del formulario público con un invitado de la lista
+// manual: mismo nombre y apellido, sin importar mayúsculas/acentos ni espacios extra.
+const normalizeName = (firstName: string, lastName: string) =>
+  `${firstName} ${lastName}`
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .trim()
+    .replace(/\s+/g, ' ');
+
+type GuestOrigin = 'form' | 'manual' | 'both';
+
+interface UnifiedGuestRow {
+  key: string;
+  firstName: string;
+  lastName: string;
+  origin: GuestOrigin;
+  status: ManualGuestStatus;
+  dietaryRestrictions?: string;
+  message?: string;
+  formEntry?: RsvpEntry;
+  manualGuest?: ManualGuest;
+}
+
 export const RsvpView: React.FC<RsvpViewProps> = ({
+  wedding,
+  onSelectPlan,
   manualGuests,
   onAddManualGuest,
   onUpdateManualGuestStatus,
@@ -69,6 +92,7 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
   const [status, setStatus] = useState<ManualGuestStatus>('pendiente');
   const [importFeedback, setImportFeedback] = useState('');
   const [openMessageFor, setOpenMessageFor] = useState<string | null>(null);
@@ -80,18 +104,85 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
     return unsubscribe;
   }, []);
 
-  const confirmados = manualGuests.filter((g) => g.status === 'confirmado').length + rsvpEntries.filter((e) => e.attendanceStatus === 'attending').length;
-  const pendientes = manualGuests.filter((g) => g.status === 'pendiente').length;
-  const noAsisten = manualGuests.filter((g) => g.status === 'no-asiste').length + rsvpEntries.filter((e) => e.attendanceStatus === 'declined').length;
+  // Antes esto eran dos listas que "no se cruzan" (ver el comentario que había acá antes
+  // de este cambio): si un invitado confirmaba desde el micrositio Y la pareja lo tenía
+  // cargado a mano, aparecía duplicado en la tabla y se contaba dos veces en las
+  // métricas de arriba. Ahora se cruzan por nombre+apellido en una sola fila por
+  // persona — cuando hay respuesta del formulario, esa es la que manda (es la acción
+  // real del invitado), la carga manual queda como referencia.
+  const formByName = new Map<string, RsvpEntry>();
+  rsvpEntries.forEach((entry) => formByName.set(normalizeName(entry.firstName, entry.lastName), entry));
+
+  const matchedManualKeys = new Set<string>();
+  const unifiedRows: UnifiedGuestRow[] = [];
+
+  manualGuests.forEach((guest) => {
+    const key = normalizeName(guest.firstName, guest.lastName);
+    const formEntry = formByName.get(key);
+    if (formEntry) {
+      matchedManualKeys.add(key);
+      unifiedRows.push({
+        key,
+        firstName: guest.firstName,
+        lastName: guest.lastName,
+        origin: 'both',
+        status: formEntry.attendanceStatus === 'attending' ? 'confirmado' : 'no-asiste',
+        dietaryRestrictions: formEntry.dietaryRestrictions,
+        message: formEntry.message,
+        formEntry,
+        manualGuest: guest,
+      });
+    } else {
+      unifiedRows.push({
+        key,
+        firstName: guest.firstName,
+        lastName: guest.lastName,
+        origin: 'manual',
+        status: guest.status,
+        manualGuest: guest,
+      });
+    }
+  });
+
+  rsvpEntries.forEach((entry) => {
+    const key = normalizeName(entry.firstName, entry.lastName);
+    if (matchedManualKeys.has(key)) return; // ya se agregó arriba, fusionada con la fila manual
+    unifiedRows.push({
+      key: `form-${entry.id}`,
+      firstName: entry.firstName,
+      lastName: entry.lastName,
+      origin: 'form',
+      status: entry.attendanceStatus === 'attending' ? 'confirmado' : 'no-asiste',
+      dietaryRestrictions: entry.dietaryRestrictions,
+      message: entry.message,
+      formEntry: entry,
+    });
+  });
+
+  const confirmados = unifiedRows.filter((r) => r.status === 'confirmado').length;
+  const pendientes = unifiedRows.filter((r) => r.status === 'pendiente').length;
+  const noAsisten = unifiedRows.filter((r) => r.status === 'no-asiste').length;
 
   const handleAddSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!firstName.trim() || !lastName.trim()) return;
-    onAddManualGuest({ firstName: firstName.trim(), lastName: lastName.trim(), status });
+    onAddManualGuest({ firstName: firstName.trim(), lastName: lastName.trim(), status, phone: phone.trim() || undefined });
     setFirstName('');
     setLastName('');
+    setPhone('');
     setStatus('pendiente');
     setIsAddOpen(false);
+  };
+
+  // Recordatorio: con teléfono cargado, le escribe directo a ese número; sin teléfono,
+  // igual abre WhatsApp con el mensaje ya armado para elegir el contacto a mano. Así
+  // "pendientes" deja de ser solo un número — hay algo para hacer con eso.
+  const buildReminderHref = (guest: ManualGuest) => {
+    const text = encodeURIComponent(
+      `¡Hola ${guest.firstName}! Te escribimos de parte de ${wedding.coupleName || 'los novios'} para saber si ya podés confirmar tu asistencia a la boda. ¡Gracias!`
+    );
+    const digits = guest.phone?.replace(/[^0-9]/g, '');
+    return digits ? `https://wa.me/${digits}?text=${text}` : `https://wa.me/?text=${text}`;
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,120 +204,56 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
     e.target.value = '';
   };
 
+  // RSVP se desbloquea desde el plan Evento en adelante. Nunca se oculta la pestaña:
+  // si el plan actual no la incluye, se muestra esta pantalla en vez del contenido — los
+  // invitados y respuestas que ya existan no se tocan ni se pierden.
+  if (isTabLocked('rsvp', wedding)) {
+    return (
+      <LockedFeatureNotice
+        wedding={wedding}
+        requiredPlan="invitados-rsvp"
+        icon={UserCheck}
+        title="Gestioná tus invitados"
+        description="Cargá invitados, seguí confirmaciones y organizá tu evento desde un solo lugar."
+        onSelectPlan={onSelectPlan}
+      />
+    );
+  }
+
   return (
     <div className="space-y-8 animate-fade-in max-w-4xl pb-16">
       <div>
         <h2 className="text-2xl sm:text-3xl font-normal text-gray-900">RSVP</h2>
         <p className="text-sm text-gray-500 mt-1">
-          Confirmaciones de asistencia que llegan desde tu micrositio, más tu propia lista de invitados.
+          Tu lista de invitados, cruzada con las confirmaciones que llegan desde tu micrositio.
         </p>
       </div>
 
       {/* MÉTRICAS */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white border border-gray-200 rounded-2xl p-5">
+        <div className="bg-white border border-gray-200 rounded-3xl p-5">
           <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 block">Confirmados</span>
           <span className="text-3xl font-bold text-gray-900 mt-2 block">{confirmados}</span>
         </div>
-        <div className="bg-white border border-gray-200 rounded-2xl p-5">
+        <div className="bg-white border border-gray-200 rounded-3xl p-5">
           <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 block">Pendientes</span>
           <span className="text-3xl font-bold text-gray-900 mt-2 block">{pendientes}</span>
         </div>
-        <div className="bg-white border border-gray-200 rounded-2xl p-5">
+        <div className="bg-white border border-gray-200 rounded-3xl p-5">
           <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 block">No asistirán</span>
           <span className="text-3xl font-bold text-gray-900 mt-2 block">{noAsisten}</span>
         </div>
       </div>
 
-      {/* TABLA RSVP: respuestas del formulario público */}
-      <section className="space-y-3">
-        <div>
-          <h3 className="text-sm font-semibold text-gray-900">Respuestas del formulario</h3>
-          <p className="text-xs text-gray-500 mt-0.5">
-            Lo que tus invitados completaron en "Confirmar asistencia" de tu micrositio.
-          </p>
-        </div>
-
-        {rsvpEntries.length === 0 ? (
-          <div className="bg-white border border-dashed border-gray-300 rounded-2xl p-8 text-center">
-            <p className="text-sm text-gray-500">
-              Todavía no recibiste respuestas. Compartí el link de tu micrositio para que empiecen a llegar.
-            </p>
-          </div>
-        ) : (
-          <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gray-100 text-left text-[11px] uppercase tracking-wider text-gray-500">
-                    <th className="px-4 py-3 font-semibold">Nombre</th>
-                    <th className="px-4 py-3 font-semibold">Apellido</th>
-                    <th className="px-4 py-3 font-semibold">Estado</th>
-                    <th className="px-4 py-3 font-semibold">Menú especial</th>
-                    <th className="px-4 py-3 font-semibold">Fecha respuesta</th>
-                    <th className="px-4 py-3 font-semibold w-8"></th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {rsvpEntries.map((entry) => (
-                    <React.Fragment key={entry.id}>
-                      <tr className="text-gray-800">
-                        <td className="px-4 py-3 font-medium">{entry.firstName}</td>
-                        <td className="px-4 py-3">{entry.lastName}</td>
-                        <td className="px-4 py-3">
-                          <span
-                            className={`inline-flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full font-semibold ${
-                              entry.attendanceStatus === 'attending'
-                                ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                                : 'bg-gray-100 text-gray-500'
-                            }`}
-                          >
-                            {entry.attendanceStatus === 'attending' ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
-                            {entry.attendanceStatus === 'attending' ? 'Confirmado' : 'No asiste'}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-gray-500">{entry.dietaryRestrictions || '—'}</td>
-                        <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{formatDate(entry.createdAt)}</td>
-                        <td className="px-4 py-3">
-                          {entry.message && (
-                            <button
-                              type="button"
-                              onClick={() => setOpenMessageFor(openMessageFor === entry.id ? null : entry.id)}
-                              aria-label="Ver mensaje"
-                              className={`p-1.5 rounded-lg cursor-pointer transition-colors ${
-                                openMessageFor === entry.id ? 'bg-gray-900 text-white' : 'text-gray-400 hover:bg-gray-100 hover:text-gray-700'
-                              }`}
-                            >
-                              <MessageCircle className="w-3.5 h-3.5" />
-                            </button>
-                          )}
-                        </td>
-                      </tr>
-                      {openMessageFor === entry.id && entry.message && (
-                        <tr>
-                          <td colSpan={6} className="px-4 pb-3 -mt-1">
-                            <p className="text-xs text-gray-600 bg-gray-50 border border-gray-100 rounded-xl p-3 italic">
-                              "{entry.message}"
-                            </p>
-                          </td>
-                        </tr>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* GESTIÓN MANUAL: lista propia del organizador, sin matching con lo de arriba */}
+      {/* LISTA DE INVITADOS UNIFICADA: cruza por nombre+apellido la respuesta del
+          formulario público con la carga manual del organizador, en vez de mostrarlas
+          como dos tablas separadas que había que conciliar a mano. */}
       <section className="space-y-3">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h3 className="text-sm font-semibold text-gray-900">Gestión manual</h3>
+            <h3 className="text-sm font-semibold text-gray-900">Invitados</h3>
             <p className="text-xs text-gray-500 mt-0.5">
-              Tu propia lista de invitados, para organizarte. No se cruza con las respuestas del formulario.
+              Cuando alguien confirma desde tu micrositio y ya lo tenías cargado, se fusiona en una sola fila.
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
@@ -234,7 +261,7 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="uppercase px-3 py-2 border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-normal rounded-xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+              className="uppercase px-3 py-2 border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-normal rounded-2xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
             >
               <Upload className="w-3.5 h-3.5" />
               <span>Importar CSV</span>
@@ -242,7 +269,7 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
             <button
               type="button"
               onClick={() => setIsAddOpen(true)}
-              className="uppercase px-3 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+              className="uppercase px-3 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-2xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Agregar invitado</span>
@@ -251,57 +278,154 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
         </div>
 
         {importFeedback && (
-          <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-semibold text-emerald-900">
+          <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs font-semibold text-emerald-900">
             {importFeedback}
           </div>
         )}
 
-        {manualGuests.length === 0 ? (
-          <div className="bg-white border border-dashed border-gray-300 rounded-2xl p-8 text-center">
-            <p className="text-sm text-gray-500">Todavía no cargaste invitados. Agregalos a mano o importá un CSV.</p>
+        {unifiedRows.length === 0 ? (
+          <div className="bg-white border border-dashed border-gray-300 rounded-3xl p-8 text-center">
+            <p className="text-sm text-gray-500">
+              Todavía no hay invitados. Cargalos a mano, importá un CSV, o esperá a que alguien confirme desde tu micrositio.
+            </p>
           </div>
         ) : (
-          <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+          <div className="bg-white border border-gray-200 rounded-3xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-gray-100 text-left text-[11px] uppercase tracking-wider text-gray-500">
                     <th className="px-4 py-3 font-semibold">Nombre</th>
                     <th className="px-4 py-3 font-semibold">Apellido</th>
+                    <th className="px-4 py-3 font-semibold">Origen</th>
                     <th className="px-4 py-3 font-semibold">Estado</th>
-                    <th className="px-4 py-3 font-semibold w-8"></th>
+                    <th className="px-4 py-3 font-semibold">Menú / mensaje</th>
+                    <th className="px-4 py-3 font-semibold w-28">Acciones</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {manualGuests.map((g) => {
-                    const meta = manualStatusMeta[g.status];
+                  {unifiedRows.map((row) => {
+                    const meta = manualStatusMeta[row.status];
                     const StatusIcon = meta.icon;
+                    const rowMessageId = row.formEntry?.id ?? row.key;
                     return (
-                      <tr key={g.id} className="text-gray-800">
-                        <td className="px-4 py-3 font-medium">{g.firstName}</td>
-                        <td className="px-4 py-3">{g.lastName}</td>
-                        <td className="px-4 py-3">
-                          <button
-                            type="button"
-                            onClick={() => onUpdateManualGuestStatus(g.id, nextManualStatus[g.status])}
-                            title="Tocá para cambiar el estado"
-                            className={`inline-flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full font-semibold cursor-pointer transition-colors ${meta.className}`}
-                          >
-                            <StatusIcon className="w-3 h-3" strokeWidth={2.5} />
-                            {meta.label}
-                          </button>
-                        </td>
-                        <td className="px-4 py-3">
-                          <button
-                            type="button"
-                            onClick={() => onDeleteManualGuest(g.id)}
-                            aria-label="Eliminar invitado"
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-rose-600 hover:bg-rose-50 cursor-pointer transition-colors"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </td>
-                      </tr>
+                      <React.Fragment key={row.key}>
+                        <tr className="text-gray-800">
+                          <td className="px-4 py-3 font-medium">{row.firstName}</td>
+                          <td className="px-4 py-3">{row.lastName}</td>
+                          <td className="px-4 py-3">
+                            <span
+                              className={`inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase tracking-wide ${
+                                row.origin === 'both'
+                                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                                  : row.origin === 'form'
+                                    ? 'bg-blue-50 text-blue-800 border border-blue-200'
+                                    : 'bg-gray-100 text-gray-600 border border-gray-200'
+                              }`}
+                              title={
+                                row.origin === 'both'
+                                  ? 'Confirmó desde tu micrositio y estaba en tu lista manual'
+                                  : row.origin === 'form'
+                                    ? 'Confirmó desde tu micrositio, todavía no está en tu lista manual'
+                                    : 'Cargado a mano, todavía no respondió desde tu micrositio'
+                              }
+                            >
+                              {row.origin === 'both' && <Link2 className="w-2.5 h-2.5" />}
+                              {row.origin === 'both' ? 'Sitio + lista' : row.origin === 'form' ? 'Sitio' : 'Manual'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3">
+                            {row.manualGuest && row.origin === 'manual' ? (
+                              <button
+                                type="button"
+                                onClick={() => onUpdateManualGuestStatus(row.manualGuest!.id, nextManualStatus[row.manualGuest!.status])}
+                                title="Tocá para cambiar el estado"
+                                className={`inline-flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full font-semibold cursor-pointer transition-colors ${meta.className}`}
+                              >
+                                <StatusIcon className="w-3 h-3" strokeWidth={2.5} />
+                                {meta.label}
+                              </button>
+                            ) : (
+                              <span
+                                className={`inline-flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full font-semibold ${
+                                  row.status === 'confirmado'
+                                    ? 'bg-gray-900 text-white'
+                                    : 'bg-transparent text-gray-400 line-through'
+                                }`}
+                              >
+                                <StatusIcon className="w-3 h-3" strokeWidth={2.5} />
+                                {meta.label}
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-4 py-3 text-gray-500">
+                            {row.dietaryRestrictions || (row.message ? '—' : '—')}
+                            {row.message && (
+                              <button
+                                type="button"
+                                onClick={() => setOpenMessageFor(openMessageFor === rowMessageId ? null : rowMessageId)}
+                                aria-label="Ver mensaje"
+                                className={`ml-1.5 inline-flex p-1 rounded-xl cursor-pointer transition-colors align-middle ${
+                                  openMessageFor === rowMessageId ? 'bg-gray-900 text-white' : 'text-gray-400 hover:bg-gray-100 hover:text-gray-700'
+                                }`}
+                              >
+                                <MessageCircle className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </td>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-1">
+                              {row.origin === 'form' && (
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    onAddManualGuest({
+                                      firstName: row.firstName,
+                                      lastName: row.lastName,
+                                      status: row.status,
+                                    })
+                                  }
+                                  className="uppercase px-2.5 py-1 border border-gray-200 text-gray-600 hover:bg-gray-50 rounded-xl text-[10px] font-semibold cursor-pointer whitespace-nowrap"
+                                >
+                                  + A mi lista
+                                </button>
+                              )}
+                              {row.manualGuest && row.status === 'pendiente' && (
+                                <a
+                                  href={buildReminderHref(row.manualGuest)}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  aria-label="Recordar por WhatsApp"
+                                  title="Recordar por WhatsApp"
+                                  className="p-1.5 rounded-xl text-gray-400 hover:text-emerald-700 hover:bg-emerald-50 cursor-pointer transition-colors"
+                                >
+                                  <MessageCircle className="w-3.5 h-3.5" />
+                                </a>
+                              )}
+                              {row.manualGuest && (
+                                <button
+                                  type="button"
+                                  onClick={() => onDeleteManualGuest(row.manualGuest!.id)}
+                                  aria-label={row.origin === 'both' ? 'Quitar de mi lista manual' : 'Eliminar invitado'}
+                                  title={row.origin === 'both' ? 'Quitar de mi lista manual' : 'Eliminar invitado'}
+                                  className="p-1.5 rounded-xl text-gray-400 hover:text-rose-600 hover:bg-rose-50 cursor-pointer transition-colors"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                        {openMessageFor === rowMessageId && row.message && (
+                          <tr>
+                            <td colSpan={6} className="px-4 pb-3 -mt-1">
+                              <p className="text-xs text-gray-600 bg-gray-50 border border-gray-100 rounded-2xl p-3 italic">
+                                "{row.message}"
+                              </p>
+                            </td>
+                          </tr>
+                        )}
+                      </React.Fragment>
                     );
                   })}
                 </tbody>
@@ -314,7 +438,7 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
       {/* MODAL: AGREGAR INVITADO */}
       {isAddOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-sm w-full p-6 border border-gray-100 animate-fade-in space-y-5">
+          <div className="bg-white rounded-3xl max-w-sm w-full p-6 border border-gray-100 animate-fade-in space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-lg text-gray-900">Agregar invitado</h3>
               <button
@@ -335,7 +459,7 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
                     required
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
                   />
                 </div>
                 <div>
@@ -345,9 +469,21 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
                     required
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
                   />
                 </div>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">
+                  Teléfono <span className="font-normal text-gray-400 normal-case">(opcional, para recordarle por WhatsApp)</span>
+                </label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+54 9 11 ..."
+                  className="w-full px-3 py-2 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1.5">Estado</label>
@@ -357,7 +493,7 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
                       key={s}
                       type="button"
                       onClick={() => setStatus(s)}
-                      className={`py-2 rounded-xl text-[11px] font-semibold uppercase cursor-pointer transition-colors border ${
+                      className={`py-2 rounded-2xl text-[11px] font-semibold uppercase cursor-pointer transition-colors border ${
                         status === s ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
                       }`}
                     >
@@ -368,7 +504,7 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
               </div>
               <button
                 type="submit"
-                className="uppercase w-full py-2.5 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal cursor-pointer transition-colors"
+                className="uppercase w-full py-2.5 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal cursor-pointer transition-colors"
               >
                 Agregar
               </button>
