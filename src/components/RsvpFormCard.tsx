@@ -37,23 +37,23 @@ export const RsvpFormCard: React.FC<RsvpFormCardProps> = ({ u }) => {
   const labelStyle: React.CSSProperties = {
     display: 'block',
     fontFamily: SANS,
-    fontSize: u(11),
+    fontSize: u(13.5),
     fontWeight: 600,
-    lineHeight: u(13),
-    color: '#282018',
+    lineHeight: u(16),
+    color: '#2B2B2B',
     marginBottom: u(8),
   };
 
   const fieldStyle: React.CSSProperties = {
     width: '100%',
-    height: u(35),
-    padding: `0 ${u(10)}`,
-    border: '1px solid #F1F1EF',
+    height: u(44),
+    padding: `0 ${u(12)}`,
+    border: '1px solid #E7ECF1',
     borderRadius: u(2),
     backgroundColor: '#FFFFFF',
     fontFamily: SANS,
-    fontSize: u(11.85),
-    color: '#282018',
+    fontSize: u(15),
+    color: '#2B2B2B',
     outline: 'none',
   };
 
@@ -84,18 +84,18 @@ export const RsvpFormCard: React.FC<RsvpFormCardProps> = ({ u }) => {
     return (
       <div
         className="bg-white flex flex-col items-center text-center"
-        style={{ width: `min(${u(589)}, calc(100% - 32px))`, marginTop: u(43), padding: `${u(56)} ${u(39)}`, border: '1px solid #E9E8E4', borderRadius: u(2) }}
+        style={{ width: `min(${u(620)}, calc(100% - 32px))`, marginTop: u(43), padding: `${u(56)} ${u(39)}`, border: '1px solid #E2E9F0', borderRadius: u(2) }}
       >
         <span
-          className="rounded-full flex items-center justify-center bg-[#2D1A0E]"
+          className="rounded-full flex items-center justify-center bg-[#16283D]"
           style={{ width: u(48), height: u(48) }}
         >
           <Check className="text-white" style={{ width: u(22), height: u(22) }} strokeWidth={2.5} />
         </span>
-        <h3 className="font-normal text-[#22180E]" style={{ fontFamily: SERIF, fontSize: u(30), lineHeight: 1.1, marginTop: u(22) }}>
+        <h3 className="font-normal text-[#2B2B2B]" style={{ fontFamily: SERIF, fontSize: u(36), lineHeight: 1.1, marginTop: u(22) }}>
           ¡Gracias por confirmar!
         </h3>
-        <p className="text-[#6F625A]" style={{ fontFamily: SANS, fontSize: u(12.5), lineHeight: u(19), marginTop: u(12), maxWidth: u(360) }}>
+        <p className="text-[#6B6B6B]" style={{ fontFamily: SANS, fontSize: u(15.5), lineHeight: u(23), marginTop: u(12), maxWidth: u(360) }}>
           {attendance === 'attending' ? '¡Nos vemos en la fiesta!' : '¡Gracias por avisarnos!'}
         </p>
         <button
@@ -104,12 +104,12 @@ export const RsvpFormCard: React.FC<RsvpFormCardProps> = ({ u }) => {
           className="uppercase cursor-pointer hover:opacity-70 transition-opacity"
           style={{
             fontFamily: SANS,
-            fontSize: u(11),
+            fontSize: u(13.5),
             fontWeight: 600,
             letterSpacing: '0.04em',
-            color: '#2D1A0E',
-            border: '1px solid #2D1A0E',
-            padding: `${u(13)} ${u(24)}`,
+            color: '#16283D',
+            border: '1px solid #16283D',
+            padding: `${u(14)} ${u(26)}`,
             borderRadius: u(2),
             marginTop: u(24),
           }}
@@ -124,11 +124,11 @@ export const RsvpFormCard: React.FC<RsvpFormCardProps> = ({ u }) => {
     <form
       onSubmit={handleSubmit}
       className="bg-white"
-      style={{ width: `min(${u(589)}, calc(100% - 32px))`, marginTop: u(43), padding: `${u(40)} ${u(39)}`, border: '1px solid #E9E8E4', borderRadius: u(2) }}
+      style={{ width: `min(${u(620)}, calc(100% - 32px))`, marginTop: u(43), padding: `${u(40)} ${u(39)}`, border: '1px solid #E2E9F0', borderRadius: u(2) }}
     >
       <p
         className="text-center"
-        style={{ fontFamily: SANS, fontSize: u(11.5), lineHeight: u(16), color: '#786C63', marginBottom: u(20) }}
+        style={{ fontFamily: SANS, fontSize: u(14), lineHeight: u(20), color: '#6B6B6B', marginBottom: u(22) }}
       >
         Completá un formulario por cada persona que asista.
       </p>
@@ -173,14 +173,14 @@ export const RsvpFormCard: React.FC<RsvpFormCardProps> = ({ u }) => {
             onClick={() => setAttendance('attending')}
             className="cursor-pointer transition-colors"
             style={{
-              height: u(42),
+              height: u(50),
               borderRadius: u(2),
               fontFamily: SANS,
-              fontSize: u(11.8),
+              fontSize: u(15),
               fontWeight: 600,
-              border: '1px solid ' + (attendance === 'attending' ? '#2D1A0E' : '#F1F1EF'),
-              backgroundColor: attendance === 'attending' ? '#2D1A0E' : '#FFFFFF',
-              color: attendance === 'attending' ? '#FFFFFF' : '#544A42',
+              border: '1px solid ' + (attendance === 'attending' ? '#16283D' : '#E7ECF1'),
+              backgroundColor: attendance === 'attending' ? '#16283D' : '#FFFFFF',
+              color: attendance === 'attending' ? '#FFFFFF' : '#3D3D3D',
             }}
           >
             Sí, asistiré
@@ -193,14 +193,14 @@ export const RsvpFormCard: React.FC<RsvpFormCardProps> = ({ u }) => {
             onClick={() => setAttendance('declined')}
             className="cursor-pointer transition-colors"
             style={{
-              height: u(42),
+              height: u(50),
               borderRadius: u(2),
               fontFamily: SANS,
-              fontSize: u(11.5),
+              fontSize: u(14.5),
               fontWeight: attendance === 'declined' ? 600 : 400,
-              border: '1px solid ' + (attendance === 'declined' ? '#2D1A0E' : '#F1F1EF'),
-              backgroundColor: attendance === 'declined' ? '#2D1A0E' : '#FFFFFF',
-              color: attendance === 'declined' ? '#FFFFFF' : '#544A42',
+              border: '1px solid ' + (attendance === 'declined' ? '#16283D' : '#E7ECF1'),
+              backgroundColor: attendance === 'declined' ? '#16283D' : '#FFFFFF',
+              color: attendance === 'declined' ? '#FFFFFF' : '#3D3D3D',
             }}
           >
             No podré asistir
@@ -216,15 +216,15 @@ export const RsvpFormCard: React.FC<RsvpFormCardProps> = ({ u }) => {
             value={dietary}
             onChange={(e) => setDietary(e.target.value)}
             className="rsvp-field appearance-none cursor-pointer"
-            style={{ ...fieldStyle, paddingRight: u(30) }}
+            style={{ ...fieldStyle, paddingRight: u(32) }}
           >
             {DIETARY_OPTIONS.map((option) => (
               <option key={option} value={option}>{option}</option>
             ))}
           </select>
           <ChevronDown
-            className="absolute pointer-events-none text-[#544A42]"
-            style={{ width: u(13), height: u(13), right: u(11), top: '50%', transform: 'translateY(-50%)' }}
+            className="absolute pointer-events-none text-[#3D3D3D]"
+            style={{ width: u(16), height: u(16), right: u(12), top: '50%', transform: 'translateY(-50%)' }}
             strokeWidth={2}
           />
         </div>
@@ -234,7 +234,7 @@ export const RsvpFormCard: React.FC<RsvpFormCardProps> = ({ u }) => {
         id="rsvp-submit-btn"
         type="submit"
         className="uppercase text-white w-full cursor-pointer hover:opacity-90 transition-opacity"
-        style={{ marginTop: u(28), height: u(41), borderRadius: u(2), backgroundColor: '#2D1A0E', fontFamily: SANS, fontSize: u(12), fontWeight: 500 }}
+        style={{ marginTop: u(28), height: u(50), borderRadius: u(2), backgroundColor: '#16283D', fontFamily: SANS, fontSize: u(15), fontWeight: 500 }}
       >
         Enviar confirmación
       </button>

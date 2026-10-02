@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowDown } from 'lucide-react';
+import { Wordmark } from './Wordmark';
 
 const SERIF = "'Instrument Serif', serif";
 const SANS = "'Schibsted Grotesk', sans-serif";
@@ -24,8 +25,80 @@ interface ExampleHeroProps {
 // El título+fecha+nav van siempre abajo (nunca centrados verticalmente) sobre la foto, y
 // debajo de todo eso el indicador fijo de "Deslizá" invita a seguir bajando.
 export const ExampleHero: React.FC<ExampleHeroProps> = ({ active, onNavigate }) => {
+  // Barra fija que aparece una vez que bajás de la foto: mientras estás leyendo el
+  // cronograma, el RSVP o la lista de regalos, siempre tenés a mano el nombre + los 3
+  // accesos para cambiar de sección sin tener que volver a subir hasta la foto.
+  const [showStickyNav, setShowStickyNav] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setShowStickyNav(window.scrollY > window.innerHeight * 0.5);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
-    <section className="sticky top-0 relative w-full overflow-hidden h-[100dvh]">
+    <>
+    <div
+      className="fixed top-0 inset-x-0 z-40 flex items-center justify-between transition-transform duration-300"
+      style={{
+        backgroundColor: '#FFFFFF',
+        borderBottom: '1px solid #E2E9F0',
+        borderBottomLeftRadius: 24,
+        borderBottomRightRadius: 24,
+        boxShadow: '0 4px 16px rgba(22,40,61,0.08)',
+        padding: '10px clamp(16px, 3vw, 32px)',
+        transform: showStickyNav ? 'translateY(0)' : 'translateY(-100%)',
+      }}
+    >
+      <div className="flex items-center" style={{ gap: 10 }}>
+        <span
+          className="font-normal whitespace-nowrap hidden sm:inline"
+          style={{ fontFamily: SERIF, fontSize: 17, color: '#2B2B2B' }}
+        >
+          Milagros &amp; Juan
+        </span>
+      </div>
+
+      <div className="absolute left-1/2 -translate-x-1/2 hidden sm:block">
+        <Wordmark className="!text-[20px]" />
+      </div>
+
+      <div className="flex items-center" style={{ gap: 6 }}>
+        {NAV_ITEMS.map((item) => {
+          const isActive = item.id === active;
+          return (
+            <button
+              key={item.id}
+              onClick={() => !isActive && onNavigate(item.id)}
+              className={`uppercase whitespace-nowrap transition-colors cursor-pointer ${
+                isActive ? 'cursor-default' : 'hover:bg-black/5'
+              }`}
+              style={{
+                fontFamily: SANS,
+                fontSize: 11,
+                letterSpacing: '0.02em',
+                padding: '8px 14px',
+                borderRadius: 999,
+                color: isActive ? '#F5F0EA' : '#2B2B2B',
+                backgroundColor: isActive ? '#16283D' : 'transparent',
+              }}
+            >
+              {item.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+
+    {/* La foto va pegada a los bordes (arriba, izquierda, derecha) — solo un margen chico
+        abajo, que deja ver el fondo de la página y da la pista de que hay que seguir
+        deslizando. */}
+    <div style={{ backgroundColor: '#FFFFFF', ['--frame' as string]: 'clamp(16px, 2.2vw, 30px)', paddingBottom: 'var(--frame)' }}>
+    <section
+      className="relative w-full overflow-hidden"
+      style={{ height: 'calc(100dvh - var(--frame))' }}
+    >
         <img
           src="/mili-juan-hero.jpg"
           alt="Milagros y Juan riendo, abrazados"
@@ -50,9 +123,9 @@ export const ExampleHero: React.FC<ExampleHeroProps> = ({ active, onNavigate }) 
                   key={item.id}
                   id={`example-${item.id}-btn`}
                   onClick={() => !isActive && onNavigate(item.id)}
-                  className={`uppercase border transition-colors whitespace-nowrap flex items-center justify-center shrink-0 text-[11px] h-9 px-4 sm:text-[clamp(7.5px,0.85vw,12px)] sm:h-[clamp(22px,2.6vw,36px)] sm:px-[clamp(6px,1.4vw,20px)] ${
+                  className={`uppercase border rounded-full transition-colors whitespace-nowrap flex items-center justify-center shrink-0 text-[11px] h-9 px-4 sm:text-[clamp(7.5px,0.85vw,12px)] sm:h-[clamp(22px,2.6vw,36px)] sm:px-[clamp(6px,1.4vw,20px)] ${
                     isActive
-                      ? 'bg-white text-[#2A1A0D] border-white cursor-default'
+                      ? 'bg-white text-[#16283D] border-white cursor-default'
                       : 'text-white border-white/70 hover:bg-white/10 cursor-pointer'
                   }`}
                   style={{ fontFamily: SANS, letterSpacing: '0.01em' }}
@@ -74,5 +147,7 @@ export const ExampleHero: React.FC<ExampleHeroProps> = ({ active, onNavigate }) 
           <ArrowDown className="w-4 h-4 mt-2 animate-bounce" strokeWidth={1.5} />
         </div>
       </section>
+    </div>
+    </>
   );
 };

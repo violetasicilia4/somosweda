@@ -82,14 +82,14 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
     borderRadius: 999,
     fontFamily: SANS,
     fontSize: u(5.4),
-    backgroundColor: active ? '#2A1A0D' : '#FFFFFF',
-    color: active ? '#FFFFFF' : '#5A4A40',
-    border: active ? '1px solid #2A1A0D' : '1px solid #EFEAE2',
+    backgroundColor: active ? '#16283D' : '#FFFFFF',
+    color: active ? '#FFFFFF' : '#3C5068',
+    border: active ? '1px solid #16283D' : '1px solid #E2E9F0',
   });
 
   const pillMobile = (active: boolean) =>
     `shrink-0 whitespace-nowrap rounded-full px-3 h-8 text-[12px] border cursor-pointer ${
-      active ? 'bg-[#2A1A0D] text-white border-[#2A1A0D]' : 'bg-white text-[#5A4A40] border-[#EFEAE2]'
+      active ? 'bg-[#16283D] text-white border-[#16283D]' : 'bg-white text-[#3C5068] border-[#E2E9F0]'
     }`;
 
   return (
@@ -103,12 +103,23 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
           congelada un buen tramo de scroll sin que se vea nada moverse. */}
       <section className="relative z-10 bg-white">
 
-      {/* Pista de scroll hacia la grilla de regalos */}
-      <div className="flex flex-col items-center" style={{ paddingTop: u(14) }}>
-        <span className="uppercase text-[#8A7A6E] text-[11px] sm:text-[length:inherit]" style={{ fontFamily: SANS, fontSize: `max(${u(3.8)}, 11px)`, letterSpacing: '0.12em', lineHeight: 1 }}>
-          Explorar regalos
+      {/* Título grande apenas se entra acá (en vez de un simple eyebrow chiquito): así
+          queda clarísimo que tocar "Regalá" en el header te trajo a una pantalla distinta
+          de la invitación, no es solo un cambio de pestaña que puede pasar desapercibido. */}
+      <div className="flex flex-col items-center text-center" style={{ paddingTop: u(20), paddingLeft: u(24), paddingRight: u(24) }}>
+        <span className="uppercase text-[#8A8A8A]" style={{ fontFamily: SANS, fontSize: `max(${u(3.3)}, 11px)`, letterSpacing: '0.12em', lineHeight: 1 }}>
+          Regalá
         </span>
-        <ChevronDown className="text-[#8A7A6E]" style={{ width: `max(${u(7)}, 14px)`, height: `max(${u(7)}, 14px)`, marginTop: u(4) }} strokeWidth={1.5} />
+        <h2
+          className="font-normal text-[#2B2B2B]"
+          style={{ fontFamily: SERIF, fontSize: `max(${u(14)}, 30px)`, lineHeight: 1.1, marginTop: u(8) }}
+        >
+          Lista de regalos
+        </h2>
+        <p style={{ fontFamily: SANS, fontSize: `max(${u(4.6)}, 13.5px)`, lineHeight: 1.5, color: '#6B6B6B', marginTop: u(6), whiteSpace: 'nowrap' }}>
+          Elegí algo para ayudarnos a armar esta nueva etapa juntos.
+        </p>
+        <ChevronDown className="text-[#8A8A8A]" style={{ width: `max(${u(7)}, 14px)`, height: `max(${u(7)}, 14px)`, marginTop: u(12) }} strokeWidth={1.5} />
       </div>
 
       {/* Filtros — mobile: pills en fila con scroll horizontal, buscador y rango apilados debajo */}
@@ -127,28 +138,28 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
           ))}
         </div>
         <div className="flex items-center gap-2">
-          <label className="flex-1 flex items-center bg-white border border-[#EFEAE2] rounded-full h-10 px-3 gap-2 min-w-0">
-            <Search className="text-[#8A6A55] w-4 h-4 shrink-0" strokeWidth={2} />
+          <label className="flex-1 flex items-center bg-white border border-[#E2E9F0] rounded-full h-10 px-3 gap-2 min-w-0">
+            <Search className="text-[#7389A0] w-4 h-4 shrink-0" strokeWidth={2} />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Buscar regalo..."
-              className="bg-transparent outline-none w-full min-w-0 text-[13px] text-[#5A4A40] placeholder:text-[#8A7A6E]"
+              className="bg-transparent outline-none w-full min-w-0 text-[13px] text-[#3C5068] placeholder:text-[#7389A0]"
               style={{ fontFamily: SANS }}
             />
           </label>
-          <div className="relative flex items-center bg-white border border-[#EFEAE2] rounded-full h-10 shrink-0">
+          <div className="relative flex items-center bg-white border border-[#E2E9F0] rounded-full h-10 shrink-0">
             <select
               value={rangeId}
               onChange={(e) => setRangeId(e.target.value)}
-              className="appearance-none bg-transparent outline-none h-full cursor-pointer text-[13px] text-[#5A4A40] pl-3 pr-7 rounded-full"
+              className="appearance-none bg-transparent outline-none h-full cursor-pointer text-[13px] text-[#3C5068] pl-3 pr-7 rounded-full"
               style={{ fontFamily: SANS }}
             >
               {priceRanges.map((r) => (
                 <option key={r.id} value={r.id}>{r.label}</option>
               ))}
             </select>
-            <ChevronDown className="absolute right-2 w-4 h-4 pointer-events-none text-[#5A4A40]" strokeWidth={2} />
+            <ChevronDown className="absolute right-2 w-4 h-4 pointer-events-none text-[#3C5068]" strokeWidth={2} />
           </div>
         </div>
       </div>
@@ -168,33 +179,33 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
           </div>
           <div className="flex items-center" style={{ gap: u(8) }}>
             <label
-              className="flex items-center bg-white border border-[#EFEAE2]"
+              className="flex items-center bg-white border border-[#E2E9F0]"
               style={{ height: u(16), width: u(109), padding: `0 ${u(8)}`, borderRadius: 999, gap: u(4) }}
             >
-              <Search className="text-[#8A6A55]" style={{ width: u(6), height: u(6) }} strokeWidth={2} />
+              <Search className="text-[#7389A0]" style={{ width: u(6), height: u(6) }} strokeWidth={2} />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Buscar regalo..."
-                className="bg-transparent outline-none w-full text-[#5A4A40] placeholder:text-[#8A7A6E]"
+                className="bg-transparent outline-none w-full text-[#3C5068] placeholder:text-[#7389A0]"
                 style={{ fontFamily: SANS, fontSize: u(5) }}
               />
             </label>
             <div
-              className="relative flex items-center bg-white border border-[#EFEAE2]"
+              className="relative flex items-center bg-white border border-[#E2E9F0]"
               style={{ height: u(16), width: u(67), borderRadius: 999 }}
             >
               <select
                 value={rangeId}
                 onChange={(e) => setRangeId(e.target.value)}
-                className="appearance-none bg-transparent outline-none w-full h-full cursor-pointer text-[#5A4A40]"
+                className="appearance-none bg-transparent outline-none w-full h-full cursor-pointer text-[#3C5068]"
                 style={{ fontFamily: SANS, fontSize: u(5), padding: `0 ${u(14)} 0 ${u(8)}`, borderRadius: 999 }}
               >
                 {priceRanges.map((r) => (
                   <option key={r.id} value={r.id}>{r.label}</option>
                 ))}
               </select>
-              <ChevronDown className="absolute pointer-events-none text-[#5A4A40]" style={{ width: u(6), height: u(6), right: u(7) }} strokeWidth={2} />
+              <ChevronDown className="absolute pointer-events-none text-[#3C5068]" style={{ width: u(6), height: u(6), right: u(7) }} strokeWidth={2} />
             </div>
           </div>
         </div>
@@ -206,20 +217,20 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
           <article key={g.id} className="w-full flex flex-col items-center text-center">
             <img src={g.image} alt={g.title} referrerPolicy="no-referrer" className="w-40 h-40 object-cover rounded-full" />
             <div className="pt-3">
-              <p className="uppercase text-[#8A7A6E] text-[11px] tracking-[0.08em]" style={{ fontFamily: SANS }}>
+              <p className="uppercase text-[#8A8A8A] text-[11px] tracking-[0.08em]" style={{ fontFamily: SANS }}>
                 {g.category}
               </p>
-              <h3 className="font-normal text-[#2A1A10] text-[21px] leading-tight mt-1" style={{ fontFamily: SERIF }}>
+              <h3 className="font-normal text-[#2B2B2B] text-[21px] leading-tight mt-1" style={{ fontFamily: SERIF }}>
                 {g.title}
               </h3>
-              <p className="font-bold text-[#3A3330] text-[15px] mt-1" style={{ fontFamily: SANS }}>
+              <p className="font-bold text-[#2B2B2B] text-[15px] mt-1" style={{ fontFamily: SANS }}>
                 {formatPrice(g.price)}
               </p>
             </div>
             <button
               onClick={() => setPaymentGift(g)}
               className="uppercase text-white w-full cursor-pointer whitespace-nowrap h-10 rounded text-[12px] mt-3"
-              style={{ backgroundColor: '#2D1A0E', fontFamily: SANS, letterSpacing: '0.03em' }}
+              style={{ backgroundColor: '#16283D', fontFamily: SANS, letterSpacing: '0.03em' }}
             >
               Regalá
             </button>
@@ -239,20 +250,20 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
               style={{ width: u(120), height: u(120) }}
             />
             <div style={{ padding: `0 ${u(8)}`, marginTop: u(12) }}>
-              <p className="uppercase text-[#8A7A6E]" style={{ fontFamily: SANS, fontSize: u(3.6), letterSpacing: '0.08em', lineHeight: 1 }}>
+              <p className="uppercase text-[#8A8A8A]" style={{ fontFamily: SANS, fontSize: u(3.6), letterSpacing: '0.08em', lineHeight: 1 }}>
                 {g.category}
               </p>
-              <h3 className="font-normal text-[#2A1A10]" style={{ fontFamily: SERIF, fontSize: u(7), lineHeight: 1.1, marginTop: u(4) }}>
+              <h3 className="font-normal text-[#2B2B2B]" style={{ fontFamily: SERIF, fontSize: u(7), lineHeight: 1.1, marginTop: u(4) }}>
                 {g.title}
               </h3>
-              <p className="font-bold text-[#3A3330]" style={{ fontFamily: SANS, fontSize: u(6.05), lineHeight: 1, marginTop: u(4) }}>
+              <p className="font-bold text-[#2B2B2B]" style={{ fontFamily: SANS, fontSize: u(6.05), lineHeight: 1, marginTop: u(4) }}>
                 {formatPrice(g.price)}
               </p>
             </div>
             <button
               onClick={() => setPaymentGift(g)}
               className="uppercase text-white w-full cursor-pointer whitespace-nowrap"
-              style={{ backgroundColor: '#2D1A0E', height: u(12), borderRadius: u(1.5), fontFamily: SANS, fontSize: u(4.2), letterSpacing: '0.03em', marginTop: u(12) }}
+              style={{ backgroundColor: '#16283D', height: u(12), borderRadius: u(1.5), fontFamily: SANS, fontSize: u(4.2), letterSpacing: '0.03em', marginTop: u(12) }}
             >
               Regalá
             </button>
