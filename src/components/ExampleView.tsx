@@ -136,6 +136,15 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
   // El CTA "Confirmar asistencia" de "¿Venís?" abre el formulario ahí mismo, en vez de
   // navegar a la pantalla de RSVP (esa sigue existiendo, vía el botón de arriba del todo).
   const [rsvpInline, setRsvpInline] = useState(false);
+  const rsvpFormRef = useRef<HTMLDivElement>(null);
+
+  // Al abrir el formulario, bajamos nosotros la página (centrado en pantalla) en vez de
+  // dejar que el invitado tenga que darse cuenta solo de que apareció más abajo.
+  useEffect(() => {
+    if (rsvpInline && rsvpFormRef.current) {
+      rsvpFormRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [rsvpInline]);
 
   // Tocar un botón de navegación (Invitación / RSVP / Regalá) no solo cambia de pantalla:
   // también te salta directo al contenido de esa sección, pasando la foto de portada. Antes
@@ -173,15 +182,15 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
       <Reveal key="giftRegistry">
         <section
           className="flex flex-col items-center justify-center text-center"
-          style={{ minHeight: '34vh', padding: `${u(28)} ${u(24)}`, backgroundColor: '#FFFFFF' }}
+          style={{ minHeight: '42vh', padding: `${u(28)} ${u(24)}`, backgroundColor: '#FFFFFF' }}
         >
-          <h2 className="font-normal" style={{ ...headingStyle, fontSize: u(54), marginTop: 0 }}>¡Nos casamos!</h2>
-          <p style={{ ...bodyStyle, fontSize: u(23), lineHeight: u(30), maxWidth: u(440), marginTop: u(16) }}>
+          <h2 className="font-normal" style={{ ...headingStyle, fontSize: u(64), marginTop: 0 }}>¡Nos casamos!</h2>
+          <p style={{ ...bodyStyle, fontSize: u(27), lineHeight: u(35), maxWidth: u(480), marginTop: u(16) }}>
             Queremos compartir este momento con ustedes.
           </p>
           <p
             className="uppercase"
-            style={{ fontFamily: SANS, fontSize: u(12.5), letterSpacing: '0.1em', color: '#6B6B6B', marginTop: u(18) }}
+            style={{ fontFamily: SANS, fontSize: u(15), letterSpacing: '0.1em', color: '#6B6B6B', marginTop: u(18) }}
           >
             {formatLongDate(wedding.weddingDate)}
           </p>
@@ -209,15 +218,16 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
             mobile para la cuenta de arriba, un valor fijo normal desde el breakpoint sm en
             adelante donde las columnas ya están lado a lado y no hace falta ese ajuste. */}
         <div
-          className="flex flex-col items-center text-center pt-0 sm:pt-10 sm:justify-center pb-5 sm:pb-[calc(48*var(--u))]"
-          style={{ backgroundColor: '#F3F3EA', paddingLeft: u(24), paddingRight: u(24) }}
+          className="flex flex-col items-center text-center pt-0 sm:pt-10 sm:justify-center pb-5 sm:pb-[calc(48*var(--u))] px-3 sm:px-[calc(24*var(--u))]"
+          style={{ backgroundColor: '#F3F3EA' }}
         >
           {/* "Hoja de papel": tarjeta blanca con sombra suave que contiene el resumen de
-              íconos + la lista de eventos, apoyada sobre el fondo papel de la columna. */}
+              íconos + la lista de eventos, apoyada sobre el fondo papel de la columna. En
+              mobile casi no le queda margen a los costados (antes sobraba mucho borde); en
+              sm+ sigue con el ancho máximo de siempre. */}
           <div
-            className="w-full"
+            className="w-full sm:max-w-[calc(460*var(--u))]"
             style={{
-              maxWidth: u(460),
               backgroundColor: '#FFFFFF',
               borderRadius: u(6),
               boxShadow: '0 1px 3px rgba(28, 16, 5, 0.06), 0 12px 32px rgba(28, 16, 5, 0.08)',
@@ -316,7 +326,7 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
           </p>
 
           {rsvpInline ? (
-            <>
+            <div ref={rsvpFormRef} className="w-full flex flex-col items-center">
               <RsvpFormCard u={u} />
               <button
                 type="button"
@@ -333,7 +343,7 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
               >
                 Cerrar
               </button>
-            </>
+            </div>
           ) : (
             <button
               type="button"

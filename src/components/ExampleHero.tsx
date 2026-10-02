@@ -97,9 +97,13 @@ export const ExampleHero: React.FC<ExampleHeroProps> = ({ active, onNavigate, su
         abajo, que deja ver el fondo de la página y da la pista de que hay que seguir
         deslizando. */}
     <div style={{ backgroundColor: '#FFFFFF', ['--frame' as string]: 'clamp(16px, 2.2vw, 30px)', paddingBottom: 'var(--frame)' }}>
+    {/* "svh" (small viewport height) en vez de "dvh": dvh se recalcula en vivo a medida
+        que la barra de direcciones del navegador se esconde/aparece al scrollear, lo que
+        hacía que la foto se viera "achicar/agrandar" — svh usa siempre el viewport más
+        chico posible, fijo, sin ese salto. */}
     <section
       className="relative w-full overflow-hidden"
-      style={{ height: 'calc(100dvh - var(--frame))' }}
+      style={{ height: 'calc(100svh - var(--frame))' }}
     >
         <img
           src="/mili-juan-hero.jpg"
@@ -110,7 +114,7 @@ export const ExampleHero: React.FC<ExampleHeroProps> = ({ active, onNavigate, su
 
         <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col items-center text-center text-white px-4 pb-24 sm:pb-28">
           <h1
-            className="font-normal text-[34px] sm:text-[clamp(24px,4.4vw,56px)]"
+            className="font-normal text-[44px] sm:text-[clamp(24px,4.4vw,56px)]"
             style={{ fontFamily: SERIF, lineHeight: 1 }}
           >
             Milagros &amp; Juan
