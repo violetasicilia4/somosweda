@@ -47,6 +47,9 @@ export const RsvpFormCard: React.FC<RsvpFormCardProps> = ({ u }) => {
   const fieldStyle: React.CSSProperties = {
     width: '100%',
     height: u(44),
+    // Piso fijo: en pantallas muy chicas el valor fluido (u(44)) puede caer bastante por
+    // debajo de los 44px mínimos recomendados para un target táctil cómodo.
+    minHeight: 46,
     padding: `0 ${u(12)}`,
     border: '1px solid #E7ECF1',
     borderRadius: u(2),
@@ -174,6 +177,7 @@ export const RsvpFormCard: React.FC<RsvpFormCardProps> = ({ u }) => {
             className="cursor-pointer transition-colors"
             style={{
               height: u(50),
+              minHeight: 46,
               borderRadius: u(2),
               fontFamily: SANS,
               fontSize: u(15),
@@ -194,6 +198,7 @@ export const RsvpFormCard: React.FC<RsvpFormCardProps> = ({ u }) => {
             className="cursor-pointer transition-colors"
             style={{
               height: u(50),
+              minHeight: 46,
               borderRadius: u(2),
               fontFamily: SANS,
               fontSize: u(14.5),
@@ -234,7 +239,7 @@ export const RsvpFormCard: React.FC<RsvpFormCardProps> = ({ u }) => {
         id="rsvp-submit-btn"
         type="submit"
         className="uppercase text-white w-full cursor-pointer hover:opacity-90 transition-opacity"
-        style={{ marginTop: u(28), height: u(50), borderRadius: u(2), backgroundColor: '#16283D', fontFamily: SANS, fontSize: u(15), fontWeight: 500 }}
+        style={{ marginTop: u(28), height: u(50), minHeight: 46, borderRadius: u(2), backgroundColor: '#16283D', fontFamily: SANS, fontSize: u(15), fontWeight: 500 }}
       >
         Enviar confirmación
       </button>

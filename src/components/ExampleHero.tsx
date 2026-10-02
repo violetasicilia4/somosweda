@@ -16,6 +16,9 @@ const NAV_ITEMS: { id: ExampleScreen; label: string }[] = [
 interface ExampleHeroProps {
   active: ExampleScreen;
   onNavigate: (screen: ExampleScreen) => void;
+  // Fecha chica debajo del nombre, en la foto — solo la pantalla de Invitación la pasa,
+  // para no repetir "¡Nos casamos! ... fecha" como bloque aparte justo después del hero.
+  subtitle?: string;
 }
 
 // Foto de portada compartida por las 3 pantallas del ejemplo (Información, Confirmar
@@ -24,7 +27,7 @@ interface ExampleHeroProps {
 // que la primera impresión sea la foto a pantalla completa, como una invitación real.
 // El título+fecha+nav van siempre abajo (nunca centrados verticalmente) sobre la foto, y
 // debajo de todo eso el indicador fijo de "Deslizá" invita a seguir bajando.
-export const ExampleHero: React.FC<ExampleHeroProps> = ({ active, onNavigate }) => {
+export const ExampleHero: React.FC<ExampleHeroProps> = ({ active, onNavigate, subtitle }) => {
   // Barra fija que aparece una vez que bajás de la foto: mientras estás leyendo el
   // cronograma, el RSVP o la lista de regalos, siempre tenés a mano el nombre + los 3
   // accesos para cambiar de sección sin tener que volver a subir hasta la foto.
@@ -71,14 +74,13 @@ export const ExampleHero: React.FC<ExampleHeroProps> = ({ active, onNavigate }) 
             <button
               key={item.id}
               onClick={() => !isActive && onNavigate(item.id)}
-              className={`uppercase whitespace-nowrap transition-colors cursor-pointer ${
+              className={`uppercase whitespace-nowrap transition-colors cursor-pointer py-4 sm:py-2 px-[14px] ${
                 isActive ? 'cursor-default' : 'hover:bg-black/5'
               }`}
               style={{
                 fontFamily: SANS,
                 fontSize: 11,
                 letterSpacing: '0.02em',
-                padding: '8px 14px',
                 borderRadius: 999,
                 color: isActive ? '#F5F0EA' : '#2B2B2B',
                 backgroundColor: isActive ? '#16283D' : 'transparent',
@@ -108,11 +110,19 @@ export const ExampleHero: React.FC<ExampleHeroProps> = ({ active, onNavigate }) 
 
         <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col items-center text-center text-white px-4 pb-24 sm:pb-28">
           <h1
-            className="font-normal text-[24px] sm:text-[clamp(18px,3.2vw,40px)]"
+            className="font-normal text-[34px] sm:text-[clamp(24px,4.4vw,56px)]"
             style={{ fontFamily: SERIF, lineHeight: 1 }}
           >
             Milagros &amp; Juan
           </h1>
+          {subtitle && (
+            <span
+              className="uppercase text-white/80 text-[10px] sm:text-[11px]"
+              style={{ fontFamily: SANS, letterSpacing: '0.1em', marginTop: 10 }}
+            >
+              {subtitle}
+            </span>
+          )}
           <div className="bg-white/50 w-8 h-px mt-4 sm:w-[clamp(24px,3.2vw,44px)] sm:mt-[clamp(10px,1.6vw,22px)]"></div>
 
           <div className="flex items-center flex-nowrap justify-center w-full px-3 gap-2 mt-6 sm:gap-[clamp(4px,1vw,14px)] sm:mt-[clamp(14px,2.4vw,32px)]">
@@ -123,7 +133,7 @@ export const ExampleHero: React.FC<ExampleHeroProps> = ({ active, onNavigate }) 
                   key={item.id}
                   id={`example-${item.id}-btn`}
                   onClick={() => !isActive && onNavigate(item.id)}
-                  className={`uppercase border rounded-full transition-colors whitespace-nowrap flex items-center justify-center shrink-0 text-[11px] h-9 px-4 sm:text-[clamp(7.5px,0.85vw,12px)] sm:h-[clamp(22px,2.6vw,36px)] sm:px-[clamp(6px,1.4vw,20px)] ${
+                  className={`uppercase border rounded-full transition-colors whitespace-nowrap flex items-center justify-center shrink-0 text-[11px] h-11 px-4 sm:text-[clamp(7.5px,0.85vw,12px)] sm:h-[clamp(22px,2.6vw,36px)] sm:px-[clamp(6px,1.4vw,20px)] ${
                     isActive
                       ? 'bg-white text-[#16283D] border-white cursor-default'
                       : 'text-white border-white/70 hover:bg-white/10 cursor-pointer'

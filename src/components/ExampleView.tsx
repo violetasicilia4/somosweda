@@ -7,13 +7,12 @@ import { RsvpFormCard } from './RsvpFormCard';
 import {
   getMicrositeFeatures,
   DEFAULT_LODGING_INFO,
-  DEFAULT_TRANSPORT_INFO,
   DEFAULT_GALLERY_IMAGES,
   buildDefaultHashtag,
 } from '../utils/microsite';
 import { getStoredWedding, getStoredWeddingEvents } from '../utils/weddingStore';
 import { formatLongDate } from '../utils/format';
-import { Church, Gem, Landmark, Music, Shirt, Bus, Navigation, ChevronDown, ArrowUpRight } from 'lucide-react';
+import { Church, Gem, Landmark, Music, Shirt, ChevronDown, ArrowUpRight } from 'lucide-react';
 
 // Lucide no tiene un ícono de "copas brindando" — se arma a mano, mismo trazo fino que
 // el resto de los íconos de línea (Church, Gem, etc.) para que no desentone.
@@ -190,7 +189,6 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
       </Reveal>
     ),
 
-
     cronograma: (
       <Reveal key="cronograma">
       <section className="w-full grid grid-cols-1 sm:grid-cols-2 items-stretch gap-y-4 sm:gap-y-0" style={{ backgroundColor: '#F3F3EA' }}>
@@ -254,8 +252,13 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
                       >
                         {ev.title}
                       </h3>
-                      <p style={{ fontFamily: SANS, fontSize: u(13), color: '#3D3D3D', marginTop: u(10), lineHeight: 1.6 }}>
-                        {ev.date}<br />{ev.time}
+                      {/* El horario es el dato que más rápido buscan los invitados — va
+                          grande y en navy, no al mismo tamaño que el resto del texto. */}
+                      <p style={{ fontFamily: SERIF, fontSize: u(28), lineHeight: 1.1, color: '#16283D', marginTop: u(12) }}>
+                        {ev.time}
+                      </p>
+                      <p style={{ fontFamily: SANS, fontSize: u(13), color: '#3D3D3D', marginTop: u(6) }}>
+                        {ev.date}
                       </p>
                       <p style={{ fontFamily: SANS, fontSize: u(13), color: '#3D3D3D', marginTop: u(8) }}>{ev.locationName}</p>
                       {ev.address && (
@@ -299,8 +302,9 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
       const showRsvp = features.events && features.rsvp;
       return (
       <Reveal key="giftAndRsvp">
-      <section className="w-full grid grid-cols-1 items-stretch">
-        {/* Arriba: "¿Venís?" / confirmar asistencia. */}
+      <section className="w-full grid grid-cols-1 sm:grid-cols-2 items-stretch">
+        {/* Arriba: "¿Venís?" / confirmar asistencia — fondo blanco, el botón navy sólido
+            es el que lleva el contraste fuerte. */}
         {showRsvp && (
         <div
           className={`flex flex-col items-center justify-center text-center ${rsvpInline ? 'sm:min-h-[78vh]' : 'min-h-[42vh] sm:min-h-[78vh]'}`}
@@ -353,14 +357,16 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
         </div>
         )}
 
-        {/* Abajo: "¿Nos querés sorprender?" / lista de regalos. */}
+        {/* Abajo: "¿Nos querés sorprender?" / lista de regalos — tratamiento más calmo
+            (botón con borde en vez de relleno sólido) para que no compita en el mismo
+            nivel que confirmar asistencia, pero mismo fondo blanco que ese lado. */}
         {showGift && (
         <div
           className="flex flex-col items-center justify-center text-center"
-          style={{ backgroundColor: '#16283D', padding: `${u(64)} ${u(28)}` }}
+          style={{ backgroundColor: '#FFFFFF', padding: `${u(64)} ${u(28)}` }}
         >
-          <h2 className="font-normal text-[42px] sm:text-[calc(56*var(--u))]" style={{ ...headingStyle, fontSize: undefined, color: '#F5F0EA', marginTop: 0 }}>¿Nos querés sorprender?</h2>
-          <p style={{ fontFamily: SANS, fontSize: u(18), lineHeight: u(26), maxWidth: u(360), color: '#F5F0EA', marginTop: u(12) }}>
+          <h2 className="font-normal text-[42px] sm:text-[calc(56*var(--u))]" style={{ ...headingStyle, fontSize: undefined, marginTop: 0 }}>¿Nos querés sorprender?</h2>
+          <p style={{ fontFamily: SANS, fontSize: u(18), lineHeight: u(26), maxWidth: u(360), color: '#6B6B6B', marginTop: u(12) }}>
             Armamos una lista con algunas ideas.
           </p>
           <button
@@ -373,7 +379,8 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
               fontWeight: 600,
               letterSpacing: '0.04em',
               color: '#16283D',
-              backgroundColor: '#F5F0EA',
+              backgroundColor: 'transparent',
+              border: '1px solid #16283D',
               padding: `${u(15)} ${u(30)}`,
               borderRadius: u(2),
               marginTop: u(24),
@@ -489,41 +496,6 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
         </Reveal>
     ),
 
-    locationTransport: (
-        <Reveal key="locationTransport">
-        <section
-          className="w-full flex flex-col items-center justify-center text-center"
-          style={{ minHeight: '45vh', padding: `${u(48)} ${u(24)}`, backgroundColor: '#FFFFFF' }}
-        >
-          <div
-            className="grid grid-cols-1 sm:grid-cols-2 w-full"
-            style={{ maxWidth: u(600), rowGap: u(36), columnGap: u(32) }}
-          >
-            {[
-              { icon: Navigation, label: 'Ubicación', value: wedding.mapLocation || `${wedding.venue || 'Estancia La Linda'}, ${wedding.city || 'Pilar, Buenos Aires'}` },
-              { icon: Bus, label: 'Transporte', value: wedding.transportInfo || DEFAULT_TRANSPORT_INFO },
-            ].map(({ icon: Icon, label, value }) => (
-              <div key={label} className="flex flex-col items-center text-center">
-                <span
-                  className="inline-flex items-center justify-center"
-                  style={{ width: u(40), height: u(40), borderRadius: '50%', backgroundColor: '#E7EEF4', color: '#3D3D3D' }}
-                >
-                  <Icon style={{ width: u(17), height: u(17) }} />
-                </span>
-                <span className="uppercase" style={{ ...eyebrowStyle, marginTop: u(14) }}>{label}</span>
-                <h2
-                  className="font-normal"
-                  style={{ fontFamily: SERIF, fontSize: u(22), lineHeight: 1.35, color: '#2B2B2B', marginTop: u(8) }}
-                >
-                  {value}
-                </h2>
-              </div>
-            ))}
-          </div>
-        </section>
-        </Reveal>
-    ),
-
     music: (
       <Reveal key="music">
         <section
@@ -550,22 +522,20 @@ export const ExampleView: React.FC<ExampleViewProps> = ({ wedding: fallbackWeddi
   // celular de 375px), ilegible. clamp() le pone un piso a partir de ahí: el layout/las
   // fotos se siguen achicando, pero el texto no baja de un tamaño legible.
   //
-  // Orden de las secciones: en vez del orden fijo de "Tu sitio" (MICROSITE_SECTION_ORDER),
-  // acá van ordenadas por qué tan usado está cada elemento en micrositios reales (ranking
-  // sobre una muestra de 30 sitios) — primero lo que casi todos usan (regalos, cronograma,
-  // RSVP), al final lo más raro. "¡Nos casamos!" queda primero igual, como intro de la
-  // página (no es un "elemento" del ranking, es el saludo inicial).
+  // Orden de las secciones, según la auditoría UX: lo primero que ve un invitado después
+  // del hero es el cronograma, así llega a RSVP ya con todo lo que necesita para confirmar.
+  // RSVP queda antes que regalos (no compiten por atención) y lo puramente decorativo/
+  // social (hashtag, galería) al final.
   const orderedKeys: { key: string; show: boolean }[] = [
-    { key: 'cronograma', show: features.events }, // #2 Info de ceremonia/fiesta
-    // #1 y #4: "¿Nos querés sorprender?" (regalos) y "¿Venís?" (RSVP) van juntos en un
-    // mismo bloque partido a la mitad, uno de cada lado — debajo de Cronograma.
+    { key: 'cronograma', show: features.events },
+    // "¿Venís?" (RSVP) y "¿Nos querés sorprender?" (regalos) van juntos en un mismo bloque
+    // partido a la mitad, uno de cada lado, con RSVP primero y con más peso visual.
     { key: 'giftAndRsvp', show: features.giftRegistry || (features.events && features.rsvp) },
-    { key: 'music', show: features.music }, // #5 Playlist colaborativa
-    { key: 'dressCode', show: features.events }, // #6 Dress code
-    { key: 'lodging', show: features.guestInfo }, // #9 Hoteles / alojamiento cercano
-    { key: 'hashtag', show: features.hashtag }, // #10 Hashtag para fotos
-    { key: 'gallery', show: features.gallery }, // (fotos, va junto al hashtag)
-    { key: 'locationTransport', show: features.guestInfo }, // #11 Transporte
+    { key: 'dressCode', show: features.events },
+    { key: 'music', show: features.music },
+    { key: 'lodging', show: features.guestInfo },
+    { key: 'hashtag', show: features.hashtag },
+    { key: 'gallery', show: features.gallery },
   ];
 
   return (
