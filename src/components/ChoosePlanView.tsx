@@ -26,7 +26,7 @@ export const ChoosePlanView: React.FC<ChoosePlanViewProps> = ({ onNavigate, onSe
   };
 
   return (
-    <div className="min-h-[calc(100vh-45px)] bg-gray-50 flex flex-col items-center px-4 py-10 font-sans">
+    <div className="min-h-dvh bg-gray-50 flex flex-col items-center px-4 py-8 sm:py-10 font-sans">
       <div className="w-full max-w-4xl">
         <div className="text-center mb-8">
           <Wordmark onClick={() => onNavigate('landing')} className="hover:opacity-85 transition-opacity" />
@@ -97,7 +97,7 @@ export const ChoosePlanView: React.FC<ChoosePlanViewProps> = ({ onNavigate, onSe
                   type="button"
                   id={`choose-plan-${plan.id}-try`}
                   onClick={(e) => { e.stopPropagation(); setSelected(plan.id); }}
-                  className={`uppercase mt-4 w-full py-2 rounded-lg text-[11px] font-medium transition-colors cursor-pointer ${
+                  className={`uppercase mt-4 w-full min-h-11 flex items-center justify-center rounded-lg text-[11px] font-medium transition-colors cursor-pointer ${
                     isSelected ? 'bg-[#2D1A0E] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
@@ -113,7 +113,7 @@ export const ChoosePlanView: React.FC<ChoosePlanViewProps> = ({ onNavigate, onSe
             id="choose-plan-continue-btn"
             type="button"
             onClick={handleContinue}
-            className="uppercase w-full max-w-xs h-[41px] bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[12px] transition-all shadow-xs cursor-pointer"
+            className="uppercase w-full max-w-xs h-11 bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[13px] transition-all shadow-xs cursor-pointer"
           >
             Continuar
           </button>

@@ -60,7 +60,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       <button
         key={item.id}
         onClick={() => onSelectTab(item.id)}
-        className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-normal uppercase transition-all text-left cursor-pointer ${
+        className={`w-full flex items-center gap-3 px-3.5 min-h-11 rounded-2xl text-xs font-normal uppercase transition-all text-left cursor-pointer ${
           isActive
             ? 'bg-gray-900 text-white shadow-2xs'
             : locked
@@ -84,7 +84,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 
   return (
     <aside
-      className={`w-64 max-w-[85vw] bg-white border-r border-gray-200 flex flex-col justify-between shrink-0 h-screen fixed lg:sticky inset-y-0 left-0 top-0 z-50 lg:z-auto transition-transform duration-200 ${
+      className={`w-64 max-w-[85vw] bg-white border-r border-gray-200 flex flex-col justify-between shrink-0 h-dvh fixed lg:sticky inset-y-0 left-0 top-0 z-50 lg:z-auto transition-transform duration-200 ${
         open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
       }`}
     >
@@ -96,7 +96,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Cerrar menú"
-            className="lg:hidden p-1.5 -mr-1.5 rounded-xl text-gray-500 hover:bg-gray-100 cursor-pointer"
+            className="lg:hidden w-11 h-11 -mr-2.5 flex items-center justify-center rounded-xl text-gray-500 hover:bg-gray-100 cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -122,10 +122,10 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       </nav>
 
       {/* FOOTER ACTIONS */}
-      <div className="p-4 border-t border-gray-100">
+      <div className="p-4 pb-[max(1rem,env(safe-area-inset-bottom))] border-t border-gray-100">
         <button
           onClick={onLogout}
-          className="uppercase w-full flex items-center gap-2 px-3 py-2 rounded-2xl text-xs font-normal text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
+          className="uppercase w-full flex items-center gap-2 px-3 min-h-11 rounded-2xl text-xs font-normal text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
         >
           <LogOut className="w-3.5 h-3.5" />
           <span>Salir</span>

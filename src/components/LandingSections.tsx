@@ -30,7 +30,7 @@ const SERIF = "'Instrument Serif', serif";
 export type ExampleScreen = 'home' | 'gifts' | 'rsvp';
 
 const btnDark =
-  'text-[12px] font-normal leading-normal uppercase text-white bg-[#2D1A0E] px-6 py-3 hover:bg-[#1A0E08] transition-colors cursor-pointer';
+  'text-[12px] font-normal leading-normal uppercase text-white bg-[#2D1A0E] px-6 min-h-11 inline-flex items-center justify-center hover:bg-[#1A0E08] transition-colors cursor-pointer';
 
 const h2Serif = 'text-center font-normal text-[#2A1A10] text-[clamp(30px,3.6vw,48px)] leading-[1.1] text-balance';
 
@@ -571,7 +571,7 @@ const PricingCTA: React.FC<{ onClick: () => void; highlighted?: boolean }> = ({ 
   <button
     type="button"
     onClick={onClick}
-    className={`w-full flex items-center justify-between rounded-full pl-5 pr-1.5 py-1.5 text-[13px] font-normal transition-colors cursor-pointer ${
+    className={`w-full min-h-11 flex items-center justify-between rounded-full pl-5 pr-1.5 text-[13px] font-normal transition-colors cursor-pointer ${
       highlighted ? 'bg-[#2D1A0E] text-white hover:bg-[#1A0E08]' : 'bg-white border border-[#DDD3C8] text-[#2A1A10] hover:bg-[#FBF9F5]'
     }`}
     style={{ fontFamily: SANS }}

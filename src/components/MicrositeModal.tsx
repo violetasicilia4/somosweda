@@ -191,12 +191,12 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
   };
 
   const containerClass = isStandalone
-    ? "min-h-screen bg-stone-100 flex flex-col font-sans"
+    ? "min-h-dvh bg-stone-100 flex flex-col font-sans"
     : "fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-xs flex justify-center p-2 sm:p-6 animate-fade-in";
 
   const cardClass = isStandalone
-    ? "w-full max-w-5xl mx-auto bg-white min-h-screen flex flex-col shadow-xl border-x border-gray-200"
-    : "relative bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden my-auto border border-gray-100 flex flex-col max-h-[92vh]";
+    ? "w-full max-w-5xl mx-auto bg-white min-h-dvh flex flex-col shadow-xl border-x border-gray-200"
+    : "relative bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden my-auto border border-gray-100 flex flex-col max-h-[92dvh]";
 
   return (
     <div className={containerClass}>
@@ -237,7 +237,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
 
             <button
               onClick={onClose}
-              className="text-gray-300 hover:text-white p-1 rounded-md hover:bg-white/10 transition-colors cursor-pointer"
+              className="text-gray-300 hover:text-white w-11 h-11 -mr-2.5 flex items-center justify-center rounded-md hover:bg-white/10 transition-colors cursor-pointer"
               title={isStandalone ? "Volver al panel" : "Cerrar"}
             >
               <X className="w-5 h-5" />
@@ -360,7 +360,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                     value={rsvpName}
                     onChange={(e) => setRsvpName(e.target.value)}
                     placeholder="Ej. Camila Rodriguez"
-                    className="w-full px-3.5 py-2 border border-gray-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-gray-900/10"
+                    className="w-full px-3.5 h-11 border border-gray-300 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-gray-900/10"
                   />
                 </div>
 
@@ -372,7 +372,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                     <select
                       value={rsvpAttending}
                       onChange={(e) => setRsvpAttending(e.target.value as 'yes' | 'no')}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:outline-none"
+                      className="w-full px-3 h-11 border border-gray-300 rounded-lg text-base focus:outline-none"
                     >
                       <option value="yes">¡Sí, ahí estaré!</option>
                       <option value="no">No podré asistir</option>
@@ -389,7 +389,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                       max={4}
                       value={rsvpGuestsCount}
                       onChange={(e) => setRsvpGuestsCount(Number(e.target.value))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:outline-none"
+                      className="w-full px-3 h-11 border border-gray-300 rounded-lg text-base focus:outline-none"
                     />
                   </div>
                 </div>
@@ -403,13 +403,13 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                     value={rsvpDiet}
                     onChange={(e) => setRsvpDiet(e.target.value)}
                     placeholder="Ninguna / Celíaco / Vegetariano"
-                    className="w-full px-3.5 py-2 border border-gray-300 rounded-lg text-xs"
+                    className="w-full px-3.5 h-11 border border-gray-300 rounded-lg text-base"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="uppercase w-full py-3 bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-normal rounded-lg text-xs sm:text-xs transition-all shadow-xs cursor-pointer mt-2"
+                  className="uppercase w-full h-11 bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-normal rounded-lg text-xs transition-all shadow-xs cursor-pointer mt-2"
                 >
                   Enviar confirmación
                 </button>
@@ -430,7 +430,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
               <button
                 type="button"
                 onClick={handleGoToGifts}
-                className="uppercase mt-5 inline-flex items-center gap-2 px-6 py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal transition-all cursor-pointer shadow-xs"
+                className="uppercase mt-5 inline-flex items-center gap-2 px-6 h-11 bg-gray-900 hover:bg-black text-white rounded-xl text-xs font-normal transition-all cursor-pointer shadow-xs"
               >
                 <Gift className="w-4 h-4" />
                 Ver lista de regalos
@@ -479,7 +479,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                   </div>
                   <button
                     onClick={handleCopyAlias}
-                    className="p-1.5 hover:bg-gray-100 rounded-md text-gray-600 transition-colors cursor-pointer"
+                    className="w-11 h-11 -my-1.5 -mr-1.5 flex items-center justify-center hover:bg-gray-100 rounded-md text-gray-600 transition-colors cursor-pointer"
                     title="Copiar alias"
                   >
                     {copiedAlias ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
@@ -516,7 +516,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                         <button
                           type="button"
                           onClick={() => handleAddToCart(gift)}
-                          className={`uppercase w-full py-2 rounded-lg text-xs font-normal transition-all cursor-pointer shadow-xs ${ cartItems.some(g => g.id === gift.id) ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100' : 'bg-gray-900 text-white hover:bg-black' }`}
+                          className={`uppercase w-full h-11 rounded-lg text-xs font-normal transition-all cursor-pointer shadow-xs ${ cartItems.some(g => g.id === gift.id) ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100' : 'bg-gray-900 text-white hover:bg-black' }`}
                         >
                           {cartItems.some(g => g.id === gift.id) ? 'En tu carrito ✓' : 'Regalá'}
                         </button>
@@ -536,7 +536,8 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
           <button
             type="button"
             onClick={() => setIsCartModalOpen(true)}
-            className="uppercase fixed bottom-5 right-5 z-50 flex items-center gap-2 bg-gray-900 hover:bg-black text-white pl-4 pr-3 py-3 rounded-full shadow-xl text-xs font-normal transition-all cursor-pointer animate-fade-in"
+            style={{ bottom: 'max(1.25rem, calc(env(safe-area-inset-bottom) + 0.75rem))' }}
+            className="uppercase fixed right-5 z-50 flex items-center gap-2 h-12 bg-gray-900 hover:bg-black text-white pl-4 pr-3 rounded-full shadow-xl text-xs font-normal transition-all cursor-pointer animate-fade-in"
           >
             <Gift className="w-4 h-4" />
             Tu carrito de regalos
@@ -549,7 +550,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
         {/* Modal for contributing to gifts: cart summary + 4-step wizard */}
         {isCartModalOpen && cartItems.length > 0 && (
           <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100 max-h-[92vh] overflow-y-auto animate-fade-in">
+            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100 max-h-[92dvh] overflow-y-auto animate-fade-in">
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full w-fit mb-1">
@@ -568,7 +569,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                 </div>
                 <button
                   onClick={handleCloseCartModal}
-                  className="text-gray-400 hover:text-gray-600 p-1"
+                  className="text-gray-400 hover:text-gray-600 w-11 h-11 -m-2.5 -mr-1 flex items-center justify-center shrink-0"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -626,7 +627,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setIsCartModalOpen(false)}
-                    className="uppercase w-full py-2.5 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 cursor-pointer"
+                    className="uppercase w-full h-11 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 cursor-pointer"
                   >
                     + Agregar otro regalo
                   </button>
@@ -634,7 +635,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setGiftFlowStep('how')}
-                    className="uppercase w-full py-3 bg-gray-900 hover:bg-black text-white font-normal rounded-xl text-xs transition-all shadow-xs cursor-pointer"
+                    className="uppercase w-full h-11 bg-gray-900 hover:bg-black text-white font-normal rounded-xl text-xs transition-all shadow-xs cursor-pointer"
                   >
                     Continuar
                   </button>
@@ -698,7 +699,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                       <button
                         type="button"
                         onClick={() => setGiftFlowStep('cart')}
-                        className="uppercase w-full py-2.5 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 cursor-pointer"
+                        className="uppercase w-full h-11 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 cursor-pointer"
                       >
                         Volver
                       </button>
@@ -720,7 +721,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                           value={giverName}
                           onChange={(e) => setGiverName(e.target.value)}
                           placeholder="Ej: Familia Morales / Lucas y Flor"
-                          className="w-full px-3.5 py-2 border border-gray-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                          className="w-full px-3.5 h-11 border border-gray-300 rounded-lg text-base focus:outline-none focus:ring-1 focus:ring-gray-900"
                         />
                       </div>
 
@@ -733,7 +734,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                           value={giverEmail}
                           onChange={(e) => setGiverEmail(e.target.value)}
                           placeholder="tuemail@ejemplo.com"
-                          className="w-full px-3.5 py-2 border border-gray-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                          className="w-full px-3.5 h-11 border border-gray-300 rounded-lg text-base focus:outline-none focus:ring-1 focus:ring-gray-900"
                         />
                       </div>
 
@@ -746,7 +747,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                           value={dedicationMessage}
                           onChange={(e) => setDedicationMessage(e.target.value)}
                           placeholder="¡Les deseamos toda la felicidad del mundo en esta nueva etapa!..."
-                          className="w-full px-3.5 py-2 border border-gray-300 rounded-lg text-xs leading-relaxed focus:outline-none focus:ring-1 focus:ring-gray-900"
+                          className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-base leading-relaxed focus:outline-none focus:ring-1 focus:ring-gray-900"
                         />
                       </div>
 
@@ -765,7 +766,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                           value={contributionAmount}
                           onChange={(e) => setContributionAmount(e.target.value)}
                           disabled={giftShareMode === 'solo'}
-                          className="w-full px-3.5 py-2 border border-gray-300 rounded-lg text-sm font-bold text-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 disabled:bg-gray-50 disabled:text-gray-500"
+                          className="w-full px-3.5 h-11 border border-gray-300 rounded-lg text-base font-bold text-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 disabled:bg-gray-50 disabled:text-gray-500"
                         />
                         {giftShareMode === 'compartido' && (
                           <p className="text-[10px] text-gray-400 mt-1">
@@ -817,13 +818,13 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                         <button
                           type="button"
                           onClick={() => setGiftFlowStep('how')}
-                          className="uppercase flex-1 py-2.5 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 cursor-pointer"
+                          className="uppercase flex-1 h-11 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 cursor-pointer"
                         >
                           Volver
                         </button>
                         <button
                           type="submit"
-                          className="uppercase flex-1 py-2.5 bg-gray-900 hover:bg-black text-white font-normal rounded-lg text-xs cursor-pointer"
+                          className="uppercase flex-1 h-11 bg-gray-900 hover:bg-black text-white font-normal rounded-lg text-xs cursor-pointer"
                         >
                           Siguiente
                         </button>
@@ -873,14 +874,14 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                         <button
                           type="button"
                           onClick={() => setGiftFlowStep('data')}
-                          className="uppercase flex-1 py-2.5 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 cursor-pointer"
+                          className="uppercase flex-1 h-11 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 cursor-pointer"
                         >
                           Volver
                         </button>
                         <button
                           type="button"
                           onClick={() => setGiftFlowStep('payment')}
-                          className="uppercase flex-1 py-2.5 bg-gray-900 hover:bg-black text-white font-normal rounded-lg text-xs cursor-pointer"
+                          className="uppercase flex-1 h-11 bg-gray-900 hover:bg-black text-white font-normal rounded-lg text-xs cursor-pointer"
                         >
                           Confirmar y pagar
                         </button>
@@ -911,7 +912,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                             <button
                               type="button"
                               onClick={handleCopyAlias}
-                              className="uppercase px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-[11px] font-normal text-gray-700 cursor-pointer"
+                              className="uppercase px-3 min-h-11 flex items-center bg-gray-100 hover:bg-gray-200 rounded text-[11px] font-normal text-gray-700 cursor-pointer shrink-0"
                             >
                               {copiedAlias ? 'Copiado!' : 'Copiar'}
                             </button>
@@ -925,7 +926,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                             <button
                               type="button"
                               onClick={handleCopyCbu}
-                              className="uppercase px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-[11px] font-normal text-gray-700 cursor-pointer shrink-0"
+                              className="uppercase px-3 min-h-11 flex items-center bg-gray-100 hover:bg-gray-200 rounded text-[11px] font-normal text-gray-700 cursor-pointer shrink-0"
                             >
                               {copiedCbu ? 'Copiado!' : 'Copiar'}
                             </button>
@@ -1003,7 +1004,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                         <button
                           type="button"
                           onClick={() => setGiftFlowStep('confirm')}
-                          className="uppercase flex-1 py-2.5 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 cursor-pointer"
+                          className="uppercase flex-1 h-11 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 cursor-pointer"
                         >
                           Volver
                         </button>
@@ -1011,7 +1012,7 @@ export const MicrositeModal: React.FC<MicrositeModalProps> = ({
                           type="button"
                           onClick={handleConfirmPayment}
                           disabled={isProcessingMp}
-                          className="uppercase flex-[2] py-3 bg-gray-900 hover:bg-black text-white font-normal rounded-xl text-xs sm:text-xs transition-all shadow-xs cursor-pointer disabled:opacity-50"
+                          className="uppercase flex-[2] min-h-11 py-2 bg-gray-900 hover:bg-black text-white font-normal rounded-xl text-xs transition-all shadow-xs cursor-pointer disabled:opacity-50 flex items-center justify-center text-center leading-snug"
                         >
                           {isProcessingMp
                             ? 'Confirmando con Mercado Pago...'

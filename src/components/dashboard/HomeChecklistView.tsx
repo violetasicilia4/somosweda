@@ -244,7 +244,7 @@ export const HomeChecklistView: React.FC<HomeChecklistViewProps> = ({
           <button
             type="button"
             onClick={() => onGoTo('cuenta', 'plan')}
-            className="uppercase px-3.5 py-2 border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-normal rounded-2xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+            className="uppercase px-3.5 min-h-11 border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-normal rounded-2xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
           >
             <span>Cambiar plan</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -253,7 +253,7 @@ export const HomeChecklistView: React.FC<HomeChecklistViewProps> = ({
             <button
               type="button"
               onClick={onPublish}
-              className="uppercase px-3.5 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-2xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+              className="uppercase px-3.5 min-h-11 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-2xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
             >
               <CreditCard className="w-3.5 h-3.5" />
               <span>Pagar y publicar</span>
@@ -299,7 +299,7 @@ export const HomeChecklistView: React.FC<HomeChecklistViewProps> = ({
               <button
                 type="button"
                 onClick={onOpenSite}
-                className="uppercase px-3.5 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-2xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+                className="uppercase px-3.5 min-h-11 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-2xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
                 <span>{isEventPlan ? 'Ver tu sitio' : 'Ver tu lista'}</span>
@@ -307,7 +307,7 @@ export const HomeChecklistView: React.FC<HomeChecklistViewProps> = ({
               <button
                 type="button"
                 onClick={handleCopy}
-                className="uppercase px-3.5 py-2 border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-normal rounded-2xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+                className="uppercase px-3.5 min-h-11 border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-normal rounded-2xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
               >
                 {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                 <span>{copied ? 'Enlace copiado' : 'Copiar enlace'}</span>
@@ -367,7 +367,7 @@ export const HomeChecklistView: React.FC<HomeChecklistViewProps> = ({
                 type="button"
                 disabled={step.status === 'blocked'}
                 onClick={step.action}
-                className={`uppercase shrink-0 px-3.5 py-2 text-xs font-normal rounded-2xl transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
+                className={`uppercase shrink-0 px-3.5 min-h-11 text-xs font-normal rounded-2xl transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   isNext
                     ? 'bg-gray-900 hover:bg-black text-white'
                     : 'border border-gray-200 hover:bg-gray-50 text-gray-700'
@@ -404,7 +404,7 @@ export const HomeChecklistView: React.FC<HomeChecklistViewProps> = ({
               <button
                 type="button"
                 onClick={x.action}
-                className="uppercase shrink-0 px-3 py-1.5 text-xs font-normal rounded-2xl border border-gray-200 hover:bg-gray-50 text-gray-600 cursor-pointer transition-colors"
+                className="uppercase shrink-0 px-3 min-h-11 text-xs font-normal rounded-2xl border border-gray-200 hover:bg-gray-50 text-gray-600 cursor-pointer transition-colors"
               >
                 {x.cta}
               </button>
@@ -425,7 +425,7 @@ export const HomeChecklistView: React.FC<HomeChecklistViewProps> = ({
             <button
               type="button"
               onClick={nextStep.action}
-              className="uppercase shrink-0 px-3.5 py-2 bg-white text-gray-900 hover:bg-gray-100 text-xs font-normal rounded-2xl cursor-pointer transition-colors"
+              className="uppercase shrink-0 px-3.5 min-h-11 bg-white text-gray-900 hover:bg-gray-100 text-xs font-normal rounded-2xl cursor-pointer transition-colors"
             >
               {nextStep.cta} →
             </button>

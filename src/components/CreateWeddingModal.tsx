@@ -64,7 +64,7 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
   };
 
   return (
-    <div className="min-h-[calc(100vh-45px)] bg-gray-50 flex flex-col justify-center items-center px-4 py-10 font-sans">
+    <div className="min-h-dvh bg-gray-50 flex flex-col justify-center items-center px-4 py-8 sm:py-10 font-sans">
       {/* Container Box */}
       <div className="w-full max-w-xl bg-white border border-gray-200 p-6 sm:p-10">
         {/* Brand header */}
@@ -98,7 +98,7 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
                 value={coupleName}
                 onChange={(e) => setCoupleName(e.target.value)}
                 placeholder="Nombre 1 & Nombre 2"
-                className="w-full pl-10 pr-3.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900 font-medium"
+                className="w-full pl-10 pr-3.5 h-11 bg-white border border-[#F1F1EF] rounded-lg text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900 font-medium"
               />
             </div>
           </div>
@@ -118,7 +118,7 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
                 required
                 value={weddingDate}
                 onChange={(e) => setWeddingDate(e.target.value)}
-                className="w-full pl-10 pr-3.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                className="w-full pl-10 pr-3.5 h-11 bg-white border border-[#F1F1EF] rounded-lg text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
               />
             </div>
           </div>
@@ -158,7 +158,7 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
             <button
               type="button"
               onClick={handleUploadClick}
-              className="uppercase w-full py-2 border border-dashed border-gray-300 hover:border-gray-400 hover:bg-gray-50 rounded-lg text-xs font-normal text-gray-600 inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+              className="uppercase w-full h-11 border border-dashed border-gray-300 hover:border-gray-400 hover:bg-gray-50 rounded-lg text-xs font-normal text-gray-600 inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
             >
               <Upload className="w-3.5 h-3.5 text-gray-400" />
               <span>Subir tu propia foto</span>
@@ -168,7 +168,7 @@ export const CreateWeddingModal: React.FC<CreateWeddingModalProps> = ({
           <button
             id="create-wedding-btn"
             type="submit"
-            className="uppercase w-full h-[41px] bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[12px] transition-all shadow-xs cursor-pointer mt-4"
+            className="uppercase w-full h-11 bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[13px] transition-all shadow-xs cursor-pointer mt-4"
           >
             {isEventPlan ? 'Crear mi evento' : 'Crear mi lista'}
           </button>

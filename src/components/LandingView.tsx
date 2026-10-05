@@ -31,7 +31,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
     'hidden md:inline text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] hover:opacity-70 transition-opacity cursor-pointer';
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-dvh flex flex-col">
       <div>
         <div className="bg-[#F7F1E4] text-[#2A2318]">
           {/* Navigation Header */}
@@ -42,13 +42,13 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
               </div>
 
               <div className="flex items-center gap-5 sm:gap-7">
-                <button type="button" onClick={() => onNavigate('find-couple')} className={navLink} style={{ fontFamily: SANS }}>
+                <button type="button" onClick={() => onNavigate('find-couple')} className={`${navLink} min-h-11 flex items-center`} style={{ fontFamily: SANS }}>
                   Encontrá a una pareja
                 </button>
                 <button
                   id="landing-header-login-btn"
                   onClick={() => onNavigate('login')}
-                  className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] hover:opacity-70 transition-opacity cursor-pointer"
+                  className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] hover:opacity-70 transition-opacity cursor-pointer min-h-11 flex items-center"
                   style={{ fontFamily: SANS }}
                 >
                   Iniciar sesión
@@ -56,7 +56,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
                 <button
                   id="landing-header-create-btn"
                   onClick={onCreate}
-                  className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] bg-white border border-[#2A2318]/40 px-5 py-2.5 hover:bg-[#F7F1E4] transition-colors cursor-pointer"
+                  className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] bg-white border border-[#2A2318]/40 px-5 min-h-11 flex items-center hover:bg-[#F7F1E4] transition-colors cursor-pointer"
                   style={{ fontFamily: SANS }}
                 >
                   Crear mi evento
@@ -95,7 +95,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
                 <button
                   id="hero-create-list-btn"
                   onClick={onCreate}
-                  className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] bg-[#F7F1E4] px-6 py-3 hover:bg-white transition-colors cursor-pointer"
+                  className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] bg-[#F7F1E4] px-6 min-h-11 flex items-center hover:bg-white transition-colors cursor-pointer"
                   style={{ fontFamily: SANS }}
                 >
                   Crear mi evento
@@ -103,7 +103,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
                 <button
                   id="hero-view-example-btn"
                   onClick={() => onOpenExample('gifts')}
-                  className="text-[12px] font-normal leading-normal uppercase border border-white/70 text-[#F5F0EA] px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer"
+                  className="text-[12px] font-normal leading-normal uppercase border border-white/70 text-[#F5F0EA] px-6 min-h-11 flex items-center hover:bg-white/10 transition-colors cursor-pointer"
                   style={{ fontFamily: SANS }}
                 >
                   Ver ejemplo
@@ -154,7 +154,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate, onOpenExam
                 <button
                   id="cta-create-list-bottom"
                   onClick={onCreate}
-                  className="text-xs uppercase font-normal border border-white/70 text-white px-6 py-3 hover:bg-white/10 transition-colors cursor-pointer"
+                  className="text-xs uppercase font-normal border border-white/70 text-white px-6 min-h-11 flex items-center hover:bg-white/10 transition-colors cursor-pointer"
                 >
                   Crear mi evento
                 </button>

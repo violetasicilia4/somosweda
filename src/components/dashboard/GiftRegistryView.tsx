@@ -379,7 +379,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   <button
                     type="button"
                     onClick={() => setViewMode('todos')}
-                    className={`px-3.5 py-2 rounded-lg text-xs font-normal uppercase transition-all cursor-pointer inline-flex items-center gap-1.5 ${
+                    className={`px-3.5 min-h-11 rounded-lg text-xs font-normal uppercase transition-all cursor-pointer inline-flex items-center gap-1.5 ${
                       viewMode === 'todos' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-500 hover:text-gray-800'
                     }`}
                   >
@@ -389,7 +389,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   <button
                     type="button"
                     onClick={() => setViewMode('categorias')}
-                    className={`px-3.5 py-2 rounded-lg text-xs font-normal uppercase transition-all cursor-pointer inline-flex items-center gap-1.5 ${
+                    className={`px-3.5 min-h-11 rounded-lg text-xs font-normal uppercase transition-all cursor-pointer inline-flex items-center gap-1.5 ${
                       viewMode === 'categorias' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-500 hover:text-gray-800'
                     }`}
                   >
@@ -405,7 +405,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Buscar un regalo..."
-                    className="w-full pl-9 pr-3 py-2.5 bg-white border border-gray-200 rounded-xl text-xs text-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+                    className="w-full pl-9 pr-3 h-11 bg-white border border-gray-200 rounded-xl text-base text-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
                   />
                 </label>
               </div>
@@ -470,7 +470,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                           <button
                             type="button"
                             onClick={() => handleRemoveAllInCategory(selectedCategory)}
-                            className="uppercase text-xs font-normal text-emerald-700 hover:text-rose-600 border border-emerald-200 hover:border-rose-200 hover:bg-rose-50 rounded-xl px-3 py-1.5 inline-flex items-center gap-1.5 cursor-pointer transition-colors shrink-0"
+                            className="uppercase text-xs font-normal text-emerald-700 hover:text-rose-600 border border-emerald-200 hover:border-rose-200 hover:bg-rose-50 rounded-xl px-3 min-h-11 inline-flex items-center gap-1.5 cursor-pointer transition-colors shrink-0"
                           >
                             <CheckCheck className="w-3.5 h-3.5" />
                             <span>Quitar todos</span>
@@ -479,7 +479,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                           <button
                             type="button"
                             onClick={() => handleAddAllInCategory(selectedCategory)}
-                            className="uppercase text-xs font-normal text-gray-700 hover:text-gray-900 border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-xl px-3 py-1.5 inline-flex items-center gap-1.5 cursor-pointer transition-colors shrink-0"
+                            className="uppercase text-xs font-normal text-gray-700 hover:text-gray-900 border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-xl px-3 min-h-11 inline-flex items-center gap-1.5 cursor-pointer transition-colors shrink-0"
                           >
                             <CheckCheck className="w-3.5 h-3.5 text-gray-400" />
                             <span>Agregar todos</span>
@@ -489,7 +489,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                       <button
                         type="button"
                         onClick={handleOpenCustomGift}
-                        className="uppercase text-xs font-normal text-gray-700 hover:text-gray-900 border border-dashed border-gray-300 hover:border-gray-400 hover:bg-gray-50 rounded-xl px-3 py-1.5 inline-flex items-center gap-1.5 cursor-pointer transition-colors shrink-0"
+                        className="uppercase text-xs font-normal text-gray-700 hover:text-gray-900 border border-dashed border-gray-300 hover:border-gray-400 hover:bg-gray-50 rounded-xl px-3 min-h-11 inline-flex items-center gap-1.5 cursor-pointer transition-colors shrink-0"
                       >
                         <Plus className="w-3.5 h-3.5 text-gray-400" />
                         <span>Crear regalo</span>
@@ -586,7 +586,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
       {/* ========================================================================= */}
       {isCustomGiftOpen && (
         <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-[32px] max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 space-y-6 animate-fade-in max-h-[92vh] overflow-y-auto">
+          <div className="bg-white rounded-[32px] max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 space-y-6 animate-fade-in max-h-[92dvh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-gray-100 pb-3">
               <div>
                 <h3 className="text-lg font-bold text-gray-900">Crear regalo</h3>
@@ -595,7 +595,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
               <button
                 type="button"
                 onClick={() => setIsCustomGiftOpen(false)}
-                className="p-1.5 rounded-xl hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                className="w-11 h-11 -m-2.5 flex items-center justify-center rounded-xl hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -611,7 +611,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   value={customTitle}
                   onChange={(e) => setCustomTitle(e.target.value)}
                   placeholder="ej: Cafetera espresso o Pasajes para nuestra luna de miel"
-                  className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-semibold text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900"
+                  className="w-full px-3.5 h-11 bg-gray-50 border border-gray-200 rounded-2xl text-base font-semibold text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900"
                   required
                 />
               </div>
@@ -625,7 +625,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   value={customDesc}
                   onChange={(e) => setCustomDesc(e.target.value)}
                   placeholder="ej: Para compartir los desayunos de cada mañana juntos."
-                  className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-2xl text-xs text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900"
+                  className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-2xl text-base text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900"
                 />
               </div>
 
@@ -637,7 +637,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   <select
                     value={customCategory}
                     onChange={(e) => setCustomCategory(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-2xl text-xs text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900 font-medium"
+                    className="w-full px-3.5 h-11 bg-gray-50 border border-gray-200 rounded-2xl text-base text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900 font-medium"
                   >
                     {REGISTRY_CATEGORIES.map((c) => (
                       <option key={c.id} value={c.name}>{c.name}</option>
@@ -654,7 +654,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                     value={customPrice}
                     onChange={(e) => setCustomPrice(e.target.value)}
                     placeholder="75000"
-                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-semibold text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900"
+                    className="w-full px-3.5 h-11 bg-gray-50 border border-gray-200 rounded-2xl text-base font-semibold text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900"
                     required
                   />
                 </div>
@@ -668,7 +668,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   type="url"
                   value={customImage}
                   onChange={(e) => setCustomImage(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-gray-50 border border-gray-200 rounded-2xl text-xs text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900 font-mono"
+                  className="w-full px-3.5 h-11 bg-gray-50 border border-gray-200 rounded-2xl text-base text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900 font-mono"
                 />
               </div>
 
@@ -676,13 +676,13 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsCustomGiftOpen(false)}
-                  className="uppercase px-4 py-2 text-xs font-normal text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
+                  className="uppercase px-4 min-h-11 text-xs font-normal text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="uppercase px-5 py-2.5 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal transition-all shadow-xs cursor-pointer"
+                  className="uppercase px-5 min-h-11 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal transition-all shadow-xs cursor-pointer"
                 >
                   Agregar a mi lista
                 </button>
@@ -697,7 +697,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
       {/* ========================================================================= */}
       {editingGift && (
         <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-[32px] max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 space-y-6 animate-fade-in max-h-[92vh] overflow-y-auto">
+          <div className="bg-white rounded-[32px] max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 space-y-6 animate-fade-in max-h-[92dvh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-gray-100 pb-3">
               <div>
                 <h3 className="text-lg font-bold text-gray-900">Editar regalo</h3>
@@ -706,7 +706,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
               <button
                 type="button"
                 onClick={() => setEditingGift(null)}
-                className="p-1.5 rounded-xl hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                className="w-11 h-11 -m-2.5 flex items-center justify-center rounded-xl hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -721,7 +721,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   type="text"
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-semibold text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900"
+                  className="w-full px-3.5 h-11 bg-gray-50 border border-gray-200 rounded-2xl text-base font-semibold text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900"
                   required
                 />
               </div>
@@ -734,7 +734,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   rows={2}
                   value={editDesc}
                   onChange={(e) => setEditDesc(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-2xl text-xs text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900"
+                  className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-2xl text-base text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900"
                 />
               </div>
 
@@ -746,7 +746,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   <select
                     value={editCategory}
                     onChange={(e) => setEditCategory(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-2xl text-xs text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900 font-medium"
+                    className="w-full px-3.5 h-11 bg-gray-50 border border-gray-200 rounded-2xl text-base text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900 font-medium"
                   >
                     {REGISTRY_CATEGORIES.map((c) => (
                       <option key={c.id} value={c.name}>{c.name}</option>
@@ -762,7 +762,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                     type="number"
                     value={editPrice}
                     onChange={(e) => setEditPrice(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-semibold text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900"
+                    className="w-full px-3.5 h-11 bg-gray-50 border border-gray-200 rounded-2xl text-base font-semibold text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900"
                     required
                   />
                 </div>
@@ -776,7 +776,7 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                   type="url"
                   value={editImage}
                   onChange={(e) => setEditImage(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-gray-50 border border-gray-200 rounded-2xl text-xs text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900 font-mono"
+                  className="w-full px-3.5 h-11 bg-gray-50 border border-gray-200 rounded-2xl text-base text-gray-900 focus:bg-white focus:outline-hidden focus:border-gray-900 font-mono"
                 />
               </div>
 
@@ -784,13 +784,13 @@ export const GiftRegistryView: React.FC<GiftRegistryViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setEditingGift(null)}
-                  className="uppercase px-4 py-2 text-xs font-normal text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
+                  className="uppercase px-4 min-h-11 text-xs font-normal text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="uppercase px-5 py-2.5 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal transition-all shadow-xs cursor-pointer"
+                  className="uppercase px-5 min-h-11 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal transition-all shadow-xs cursor-pointer"
                 >
                   Guardar cambios
                 </button>

@@ -88,7 +88,7 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
   });
 
   const pillMobile = (active: boolean) =>
-    `shrink-0 whitespace-nowrap rounded-full px-3 h-8 text-[12px] border cursor-pointer ${
+    `shrink-0 whitespace-nowrap rounded-full px-3 h-11 flex items-center text-[12px] border cursor-pointer ${
       active ? 'bg-[#16283D] text-white border-[#16283D]' : 'bg-white text-[#3C5068] border-[#E2E9F0]'
     }`;
 
@@ -138,21 +138,21 @@ export const ExampleGifts: React.FC<ExampleGiftsProps> = ({ onNavigate }) => {
           ))}
         </div>
         <div className="flex items-center gap-2">
-          <label className="flex-1 flex items-center bg-white border border-[#E2E9F0] rounded-full h-10 px-3 gap-2 min-w-0">
+          <label className="flex-1 flex items-center bg-white border border-[#E2E9F0] rounded-full h-11 px-3 gap-2 min-w-0">
             <Search className="text-[#7389A0] w-4 h-4 shrink-0" strokeWidth={2} />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Buscar regalo..."
-              className="bg-transparent outline-none w-full min-w-0 text-[13px] text-[#3C5068] placeholder:text-[#7389A0]"
+              className="bg-transparent outline-none w-full min-w-0 text-base text-[#3C5068] placeholder:text-[#7389A0]"
               style={{ fontFamily: SANS }}
             />
           </label>
-          <div className="relative flex items-center bg-white border border-[#E2E9F0] rounded-full h-10 shrink-0">
+          <div className="relative flex items-center bg-white border border-[#E2E9F0] rounded-full h-11 shrink-0">
             <select
               value={rangeId}
               onChange={(e) => setRangeId(e.target.value)}
-              className="appearance-none bg-transparent outline-none h-full cursor-pointer text-[13px] text-[#3C5068] pl-3 pr-7 rounded-full"
+              className="appearance-none bg-transparent outline-none h-full cursor-pointer text-base text-[#3C5068] pl-3 pr-7 rounded-full"
               style={{ fontFamily: SANS }}
             >
               {priceRanges.map((r) => (

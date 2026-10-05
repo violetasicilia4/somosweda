@@ -96,9 +96,9 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
   };
 
   return (
-    <div className="min-h-[calc(100vh-45px)] bg-gray-50 flex flex-col justify-center items-center px-4 py-12">
+    <div className="min-h-dvh bg-gray-50 flex flex-col justify-center items-center px-4 py-8 sm:py-12">
       {/* Centered Auth Box matching screenshots */}
-      <div className="w-full max-w-md bg-white border border-gray-200 p-8 sm:p-10 transition-all">
+      <div className="w-full max-w-md bg-white border border-gray-200 p-6 sm:p-10 transition-all">
         {/* Brand header */}
         <div className="text-center mb-6">
           <Wordmark onClick={() => onNavigate('landing')} className="hover:opacity-85 transition-opacity" />
@@ -136,7 +136,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="tu@email.com"
-                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-3 h-11 bg-white border border-[#F1F1EF] rounded-lg text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
@@ -160,14 +160,14 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Tu contraseña"
-                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-3 h-11 bg-white border border-[#F1F1EF] rounded-lg text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
               <button
                 id="login-submit-btn"
                 type="submit"
-                className="uppercase w-full h-[41px] bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[12px] transition-all shadow-xs cursor-pointer mt-2"
+                className="uppercase w-full h-11 bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[13px] transition-all shadow-xs cursor-pointer mt-2"
               >
                 Iniciar sesión
               </button>
@@ -189,7 +189,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   onAuthSuccess({ name: 'Milagros', email: 'milagros@gmail.com' });
                   onNavigate('dashboard');
                 }}
-                className="uppercase w-full py-2.5 px-4 border border-gray-300 rounded-lg text-xs sm:text-xs font-normal text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                className="uppercase w-full h-11 px-4 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -206,7 +206,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   onAuthSuccess({ name: 'Juan', email: 'juan@icloud.com' });
                   onNavigate('dashboard');
                 }}
-                className="uppercase w-full py-2.5 px-4 border border-gray-300 rounded-lg text-xs sm:text-xs font-normal text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                className="uppercase w-full h-11 px-4 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
                 <svg className="w-4 h-4 fill-current text-gray-900" viewBox="0 0 170 170">
                   <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.66-7.79-11.88-14.24-5.35-8.24-9.64-17.65-12.87-28.23-3.23-10.59-4.85-20.73-4.85-30.43 0-14.65 3.82-26.68 11.45-36.08 7.64-9.4 17.06-14.2 28.27-14.41 5.37 0 11.16 1.41 17.37 4.23 6.22 2.82 10.15 4.34 11.8 4.54 1.34-.2 5.48-1.78 12.42-4.75 6.94-2.97 12.75-4.26 17.43-3.87 13.06 1.06 23.36 5.8 30.9 14.22-11.4 6.89-16.92 16.3-16.56 28.24.36 9.4 4.09 17.27 11.2 23.6 7.11 6.33 15.42 9.94 24.93 10.82-2.18 6.78-4.99 13.79-8.45 21.03zM119.22 33.15c0-7.39 2.66-14.33 7.98-20.82 5.33-6.49 12-10.89 20.02-13.2 1.05 7.84-.79 15.18-5.51 22.01-4.72 6.84-11.39 11.1-20.01 12.78-.71-.26-1.54-.48-2.48-.77z"/>
@@ -248,7 +248,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="Nombre y apellido"
-                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-3 h-11 bg-white border border-[#F1F1EF] rounded-lg text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
@@ -263,7 +263,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="tu@email.com"
-                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-3 h-11 bg-white border border-[#F1F1EF] rounded-lg text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
@@ -278,7 +278,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Creá una contraseña segura"
-                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-3 h-11 bg-white border border-[#F1F1EF] rounded-lg text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
@@ -293,7 +293,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Repetí tu contraseña"
-                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-3 h-11 bg-white border border-[#F1F1EF] rounded-lg text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
@@ -313,7 +313,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
               <button
                 id="register-submit-btn"
                 type="submit"
-                className="uppercase w-full h-[41px] bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[12px] transition-all shadow-xs cursor-pointer mt-2"
+                className="uppercase w-full h-11 bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[13px] transition-all shadow-xs cursor-pointer mt-2"
               >
                 Crear cuenta
               </button>
@@ -335,7 +335,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   onAuthSuccess({ name: 'Milagros', email: 'milagros@gmail.com' });
                   onNavigate('choose-plan');
                 }}
-                className="uppercase w-full py-2.5 px-4 border border-gray-300 rounded-lg text-xs sm:text-xs font-normal text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                className="uppercase w-full h-11 px-4 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -352,7 +352,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   onAuthSuccess({ name: 'Milagros', email: 'milagros@icloud.com' });
                   onNavigate('choose-plan');
                 }}
-                className="uppercase w-full py-2.5 px-4 border border-gray-300 rounded-lg text-xs sm:text-xs font-normal text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                className="uppercase w-full h-11 px-4 border border-gray-300 rounded-lg text-xs font-normal text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
                 <svg className="w-4 h-4 fill-current text-gray-900" viewBox="0 0 170 170">
                   <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.66-7.79-11.88-14.24-5.35-8.24-9.64-17.65-12.87-28.23-3.23-10.59-4.85-20.73-4.85-30.43 0-14.65 3.82-26.68 11.45-36.08 7.64-9.4 17.06-14.2 28.27-14.41 5.37 0 11.16 1.41 17.37 4.23 6.22 2.82 10.15 4.34 11.8 4.54 1.34-.2 5.48-1.78 12.42-4.75 6.94-2.97 12.75-4.26 17.43-3.87 13.06 1.06 23.36 5.8 30.9 14.22-11.4 6.89-16.92 16.3-16.56 28.24.36 9.4 4.09 17.27 11.2 23.6 7.11 6.33 15.42 9.94 24.93 10.82-2.18 6.78-4.99 13.79-8.45 21.03zM119.22 33.15c0-7.39 2.66-14.33 7.98-20.82 5.33-6.49 12-10.89 20.02-13.2 1.05 7.84-.79 15.18-5.51 22.01-4.72 6.84-11.39 11.1-20.01 12.78-.71-.26-1.54-.48-2.48-.77z"/>
@@ -396,14 +396,14 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="tu@email.com"
-                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-3 h-11 bg-white border border-[#F1F1EF] rounded-lg text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
               <button
                 id="forgot-submit-btn"
                 type="submit"
-                className="uppercase w-full h-[41px] bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[12px] transition-all shadow-xs cursor-pointer mt-2"
+                className="uppercase w-full h-11 bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[13px] transition-all shadow-xs cursor-pointer mt-2"
               >
                 Enviar enlace de recuperación
               </button>
@@ -440,11 +440,14 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                     key={index}
                     ref={pinRefs[index]}
                     type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete="one-time-code"
                     maxLength={1}
                     value={digit}
                     onChange={(e) => handlePinChange(index, e.target.value)}
                     onKeyDown={(e) => handlePinKeyDown(index, e)}
-                    className="w-11 h-12 text-center text-lg font-semibold text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900/15 focus:border-gray-900 transition-all"
+                    className="w-11 h-12 sm:w-12 sm:h-12 text-center text-lg font-semibold text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900/15 focus:border-gray-900 transition-all"
                   />
                 ))}
               </div>
@@ -452,7 +455,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
               <button
                 id="verify-pin-btn"
                 type="submit"
-                className="uppercase w-full h-[41px] bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[12px] transition-all shadow-xs cursor-pointer"
+                className="uppercase w-full h-11 bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[13px] transition-all shadow-xs cursor-pointer"
               >
                 Verificar código
               </button>
@@ -503,7 +506,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   type="password"
                   required
                   placeholder="Tu contraseña"
-                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-3 h-11 bg-white border border-[#F1F1EF] rounded-lg text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
@@ -516,7 +519,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
                   type="password"
                   required
                   placeholder="Tu contraseña"
-                  className="w-full px-2.5 h-[35px] bg-white border border-[#F1F1EF] rounded-lg text-[12px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
+                  className="w-full px-3 h-11 bg-white border border-[#F1F1EF] rounded-lg text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900"
                 />
               </div>
 
@@ -537,7 +540,7 @@ export const AuthViews: React.FC<AuthViewsProps> = ({ currentView, onNavigate, o
               <button
                 id="reset-password-submit-btn"
                 type="submit"
-                className="uppercase w-full h-[41px] bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[12px] transition-all shadow-xs cursor-pointer mt-2"
+                className="uppercase w-full h-11 bg-[#2D1A0E] hover:bg-[#1A0E08] text-white font-medium rounded-lg text-[13px] transition-all shadow-xs cursor-pointer mt-2"
               >
                 Guardar nueva contraseña
               </button>

@@ -87,14 +87,14 @@ export const GiftPaymentModal: React.FC<GiftPaymentModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4" onClick={onClose}>
       <div
-        className="relative bg-white w-full max-w-[600px] max-h-[92vh] overflow-y-auto rounded-sm"
+        className="relative bg-white w-full max-w-[600px] max-h-[92dvh] overflow-y-auto rounded-sm"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           type="button"
           onClick={onClose}
           aria-label="Cerrar"
-          className="absolute top-5 right-5 w-8 h-8 rounded-full border border-[#E3DDD3] flex items-center justify-center text-[#5A4A40] hover:bg-[#F6F3EC] cursor-pointer"
+          className="absolute top-3 right-3 w-11 h-11 rounded-full border border-[#E3DDD3] flex items-center justify-center text-[#5A4A40] hover:bg-[#F6F3EC] cursor-pointer"
         >
           <X className="w-4 h-4" strokeWidth={1.8} />
         </button>
@@ -181,7 +181,7 @@ export const GiftPaymentModal: React.FC<GiftPaymentModalProps> = ({
                 onChange={(e) => setDedicatoria(e.target.value)}
                 placeholder="Dedicatoria (opcional)"
                 rows={3}
-                className="w-full border border-[#E3DDD3] px-4 py-3 text-[14px] text-[#282018] outline-none resize-none placeholder:text-[#9C9086]"
+                className="w-full border border-[#E3DDD3] px-4 py-3 text-base text-[#282018] outline-none resize-none placeholder:text-[#9C9086]"
                 style={{ fontFamily: SANS }}
               />
 
@@ -189,7 +189,7 @@ export const GiftPaymentModal: React.FC<GiftPaymentModalProps> = ({
                 <span className="block text-[11px] uppercase tracking-[0.05em] text-[#9C9086] mb-1.5" style={{ fontFamily: SANS }}>
                   Tipo de pago
                 </span>
-                <div className="w-full border border-[#E3DDD3] px-4 py-3 text-[14px] text-[#282018]" style={{ fontFamily: SANS }}>
+                <div className="w-full border border-[#E3DDD3] px-4 py-3 text-base text-[#282018]" style={{ fontFamily: SANS }}>
                   Pago único
                 </div>
               </div>
@@ -198,7 +198,7 @@ export const GiftPaymentModal: React.FC<GiftPaymentModalProps> = ({
                 value={participantes}
                 onChange={(e) => setParticipantes(e.target.value)}
                 placeholder={mode === 'compartido' ? 'Nombres de los participantes' : 'Tu nombre y apellido'}
-                className="w-full border border-[#E3DDD3] px-4 py-3 text-[14px] text-[#282018] outline-none placeholder:text-[#9C9086]"
+                className="w-full border border-[#E3DDD3] px-4 py-3 text-base text-[#282018] outline-none placeholder:text-[#9C9086]"
                 style={{ fontFamily: SANS }}
               />
 
@@ -207,7 +207,7 @@ export const GiftPaymentModal: React.FC<GiftPaymentModalProps> = ({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
-                className="w-full border border-[#E3DDD3] px-4 py-3 text-[14px] text-[#282018] outline-none placeholder:text-[#9C9086]"
+                className="w-full border border-[#E3DDD3] px-4 py-3 text-base text-[#282018] outline-none placeholder:text-[#9C9086]"
                 style={{ fontFamily: SANS }}
               />
 
@@ -219,7 +219,7 @@ export const GiftPaymentModal: React.FC<GiftPaymentModalProps> = ({
                   <input
                     value={monto}
                     onChange={(e) => setMonto(e.target.value.replace(/[^0-9]/g, ''))}
-                    className="flex-1 min-w-0 px-4 py-3 text-[14px] text-[#282018] outline-none"
+                    className="flex-1 min-w-0 px-4 py-3 text-base text-[#282018] outline-none"
                     style={{ fontFamily: SANS }}
                   />
                 </div>
@@ -227,7 +227,7 @@ export const GiftPaymentModal: React.FC<GiftPaymentModalProps> = ({
                   <select
                     value={metodoPago}
                     onChange={(e) => setMetodoPago(e.target.value)}
-                    className="appearance-none w-full border border-[#E3DDD3] px-4 py-3 text-[14px] text-[#282018] outline-none cursor-pointer"
+                    className="appearance-none w-full border border-[#E3DDD3] px-4 py-3 text-base text-[#282018] outline-none cursor-pointer"
                     style={{ fontFamily: SANS }}
                   >
                     <option value="">Seleccioná un método de pago</option>
@@ -244,7 +244,7 @@ export const GiftPaymentModal: React.FC<GiftPaymentModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="flex-1 border border-[#282018] text-[#282018] uppercase text-[12px] py-3 cursor-pointer"
+                  className="flex-1 min-h-11 border border-[#282018] text-[#282018] uppercase text-[12px] cursor-pointer"
                   style={{ fontFamily: SANS }}
                 >
                   Volver
@@ -253,7 +253,7 @@ export const GiftPaymentModal: React.FC<GiftPaymentModalProps> = ({
                   type="button"
                   disabled={!canContinueStep2}
                   onClick={() => setStep(3)}
-                  className="flex-1 uppercase text-[12px] py-3 text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  className="flex-1 min-h-11 uppercase text-[12px] text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                   style={{ fontFamily: SANS, backgroundColor: BRAND }}
                 >
                   Siguiente
@@ -291,7 +291,7 @@ export const GiftPaymentModal: React.FC<GiftPaymentModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="flex-1 border border-[#282018] text-[#282018] uppercase text-[12px] py-3 cursor-pointer"
+                  className="flex-1 min-h-11 border border-[#282018] text-[#282018] uppercase text-[12px] cursor-pointer"
                   style={{ fontFamily: SANS }}
                 >
                   Volver
@@ -299,7 +299,7 @@ export const GiftPaymentModal: React.FC<GiftPaymentModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setStep(4)}
-                  className="flex-1 uppercase text-[12px] py-3 text-white cursor-pointer"
+                  className="flex-1 min-h-11 uppercase text-[12px] text-white cursor-pointer"
                   style={{ fontFamily: SANS, backgroundColor: BRAND }}
                 >
                   Confirmar regalo
@@ -326,12 +326,12 @@ export const GiftPaymentModal: React.FC<GiftPaymentModalProps> = ({
                   type="button"
                   onClick={handleCopy}
                   aria-label="Copiar datos"
-                  className="absolute top-4 right-4 text-[#8A7A6E] hover:text-[#282018] cursor-pointer"
+                  className="absolute top-2 right-2 w-11 h-11 flex items-center justify-center text-[#8A7A6E] hover:text-[#282018] cursor-pointer"
                 >
                   <Copy className="w-4 h-4" strokeWidth={1.8} />
                 </button>
                 {copied && (
-                  <span className="absolute top-4 right-11 text-[11px] text-[#8A7A6E]" style={{ fontFamily: SANS }}>
+                  <span className="absolute top-4 right-14 text-[11px] text-[#8A7A6E]" style={{ fontFamily: SANS }}>
                     ¡Copiado!
                   </span>
                 )}
@@ -348,7 +348,7 @@ export const GiftPaymentModal: React.FC<GiftPaymentModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setStep(3)}
-                  className="flex-1 border border-[#282018] text-[#282018] uppercase text-[12px] py-3 cursor-pointer"
+                  className="flex-1 min-h-11 border border-[#282018] text-[#282018] uppercase text-[12px] cursor-pointer"
                   style={{ fontFamily: SANS }}
                 >
                   Volver
@@ -356,7 +356,7 @@ export const GiftPaymentModal: React.FC<GiftPaymentModalProps> = ({
                 <button
                   type="button"
                   onClick={handleFilePick}
-                  className="flex-1 uppercase text-[12px] py-3 text-white cursor-pointer"
+                  className="flex-1 min-h-11 uppercase text-[12px] text-white cursor-pointer"
                   style={{ fontFamily: SANS, backgroundColor: BRAND }}
                 >
                   Subir comprobante
@@ -398,7 +398,7 @@ export const GiftPaymentModal: React.FC<GiftPaymentModalProps> = ({
                   <button
                     type="button"
                     onClick={handleFilePick}
-                    className="uppercase text-[12px] text-white px-8 py-3.5 mt-7 cursor-pointer"
+                    className="uppercase text-[12px] text-white px-8 min-h-11 mt-7 cursor-pointer"
                     style={{ fontFamily: SANS, backgroundColor: BRAND }}
                   >
                     Subir comprobante

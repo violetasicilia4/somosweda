@@ -41,18 +41,18 @@ export const FindCoupleView: React.FC<FindCoupleViewProps> = ({ onNavigate, onOp
     'text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] hover:opacity-70 transition-opacity cursor-pointer';
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-[#2A1A10]">
+    <div className="min-h-dvh flex flex-col bg-white text-[#2A1A10]">
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md px-4 sm:px-8 border-b border-[#EFE9E1]">
         <div className="max-w-5xl mx-auto h-14 sm:h-16 flex items-center justify-between">
           <Wordmark onClick={() => onNavigate('landing')} />
           <div className="flex items-center gap-5 sm:gap-7">
-            <button type="button" onClick={() => onNavigate('login')} className={navBtn} style={{ fontFamily: SANS }}>
+            <button type="button" onClick={() => onNavigate('login')} className={`${navBtn} min-h-11 flex items-center`} style={{ fontFamily: SANS }}>
               Iniciar sesión
             </button>
             <button
               type="button"
               onClick={() => onNavigate('register')}
-              className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] bg-white border border-[#2A2318]/40 px-5 py-2.5 hover:bg-[#F7F1E4] transition-colors cursor-pointer"
+              className="text-[12px] font-normal leading-normal uppercase text-[#2C1A0E] bg-white border border-[#2A2318]/40 px-5 min-h-11 flex items-center hover:bg-[#F7F1E4] transition-colors cursor-pointer"
               style={{ fontFamily: SANS }}
             >
               Crear mi lista
@@ -92,7 +92,7 @@ export const FindCoupleView: React.FC<FindCoupleViewProps> = ({ onNavigate, onOp
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Buscá por nombre, por ejemplo Milagros"
               aria-label="Buscar una pareja"
-              className="w-full h-11 pl-11 pr-4 bg-white border border-[#DDD3C8] rounded-[2px] text-[14px] text-[#2A1A10] placeholder:text-[#8A7A6E] focus:outline-none focus:border-[#2D1A0E]"
+              className="w-full h-11 pl-11 pr-4 bg-white border border-[#DDD3C8] rounded-[2px] text-base text-[#2A1A10] placeholder:text-[#8A7A6E] focus:outline-none focus:border-[#2D1A0E]"
               style={{ fontFamily: SANS }}
             />
           </div>
@@ -111,7 +111,7 @@ export const FindCoupleView: React.FC<FindCoupleViewProps> = ({ onNavigate, onOp
                   <button
                     type="button"
                     onClick={() => onOpenExample('gifts')}
-                    className="mt-3 uppercase text-[10px] tracking-[0.04em] text-[#2D1A0E] border border-[#2D1A0E]/50 px-3 py-2 hover:bg-[#2D1A0E] hover:text-white transition-colors cursor-pointer"
+                    className="mt-3 uppercase text-[10px] tracking-[0.04em] text-[#2D1A0E] border border-[#2D1A0E]/50 px-3 min-h-11 flex items-center justify-center hover:bg-[#2D1A0E] hover:text-white transition-colors cursor-pointer"
                     style={{ fontFamily: SANS }}
                   >
                     Ver lista de regalos

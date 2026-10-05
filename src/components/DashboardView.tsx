@@ -157,7 +157,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   };
 
   return (
-    <div className="flex h-screen bg-gray-50 text-gray-900 font-sans overflow-hidden">
+    <div className="flex h-dvh bg-gray-50 text-gray-900 font-sans overflow-hidden">
       {/* SIDEBAR NAVIGATION */}
       <DashboardSidebar
         activeTab={activeTab}
@@ -177,7 +177,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       )}
 
       {/* MAIN CONTENT AREA */}
-      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
+      <div className="flex-1 flex flex-col min-w-0 h-dvh overflow-y-auto">
         {/* TOP CONTEXT BAR */}
         <header className="bg-white/90 backdrop-blur-xs border-b border-gray-200 px-4 sm:px-8 py-3 sticky top-0 z-30 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
@@ -185,7 +185,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               type="button"
               onClick={() => setMenuOpen(true)}
               aria-label="Abrir menú"
-              className="lg:hidden p-1.5 -ml-1.5 rounded-xl text-gray-700 hover:bg-gray-100 cursor-pointer shrink-0"
+              className="lg:hidden w-11 h-11 -ml-2.5 flex items-center justify-center rounded-xl text-gray-700 hover:bg-gray-100 cursor-pointer shrink-0"
             >
               <Menu className="w-5 h-5" />
             </button>
@@ -215,7 +215,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               type="button"
               onClick={openSite}
               aria-label={`Ver tu ${siteNoun}`}
-              className="whitespace-nowrap uppercase px-2.5 sm:px-3 py-1.5 rounded-2xl border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-normal inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="whitespace-nowrap uppercase px-2.5 sm:px-3 h-11 rounded-2xl border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-normal inline-flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <ExternalLink className="w-3.5 h-3.5 text-gray-500" />
               <span className="hidden sm:inline">Ver tu {siteNoun}</span>
@@ -225,7 +225,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <button
                 type="button"
                 onClick={handleOpenPublishModal}
-                className="whitespace-nowrap uppercase px-3 sm:px-4 py-1.5 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="whitespace-nowrap uppercase px-3 sm:px-4 h-11 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal inline-flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 <span className="hidden sm:inline">Publicar tu {siteNoun}</span>
                 <span className="sm:hidden">Publicar</span>
@@ -346,14 +346,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   handleSelectPlan(highestPlan);
                   setPublishStep('pay');
                 }}
-                className="uppercase w-full py-2.5 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal cursor-pointer transition-colors"
+                className="uppercase w-full h-11 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal cursor-pointer transition-colors"
               >
                 Continuar con {highestPlanDetails.name}
               </button>
               <button
                 type="button"
                 onClick={() => setIsPaymentModalOpen(false)}
-                className="uppercase w-full py-2 text-xs font-normal text-gray-500 hover:text-gray-800 cursor-pointer"
+                className="uppercase w-full min-h-11 text-xs font-normal text-gray-500 hover:text-gray-800 cursor-pointer"
               >
                 Seguir explorando
               </button>
@@ -364,7 +364,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
       {isPaymentModalOpen && publishStep === 'pay' && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-xl w-full p-6 border border-gray-100 animate-fade-in space-y-5 max-h-[92vh] overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-xl w-full p-6 border border-gray-100 animate-fade-in space-y-5 max-h-[92dvh] overflow-y-auto">
             <div className="flex justify-between items-start pb-2 border-b border-gray-100">
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full inline-block mb-1">
@@ -374,7 +374,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </div>
               <button
                 onClick={() => setIsPaymentModalOpen(false)}
-                className="text-gray-400 hover:text-gray-700 text-xs font-semibold p-1 cursor-pointer"
+                className="-mr-2 -mt-2 px-2 h-11 text-gray-400 hover:text-gray-700 text-xs font-semibold cursor-pointer"
               >
                 Cerrar
               </button>
@@ -424,7 +424,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 type="button"
                 disabled={isPublishingInProgress || !canPublish}
                 onClick={handleExecutePayment}
-                className="uppercase w-full py-3 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal cursor-pointer flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="uppercase w-full min-h-11 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal cursor-pointer flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isPublishingInProgress ? (
                   <span>Publicando tu {siteNoun}...</span>
@@ -446,7 +446,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <button
                 type="button"
                 onClick={() => setIsPaymentModalOpen(false)}
-                className="uppercase w-full py-2 text-xs font-normal text-gray-500 hover:text-gray-800 cursor-pointer"
+                className="uppercase w-full min-h-11 text-xs font-normal text-gray-500 hover:text-gray-800 cursor-pointer"
               >
                 Seguir en borrador
               </button>

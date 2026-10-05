@@ -60,7 +60,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
             key={t.id}
             type="button"
             onClick={() => onSectionChange(t.id)}
-            className={`pb-3.5 text-xs font-normal uppercase transition-all cursor-pointer whitespace-nowrap ${
+            className={`min-h-11 flex items-center text-xs font-normal uppercase transition-all cursor-pointer whitespace-nowrap ${
               section === t.id ? 'text-gray-900 border-b-2 border-gray-900' : 'text-gray-500 hover:text-gray-800'
             }`}
           >
@@ -116,7 +116,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
                 required
                 value={partner1}
                 onChange={(e) => setPartner1(e.target.value)}
-                className="w-full px-3.5 py-2 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                className="w-full px-3.5 h-11 border border-gray-300 rounded-2xl text-base focus:outline-none focus:ring-1 focus:ring-gray-900"
               />
             </div>
 
@@ -129,7 +129,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
                 required
                 value={partner2}
                 onChange={(e) => setPartner2(e.target.value)}
-                className="w-full px-3.5 py-2 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                className="w-full px-3.5 h-11 border border-gray-300 rounded-2xl text-base focus:outline-none focus:ring-1 focus:ring-gray-900"
               />
             </div>
           </div>
@@ -144,7 +144,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
                 required
                 value={weddingDate}
                 onChange={(e) => setWeddingDate(e.target.value)}
-                className="w-full px-3.5 py-2 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                className="w-full px-3.5 h-11 border border-gray-300 rounded-2xl text-base focus:outline-none focus:ring-1 focus:ring-gray-900"
               />
             </div>
 
@@ -157,7 +157,7 @@ export const AccountView: React.FC<AccountViewProps> = ({
                 required
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                className="w-full px-3.5 py-2 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                className="w-full px-3.5 h-11 border border-gray-300 rounded-2xl text-base focus:outline-none focus:ring-1 focus:ring-gray-900"
               />
             </div>
           </div>
@@ -171,14 +171,14 @@ export const AccountView: React.FC<AccountViewProps> = ({
               required
               value={venue}
               onChange={(e) => setVenue(e.target.value)}
-              className="w-full px-3.5 py-2 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+              className="w-full px-3.5 h-11 border border-gray-300 rounded-2xl text-base focus:outline-none focus:ring-1 focus:ring-gray-900"
             />
           </div>
 
           <div className="pt-2 flex justify-end">
             <button
               type="submit"
-              className="uppercase px-6 py-2.5 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs sm:text-xs font-normal cursor-pointer shadow-xs"
+              className="uppercase px-6 min-h-11 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal cursor-pointer shadow-xs w-full sm:w-auto"
             >
               Guardar cambios
             </button>

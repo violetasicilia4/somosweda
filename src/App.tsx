@@ -183,7 +183,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
+    <div className="min-h-dvh bg-gray-50 flex flex-col font-sans">
       {/* Main Views */}
       <div className="flex-1 flex flex-col">
         {currentView === 'landing' && (

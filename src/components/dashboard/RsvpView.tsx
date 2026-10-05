@@ -261,7 +261,7 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="uppercase px-3 py-2 border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-normal rounded-2xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+              className="uppercase px-3 min-h-11 border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-normal rounded-2xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
             >
               <Upload className="w-3.5 h-3.5" />
               <span>Importar CSV</span>
@@ -269,7 +269,7 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
             <button
               type="button"
               onClick={() => setIsAddOpen(true)}
-              className="uppercase px-3 py-2 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-2xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+              className="uppercase px-3 min-h-11 bg-gray-900 hover:bg-black text-white text-xs font-normal rounded-2xl inline-flex items-center gap-1.5 cursor-pointer transition-colors"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Agregar invitado</span>
@@ -444,7 +444,7 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
               <button
                 type="button"
                 onClick={() => setIsAddOpen(false)}
-                className="text-gray-400 hover:text-gray-700 cursor-pointer"
+                className="w-11 h-11 -m-2.5 flex items-center justify-center text-gray-400 hover:text-gray-700 cursor-pointer"
                 aria-label="Cerrar"
               >
                 <X className="w-4 h-4" />
@@ -459,7 +459,7 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
                     required
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                    className="w-full px-3 h-11 border border-gray-300 rounded-2xl text-base focus:outline-none focus:ring-1 focus:ring-gray-900"
                   />
                 </div>
                 <div>
@@ -469,7 +469,7 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
                     required
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                    className="w-full px-3 h-11 border border-gray-300 rounded-2xl text-base focus:outline-none focus:ring-1 focus:ring-gray-900"
                   />
                 </div>
               </div>
@@ -482,7 +482,7 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+54 9 11 ..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-900"
+                  className="w-full px-3 h-11 border border-gray-300 rounded-2xl text-base focus:outline-none focus:ring-1 focus:ring-gray-900"
                 />
               </div>
               <div>
@@ -493,7 +493,7 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
                       key={s}
                       type="button"
                       onClick={() => setStatus(s)}
-                      className={`py-2 rounded-2xl text-[11px] font-semibold uppercase cursor-pointer transition-colors border ${
+                      className={`min-h-11 px-1 rounded-2xl text-[11px] font-semibold uppercase cursor-pointer transition-colors border ${
                         status === s ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
                       }`}
                     >
@@ -504,7 +504,7 @@ export const RsvpView: React.FC<RsvpViewProps> = ({
               </div>
               <button
                 type="submit"
-                className="uppercase w-full py-2.5 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal cursor-pointer transition-colors"
+                className="uppercase w-full h-11 bg-gray-900 hover:bg-black text-white rounded-2xl text-xs font-normal cursor-pointer transition-colors"
               >
                 Agregar
               </button>
